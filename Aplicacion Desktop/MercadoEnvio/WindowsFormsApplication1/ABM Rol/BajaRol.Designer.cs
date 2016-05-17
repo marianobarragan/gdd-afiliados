@@ -1,6 +1,6 @@
-﻿namespace WindowsFormsApplication1.ABM_Rol
+﻿namespace MercadoEnvio.ABM_Rol
 {
-    partial class Form1
+    partial class BajaRol
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.Text = "BajaRol";
         }
 
         #endregion

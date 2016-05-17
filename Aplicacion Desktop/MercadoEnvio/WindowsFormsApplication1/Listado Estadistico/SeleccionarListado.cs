@@ -8,13 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1.Historial_Cliente
+namespace MercadoEnvio.Listado_Estadistico
 {
-    public partial class Form1 : Form
+    public partial class SeleccionarListado : Form
     {
-        public Form1()
+        public SeleccionarListado()
         {
             InitializeComponent();
+        }
+
+        private void lstOpciones_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
 
         private void Form1_Load(object sender, EventArgs e)

@@ -4,7 +4,7 @@
     <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
       <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
         <Connections>
-          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="GD1C2016ConnectionSAPO" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="GD1C2016ConnectionSAPO (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.WindowsFormsApplication1.Properties.Settings.GlobalReference.Default.GD1C2016ConnectionSAPO" Provider="System.Data.SqlClient" />
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="GD1C2016ConnectionSAPO" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="GD1C2016ConnectionSAPO (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.MercadoEnvio.Properties.Settings.GlobalReference.Default.GD1C2016ConnectionSAPO" Provider="System.Data.SqlClient" />
         </Connections>
         <Tables>
           <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="MaestraTableAdapter" GeneratorDataComponentClassName="MaestraTableAdapter" Name="Maestra" UserDataComponentName="MaestraTableAdapter">
@@ -147,7 +147,7 @@
   <xs:element name="GD1C2016DataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="GD1C2016DataSet" msprop:Generator_UserDSName="GD1C2016DataSet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="Maestra" msprop:Generator_TableClassName="MaestraDataTable" msprop:Generator_TableVarName="tableMaestra" msprop:Generator_TablePropName="Maestra" msprop:Generator_RowDeletingName="MaestraRowDeleting" msprop:Generator_RowChangingName="MaestraRowChanging" msprop:Generator_RowEvHandlerName="MaestraRowChangeEventHandler" msprop:Generator_RowDeletedName="MaestraRowDeleted" msprop:Generator_UserTableName="Maestra" msprop:Generator_RowChangedName="MaestraRowChanged" msprop:Generator_RowEvArgName="MaestraRowChangeEvent" msprop:Generator_RowClassName="MaestraRow">
+        <xs:element name="Maestra" msprop:Generator_TableClassName="MaestraDataTable" msprop:Generator_TableVarName="tableMaestra" msprop:Generator_RowChangedName="MaestraRowChanged" msprop:Generator_TablePropName="Maestra" msprop:Generator_RowDeletingName="MaestraRowDeleting" msprop:Generator_RowChangingName="MaestraRowChanging" msprop:Generator_RowEvHandlerName="MaestraRowChangeEventHandler" msprop:Generator_RowDeletedName="MaestraRowDeleted" msprop:Generator_RowClassName="MaestraRow" msprop:Generator_UserTableName="Maestra" msprop:Generator_RowEvArgName="MaestraRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Publ_Cli_Dni" msprop:Generator_ColumnVarNameInTable="columnPubl_Cli_Dni" msprop:Generator_ColumnPropNameInRow="Publ_Cli_Dni" msprop:Generator_ColumnPropNameInTable="Publ_Cli_DniColumn" msprop:Generator_UserColumnName="Publ_Cli_Dni" type="xs:decimal" minOccurs="0" />

@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace WindowsFormsApplication1 {
+namespace MercadoEnvio {
     
     
     /// <summary>
@@ -2956,7 +2956,7 @@ namespace WindowsFormsApplication1 {
         }
     }
 }
-namespace WindowsFormsApplication1.GD1C2016DataSetTableAdapters {
+namespace MercadoEnvio.GD1C2016DataSetTableAdapters {
     
     
     /// <summary>
@@ -3230,7 +3230,7 @@ namespace WindowsFormsApplication1.GD1C2016DataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = global::WindowsFormsApplication1.Properties.Settings.Default.GD1C2016ConnectionSAPO;
+            this._connection.ConnectionString = global::MercadoEnvio.Properties.Settings.Default.GD1C2016ConnectionSAPO;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
