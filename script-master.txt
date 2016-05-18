@@ -1,0 +1,193 @@
+BEGIN TRANSACTION
+
+USE[GD1C2016];
+GO
+
+CREATE SCHEMA [DBME] AUTHORIZATION [gd];
+GO
+
+/* START CREACION TABLAS */
+
+CREATE TABLE DBME.funcionalidad (
+	funcionalidad_id INT IDENTITY(1,1) PRIMARY KEY,
+	descripcion varchar(30)
+);
+GO
+
+CREATE TABLE DBME.rol (
+	rol_id INT IDENTITY(1,1) PRIMARY KEY,
+	nombre_rol varchar(30),
+	es_rol_habilitado bit
+);
+GO
+
+CREATE TABLE DBME.rol_x_funcionalidad (
+	funcionalidad_id INT FOREIGN KEY REFERENCES DBME.funcionalidad(funcionalidad_id), 
+	rol_id INT FOREIGN KEY REFERENCES DBME.rol(rol_id) 
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+GO
+
+CREATE TABLE DBME.domicilio (
+	domicilio_id INT IDENTITY(1,1) PRIMARY KEY,
+	ciudad VARCHAR(25),
+	localidad VARCHAR(25),
+	codigo_postal INT,
+	piso SMALLINT,
+	departamento VARCHAR(2),
+	domicilio_calle VARCHAR(30),
+	numero_calle INT,
+);
+GO
+
+CREATE TABLE DBME.usuario(
+	usuario_id INT IDENTITY(1,1) PRIMARY KEY,
+	username VARCHAR(21),
+	password VARCHAR(21),
+	habilitado bit,
+	cantidad_intentos_fallidos TINYINT DEFAULT '0',
+	mail VARCHAR(40),
+	domicilio_id INT FOREIGN KEY REFERENCES DBME.domicilio(domicilio_id),
+	fecha_creacion DATETIME,
+	telefono BIGINT,
+	es_nuevo BIT,
+);
+GO
+
+CREATE TABLE DBME.rol_x_usuario (
+	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id), 
+	rol_id INT FOREIGN KEY REFERENCES DBME.rol(rol_id) 
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+GO
+
+CREATE TABLE DBME.cliente(
+	cliente_id INT IDENTITY(1,1) PRIMARY KEY,
+	apellido VARCHAR(16),
+	nombre VARCHAR(25),
+	numero_documento INT UNIQUE,
+	tipo_documento CHAR,
+	fecha_nacimiento DATE,
+	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id) 
+);
+GO
+
+CREATE TABLE DBME.rubro(
+	rubro_id INT IDENTITY(1,1) PRIMARY KEY,
+	descripcion_corta VARCHAR(30),
+	descripcion_larga VARCHAR(255),
+);
+GO
+
+CREATE TABLE DBME.empresa(
+	empresa_id INT IDENTITY(1,1) PRIMARY KEY,
+	razon_social VARCHAR(20) UNIQUE,
+	cuit BIGINT UNIQUE,
+	fecha_creacion DATETIME,
+	nombre_contacto VARCHAR(25),
+	rubro_id INT FOREIGN KEY REFERENCES DBME.rubro(rubro_id),
+	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id)
+);
+
+CREATE TABLE DBME.administrador(
+	administrador_id INT IDENTITY(1,1) PRIMARY KEY,
+	nombre VARCHAR(16),
+	apellido VARCHAR(25),
+	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id)
+);
+
+
+CREATE TABLE DBME.visibilidad(
+	visibilidad_id NUMERIC(18,0) PRIMARY KEY,
+	visibilidad_descripcion NVARCHAR(255),
+	visibilidad_precio NUMERIC(18,2), 
+	visibilidad_porcentaje NUMERIC(18,2),
+	visibilidad_costo_envio NUMERIC(10,2)
+);
+
+CREATE TABLE DBME.publicacion(
+	publicacion_id INT IDENTITY(1,1) PRIMARY KEY,
+	description VARCHAR(40), 
+	stock INT,
+	fecha_creacion DATETIME,
+	fecha_vencimiento DATETIME, 
+	precio DECIMAL(10,2),
+	costo DECIMAL(10,2),
+	rubro_id INT FOREIGN KEY REFERENCES DBME.rubro(rubro_id),
+	visibilidad_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.visibilidad(visibilidad_id),
+	autor_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id),
+	estado VARCHAR CHECK (estado IN ('BORRADOR','ACTIVA','PAUSADA','FINALIZADA')) DEFAULT 'BORRADOR',
+	permite_preguntas bit,
+	realiza_envio bit,
+	cantidad INT,
+	fecha_finalizacion DATE,
+	valor_inicial DECIMAL(10,2),
+	valor_actual DECIMAL(10,2)
+);
+
+CREATE TABLE DBME.oferta(
+	oferta_id INT IDENTITY(1,1) PRIMARY KEY,
+	fecha DATETIME,
+	monto DECIMAL(20,2),
+	publicacion_id INT FOREIGN KEY REFERENCES DBME.publicacion(publicacion_id),
+	autor_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id)
+);
+
+CREATE TABLE DBME.compra(
+	compra_id INT IDENTITY(1,1) PRIMARY KEY,
+	fecha DATETIME,
+	autor_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id),
+	publicacion_id INT FOREIGN KEY REFERENCES DBME.publicacion(publicacion_id),
+	esta_calificada bit
+);
+
+CREATE TABLE DBME.calificacion(
+	calificacion_id INT IDENTITY(1,1) PRIMARY KEY,
+	cantidad_estrellas TINYINT CHECK(cantidad_estrellas BETWEEN '0' AND '5') DEFAULT '0',
+	descripcion VARCHAR(140) NOT NULL,
+	fecha DATETIME,
+	autor_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id),
+	compra_id INT FOREIGN KEY REFERENCES DBME.compra(compra_id),
+	
+);
+
+CREATE TABLE DBME.factura(
+	factura_id INT IDENTITY(1,1) PRIMARY KEY,
+	compra_id INT FOREIGN KEY REFERENCES DBME.compra(compra_id),
+	fecha DATETIME,
+	monto_total DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE DBME.factura_detalle(
+	factura_detalle_id INT IDENTITY(1,1) PRIMARY KEY,
+	tipo_de_item VARCHAR CHECK(tipo_de_item IN ('PRODUCTO','ENVIO','VISIBILIDAD')), /* costo de producto, o costo de envio, o costo de publicacion  */
+	factura_id INT FOREIGN KEY REFERENCES DBME.factura(factura_id),
+	monto_parcial DECIMAL(10,2) NOT NULL
+);
+
+/* END CREACION TABLAS*/
+--*****************************************************************
+/* START MIGRACION*/
+
+--Creo una tabla temporal con el fin de utilizarla como ayuda para la migracion de los pasajes y asi buscar menos ids y mejorar el tiempo de migracion
+CREATE TABLE DBME.#visibilidad(visibilidad_id NUMERIC(18,0) , visibilidad_descripcion NVARCHAR(255), visibilidad_porcentaje NUMERIC(18,2), visibilidad_precio NUMERIC(18,2));
+GO
+
+INSERT INTO #visibilidad
+	SELECT DISTINCT Publicacion_Visibilidad_Cod, Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio
+	FROM gd_esquema.Maestra
+	ORDER BY Publicacion_Visibilidad_Cod
+GO
+
+
+/* END MIGRACION */
+
+/* START TRIGGERS */
+
+/* END TRIGGERS */
+
+/* START FUNCTIONS */
+
+/* END FUNCTIONS */
