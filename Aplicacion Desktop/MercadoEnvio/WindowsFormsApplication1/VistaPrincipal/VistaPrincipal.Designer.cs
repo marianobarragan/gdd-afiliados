@@ -47,7 +47,7 @@
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(357, 240);
+            this.groupBox1.Size = new System.Drawing.Size(525, 411);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Seleccione Función";
@@ -55,9 +55,9 @@
             // btnIrFuncion
             // 
             this.btnIrFuncion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnIrFuncion.Location = new System.Drawing.Point(266, 26);
+            this.btnIrFuncion.Location = new System.Drawing.Point(381, 353);
             this.btnIrFuncion.Name = "btnIrFuncion";
-            this.btnIrFuncion.Size = new System.Drawing.Size(85, 43);
+            this.btnIrFuncion.Size = new System.Drawing.Size(138, 52);
             this.btnIrFuncion.TabIndex = 1;
             this.btnIrFuncion.Text = "IR!";
             this.btnIrFuncion.UseVisualStyleBackColor = true;
@@ -70,13 +70,13 @@
             this.lstFunciones.ItemHeight = 20;
             this.lstFunciones.Location = new System.Drawing.Point(6, 25);
             this.lstFunciones.Name = "lstFunciones";
-            this.lstFunciones.Size = new System.Drawing.Size(254, 204);
+            this.lstFunciones.Size = new System.Drawing.Size(513, 304);
             this.lstFunciones.TabIndex = 1;
             // 
             // btnLogout
             // 
             this.btnLogout.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLogout.Location = new System.Drawing.Point(557, 221);
+            this.btnLogout.Location = new System.Drawing.Point(725, 392);
             this.btnLogout.Name = "btnLogout";
             this.btnLogout.Size = new System.Drawing.Size(105, 31);
             this.btnLogout.TabIndex = 1;
@@ -90,12 +90,12 @@
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(375, 12);
+            this.groupBox2.Location = new System.Drawing.Point(543, 12);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(287, 203);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Usuario:";
+            this.groupBox2.Text = "Sesión actual:";
             // 
             // label3
             // 
@@ -131,7 +131,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(678, 264);
+            this.BackColor = System.Drawing.Color.SkyBlue;
+            this.ClientSize = new System.Drawing.Size(842, 435);
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);

@@ -10,21 +10,11 @@ using System.Windows.Forms;
 
 namespace MercadoEnvio.Templates
 {
-    public partial class ABM : Form
+    public partial class ModificadoElemento : Form
     {
-        public ABM()
+        public ModificadoElemento()
         {
             InitializeComponent();
-        }
-
-        private void ABM_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnIrVista_Click(object sender, EventArgs e)
-        {
-            //System.Diagnostics.Debug.WriteLine(lstOpciones.SelectedIndex);
         }
     }
 }

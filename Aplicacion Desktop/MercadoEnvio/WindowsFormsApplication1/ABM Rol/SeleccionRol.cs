@@ -8,16 +8,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1
+namespace MercadoEnvio.ABM_Rol
 {
-    public partial class Form1 : Form
+    public partial class SeleccionRol : Form
     {
-        public Form1()
+        public SeleccionRol()
         {
             InitializeComponent();
         }
 
-        private void guedeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SeleccionRol_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnIrVista_Click(object sender, EventArgs e)
         {
 
         }

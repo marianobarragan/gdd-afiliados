@@ -24,7 +24,7 @@ namespace MercadoEnvio.Listado_Estadistico
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            lstOpciones.SelectedIndex = 0;
         }
     }
 }

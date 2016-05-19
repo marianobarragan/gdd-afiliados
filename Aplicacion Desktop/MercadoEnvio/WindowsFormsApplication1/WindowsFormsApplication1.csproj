@@ -65,6 +65,12 @@
     <Compile Include="ABM Rol\ModificarRol.Designer.cs">
       <DependentUpon>ModificarRol.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM Rol\SeleccionRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Rol\SeleccionRol.Designer.cs">
+      <DependentUpon>SeleccionRol.cs</DependentUpon>
+    </Compile>
     <Compile Include="ABM Rubro\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,11 +150,29 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Templates\ABM.cs">
+    <Compile Include="Templates\ABMSeleccion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Templates\ABM.Designer.cs">
-      <DependentUpon>ABM.cs</DependentUpon>
+    <Compile Include="Templates\ABMSeleccion.Designer.cs">
+      <DependentUpon>ABMSeleccion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Alta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Templates\Alta.Designer.cs">
+      <DependentUpon>Alta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\Listado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Templates\Listado.Designer.cs">
+      <DependentUpon>Listado.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\ModificadoElemento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Templates\ModificadoElemento.Designer.cs">
+      <DependentUpon>ModificadoElemento.cs</DependentUpon>
     </Compile>
     <Compile Include="VistaPrincipal\VistaPrincipal.cs">
       <SubType>Form</SubType>
@@ -159,11 +183,17 @@
     <EmbeddedResource Include="ABM Rol\AltaRol.resx">
       <DependentUpon>AltaRol.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rol\SeleccionRol.resx">
+      <DependentUpon>SeleccionRol.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Listado Estadistico\ListadoPrincipal.resx">
       <DependentUpon>ListadoPrincipal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Listado Estadistico\SeleccionarListado.resx">
+      <DependentUpon>SeleccionarListado.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\LoginAvanzado.resx">
       <DependentUpon>LoginAvanzado.cs</DependentUpon>
@@ -181,8 +211,17 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Templates\ABM.resx">
-      <DependentUpon>ABM.cs</DependentUpon>
+    <EmbeddedResource Include="Templates\ABMSeleccion.resx">
+      <DependentUpon>ABMSeleccion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\Alta.resx">
+      <DependentUpon>Alta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\Listado.resx">
+      <DependentUpon>Listado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\ModificadoElemento.resx">
+      <DependentUpon>ModificadoElemento.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VistaPrincipal\VistaPrincipal.resx">
       <DependentUpon>VistaPrincipal.cs</DependentUpon>

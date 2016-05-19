@@ -17,7 +17,7 @@ namespace MercadoEnvio
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MercadoEnvio.Listado_Estadistico.ListadoPrincipal());
+            Application.Run(new MercadoEnvio.Login.LoginInicial());
             //Application.Run(new MercadoEnvio.Templates.ABM());
             
         }

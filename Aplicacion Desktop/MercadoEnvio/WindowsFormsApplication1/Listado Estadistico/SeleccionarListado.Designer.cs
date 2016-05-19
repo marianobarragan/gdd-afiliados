@@ -36,7 +36,7 @@
             // btnVolver
             // 
             this.btnVolver.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnVolver.Location = new System.Drawing.Point(12, 162);
+            this.btnVolver.Location = new System.Drawing.Point(62, 243);
             this.btnVolver.Name = "btnVolver";
             this.btnVolver.Size = new System.Drawing.Size(97, 44);
             this.btnVolver.TabIndex = 5;
@@ -46,7 +46,7 @@
             // btnIrVista
             // 
             this.btnIrVista.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnIrVista.Location = new System.Drawing.Point(352, 162);
+            this.btnIrVista.Location = new System.Drawing.Point(402, 243);
             this.btnIrVista.Name = "btnIrVista";
             this.btnIrVista.Size = new System.Drawing.Size(97, 44);
             this.btnIrVista.TabIndex = 4;
@@ -63,9 +63,9 @@
             "Clientes con mayor cantidad de productos comprados",
             "Vendedores con mayor cantidad de facturas",
             "Vendedores con mayor monto facturado"});
-            this.lstOpciones.Location = new System.Drawing.Point(12, 12);
+            this.lstOpciones.Location = new System.Drawing.Point(62, 37);
             this.lstOpciones.Name = "lstOpciones";
-            this.lstOpciones.Size = new System.Drawing.Size(437, 144);
+            this.lstOpciones.Size = new System.Drawing.Size(437, 164);
             this.lstOpciones.TabIndex = 3;
             this.lstOpciones.SelectedIndexChanged += new System.EventHandler(this.lstOpciones_SelectedIndexChanged);
             // 
@@ -73,7 +73,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(462, 216);
+            this.BackColor = System.Drawing.Color.SkyBlue;
+            this.ClientSize = new System.Drawing.Size(573, 322);
             this.Controls.Add(this.btnVolver);
             this.Controls.Add(this.btnIrVista);
             this.Controls.Add(this.lstOpciones);
