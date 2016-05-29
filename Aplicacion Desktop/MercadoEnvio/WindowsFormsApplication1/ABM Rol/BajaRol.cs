@@ -21,5 +21,10 @@ namespace MercadoEnvio.ABM_Rol
         {
 
         }
+
+        private void BajaRol_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

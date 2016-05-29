@@ -1,5 +1,3 @@
-BEGIN TRANSACTION
-
 USE[GD1C2016];
 GO
 
@@ -33,11 +31,11 @@ CREATE TABLE DBME.domicilio (
 	domicilio_id INT IDENTITY(1,1) PRIMARY KEY,
 	ciudad VARCHAR(25),
 	localidad VARCHAR(25),
-	codigo_postal INT,
-	piso SMALLINT,
-	departamento VARCHAR(2),
-	domicilio_calle VARCHAR(30),
-	numero_calle INT,
+	codigo_postal NVARCHAR(50),
+	piso NUMERIC(18,0),
+	departamento NVARCHAR(50),
+	domicilio_calle NVARCHAR(255),
+	numero_calle NUMERIC(18,0),
 );
 GO
 
@@ -47,7 +45,7 @@ CREATE TABLE DBME.usuario(
 	password VARCHAR(21),
 	habilitado bit,
 	cantidad_intentos_fallidos TINYINT DEFAULT '0',
-	mail VARCHAR(40),
+	mail NVARCHAR(255),
 	domicilio_id INT FOREIGN KEY REFERENCES DBME.domicilio(domicilio_id),
 	fecha_creacion DATETIME,
 	telefono BIGINT,
@@ -65,11 +63,11 @@ GO
 
 CREATE TABLE DBME.cliente(
 	cliente_id INT IDENTITY(1,1) PRIMARY KEY,
-	apellido VARCHAR(16),
-	nombre VARCHAR(25),
-	numero_documento INT UNIQUE,
+	apellido NVARCHAR(255),
+	nombre NVARCHAR(255),
+	numero_documento NUMERIC(18,0) UNIQUE,
 	tipo_documento CHAR,
-	fecha_nacimiento DATE,
+	fecha_nacimiento DATETIME,
 	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id) 
 );
 GO
@@ -83,13 +81,14 @@ GO
 
 CREATE TABLE DBME.empresa(
 	empresa_id INT IDENTITY(1,1) PRIMARY KEY,
-	razon_social VARCHAR(20) UNIQUE,
-	cuit BIGINT UNIQUE,
+	razon_social NVARCHAR(255) UNIQUE,
+	cuit NVARCHAR(50) UNIQUE,
 	fecha_creacion DATETIME,
 	nombre_contacto VARCHAR(25),
 	rubro_id INT FOREIGN KEY REFERENCES DBME.rubro(rubro_id),
 	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id)
 );
+GO
 
 CREATE TABLE DBME.administrador(
 	administrador_id INT IDENTITY(1,1) PRIMARY KEY,
@@ -97,7 +96,7 @@ CREATE TABLE DBME.administrador(
 	apellido VARCHAR(25),
 	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id)
 );
-
+GO
 
 CREATE TABLE DBME.visibilidad(
 	visibilidad_id NUMERIC(18,0) PRIMARY KEY,
@@ -106,74 +105,90 @@ CREATE TABLE DBME.visibilidad(
 	visibilidad_porcentaje NUMERIC(18,2),
 	visibilidad_costo_envio NUMERIC(10,2)
 );
+GO
 
 CREATE TABLE DBME.publicacion(
-	publicacion_id INT IDENTITY(1,1) PRIMARY KEY,
-	description VARCHAR(40), 
-	stock INT,
+	publicacion_id NUMERIC(18,0) IDENTITY(1,1) PRIMARY KEY,
+	publicacion_tipo NVARCHAR(255), 
+	description NVARCHAR(255), 
+	stock NUMERIC(18,0),
 	fecha_creacion DATETIME,
 	fecha_vencimiento DATETIME, 
-	precio DECIMAL(10,2),
+	precio NUMERIC(18,2),
 	costo DECIMAL(10,2),
 	rubro_id INT FOREIGN KEY REFERENCES DBME.rubro(rubro_id),
 	visibilidad_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.visibilidad(visibilidad_id),
 	autor_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id),
-	estado VARCHAR CHECK (estado IN ('BORRADOR','ACTIVA','PAUSADA','FINALIZADA')) DEFAULT 'BORRADOR',
+	estado NVARCHAR(255) CHECK (estado IN ('BORRADOR','ACTIVA','PAUSADA','FINALIZADA')) DEFAULT 'BORRADOR',
 	permite_preguntas bit,
 	realiza_envio bit,
 	cantidad INT,
 	fecha_finalizacion DATE,
 	valor_inicial DECIMAL(10,2),
 	valor_actual DECIMAL(10,2)
+
 );
+GO
 
 CREATE TABLE DBME.oferta(
 	oferta_id INT IDENTITY(1,1) PRIMARY KEY,
 	fecha DATETIME,
-	monto DECIMAL(20,2),
-	publicacion_id INT FOREIGN KEY REFERENCES DBME.publicacion(publicacion_id),
+	monto NUMERIC(18,2),
+	publicacion_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.publicacion(publicacion_id),
 	autor_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id)
 );
+GO
 
 CREATE TABLE DBME.compra(
 	compra_id INT IDENTITY(1,1) PRIMARY KEY,
+	cantidad NUMERIC(18,0),
 	fecha DATETIME,
 	autor_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id),
-	publicacion_id INT FOREIGN KEY REFERENCES DBME.publicacion(publicacion_id),
+	publicacion_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.publicacion(publicacion_id),
 	esta_calificada bit
 );
+GO
 
 CREATE TABLE DBME.calificacion(
-	calificacion_id INT IDENTITY(1,1) PRIMARY KEY,
-	cantidad_estrellas TINYINT CHECK(cantidad_estrellas BETWEEN '0' AND '5') DEFAULT '0',
-	descripcion VARCHAR(140) NOT NULL,
+	calificacion_id NUMERIC(18,0) IDENTITY(1,1) PRIMARY KEY,
+	cantidad_estrellas NUMERIC(18,0) CHECK(cantidad_estrellas BETWEEN '0' AND '5') DEFAULT '0',
+	descripcion NVARCHAR(255) NOT NULL,
 	fecha DATETIME,
 	autor_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id),
 	compra_id INT FOREIGN KEY REFERENCES DBME.compra(compra_id),
 	
 );
+GO
 
 CREATE TABLE DBME.factura(
-	factura_id INT IDENTITY(1,1) PRIMARY KEY,
+	factura_id NUMERIC(18,0) IDENTITY(1,1) PRIMARY KEY,
 	compra_id INT FOREIGN KEY REFERENCES DBME.compra(compra_id),
 	fecha DATETIME,
-	monto_total DECIMAL(10,2) NOT NULL
+	monto_total NUMERIC(18,2) NOT NULL,
+	forma_pago_desc NVARCHAR(255)
 );
+GO
 
 CREATE TABLE DBME.factura_detalle(
 	factura_detalle_id INT IDENTITY(1,1) PRIMARY KEY,
+	factura_cantidad NUMERIC(18,0),
 	tipo_de_item VARCHAR CHECK(tipo_de_item IN ('PRODUCTO','ENVIO','VISIBILIDAD')), /* costo de producto, o costo de envio, o costo de publicacion  */
-	factura_id INT FOREIGN KEY REFERENCES DBME.factura(factura_id),
-	monto_parcial DECIMAL(10,2) NOT NULL
+	factura_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.factura(factura_id),
+	monto_parcial NUMERIC(18,2) NOT NULL
 );
+GO
 
 /* END CREACION TABLAS*/
 --*****************************************************************
-/* START MIGRACION*/
 
---Creo una tabla temporal con el fin de utilizarla como ayuda para la migracion de los pasajes y asi buscar menos ids y mejorar el tiempo de migracion
+
+
+
+
+--Creo una tabla temporal de dr prueba
 CREATE TABLE DBME.#visibilidad(visibilidad_id NUMERIC(18,0) , visibilidad_descripcion NVARCHAR(255), visibilidad_porcentaje NUMERIC(18,2), visibilidad_precio NUMERIC(18,2));
 GO
+
 
 INSERT INTO #visibilidad
 	SELECT DISTINCT Publicacion_Visibilidad_Cod, Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio
@@ -181,8 +196,38 @@ INSERT INTO #visibilidad
 	ORDER BY Publicacion_Visibilidad_Cod
 GO
 
+/* */
+CREATE PROCEDURE DBME.migracionVisibilidad
+AS
+BEGIN
+
+	--Se migran los fabricante de la tabla Maestra
+	INSERT INTO DBME.visibilidad
+	SELECT DISTINCT Publicacion_Visibilidad_Cod, Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio 
+	FROM gd_esquema.Maestra
+	ORDER BY Publicacion_Visibilidad_Cod
+
+END;
+GO
+
+
+/* START MIGRACION*/
+
+--EJECUTAR LOS PROCEDURES 
 
 /* END MIGRACION */
+
+--CREATE PROCEDURE DBAS.migracionFabricantes
+--AS
+--BEGIN
+
+	----Se migran los fabricante de la tabla Maestra
+	--INSERT INTO DBAS.fabricantes(nombre_fabricante)
+	--SELECT DISTINCT Aeronave_Fabricante 
+	--FROM gd_esquema.Maestra
+
+--END;
+--GO
 
 /* START TRIGGERS */
 

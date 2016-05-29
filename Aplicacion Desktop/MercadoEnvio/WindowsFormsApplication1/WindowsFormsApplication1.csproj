@@ -89,6 +89,7 @@
     <Compile Include="ABM Visibilidad\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="AltaRol.cs" />
     <Compile Include="Calificar\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
