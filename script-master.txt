@@ -8,13 +8,13 @@ GO
 
 CREATE TABLE DBME.funcionalidad (
 	funcionalidad_id INT IDENTITY(1,1) PRIMARY KEY,
-	descripcion varchar(30)
+	descripcion NVARCHAR(255)
 );
 GO
 
 CREATE TABLE DBME.rol (
 	rol_id INT IDENTITY(1,1) PRIMARY KEY,
-	nombre_rol varchar(30),
+	nombre_rol NVARCHAR(255),
 	es_rol_habilitado bit
 );
 GO
@@ -184,50 +184,101 @@ GO
 
 
 
+/* START BASES DE MIGRACION */ 
 
---Creo una tabla temporal de dr prueba
-CREATE TABLE DBME.#visibilidad(visibilidad_id NUMERIC(18,0) , visibilidad_descripcion NVARCHAR(255), visibilidad_porcentaje NUMERIC(18,2), visibilidad_precio NUMERIC(18,2));
-GO
-
-
-INSERT INTO #visibilidad
-	SELECT DISTINCT Publicacion_Visibilidad_Cod, Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio
-	FROM gd_esquema.Maestra
-	ORDER BY Publicacion_Visibilidad_Cod
-GO
-
-/* */
-CREATE PROCEDURE DBME.migracionVisibilidad
+CREATE PROCEDURE DBME.crearFuncionalidades
 AS
 BEGIN
+	
+	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('CREAR USUARIO');
+	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE ROL');
+	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE USUARIOS');
+	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE RUBRO');
+	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE VISIBILIDAD DE PUBLICACION');
+	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('GENERAR PUBLICACION');
+	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('COMPRAR/OFERTAR');
+	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('HISTORIAL DEL CLIENTE');
+	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('CALIFICAR AL VENDEDOR');
+	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('CONSULTA DE FACTURAS REALIZADAS AL VENDEDOR');
+	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('LISTADO ESTADISTICO');
 
-	--Se migran los fabricante de la tabla Maestra
-	INSERT INTO DBME.visibilidad
-	SELECT DISTINCT Publicacion_Visibilidad_Cod, Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio 
-	FROM gd_esquema.Maestra
-	ORDER BY Publicacion_Visibilidad_Cod
+END;
+GO
+
+CREATE PROCEDURE DBME.crearRoles
+AS
+BEGIN
+	
+	INSERT INTO DBME.rol(nombre_rol,es_rol_habilitado) VALUES ('Administrador',1);
+	INSERT INTO DBME.rol(nombre_rol,es_rol_habilitado) VALUES ('Cliente',1);
+	INSERT INTO DBME.rol(nombre_rol,es_rol_habilitado) VALUES ('Empresa',1);
+
+END;
+GO
+
+CREATE PROCEDURE DBME.enlazarRol_X_Funcionalidad 
+AS
+BEGIN
+	
+	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id)
+	SELECT rol_id,funcionalidad_id
+	FROM DBME.rol, DBME.funcionalidad
+
+	--- TERMINAR
+END;
+GO
+
+
+
+
+CREATE PROCEDURE DBME.agregarFuncionalidadesAdministrador
+AS
+BEGIN
+	
+	INSERT INTO DBME.rol(nombre_rol) VALUES ('Administrador');
+	INSERT INTO DBME.rol(nombre_rol) VALUES ('Cliente');
+	INSERT INTO DBME.rol(nombre_rol) VALUES ('Empresa');
 
 END;
 GO
 
 
-/* START MIGRACION*/
 
---EJECUTAR LOS PROCEDURES 
+CREATE PROCEDURE DBME.migrarVisibilidad
+AS
+BEGIN
+
+	--Se migran los fabricante de la tabla Maestra
+	INSERT INTO DBME.visibilidad(visibilidad_id, visibilidad_descripcion, visibilidad_porcentaje, visibilidad_precio, visibilidad_costo_envio)
+	SELECT DISTINCT Publicacion_Visibilidad_Cod, Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio, (180 - Publicacion_Visibilidad_Precio)
+	FROM gd_esquema.Maestra
+	ORDER BY Publicacion_Visibilidad_Cod
+
+	UPDATE DBME.visibilidad
+	SET visibilidad_costo_envio = (180 - visibilidad_precio)
+	
+	UPDATE DBME.visibilidad
+	SET visibilidad_costo_envio = 0
+	WHERE visibilidad_descripcion = 'Gratis'
+
+END;
+GO
+
+
+
+/* END BASES DE MIGRACION */ 
+
+/* START MIGRACION*/ --      EJECUTAR LOS PROCEDURES !!!!
+
+	EXECUTE DBME.crearFuncionalidades
+	EXECUTE DBME.crearRoles
+	EXECUTE DBME.migrarVisibilidad
+	GO
+
+
 
 /* END MIGRACION */
 
---CREATE PROCEDURE DBAS.migracionFabricantes
---AS
---BEGIN
-
-	----Se migran los fabricante de la tabla Maestra
-	--INSERT INTO DBAS.fabricantes(nombre_fabricante)
-	--SELECT DISTINCT Aeronave_Fabricante 
-	--FROM gd_esquema.Maestra
-
---END;
---GO
 
 /* START TRIGGERS */
 
