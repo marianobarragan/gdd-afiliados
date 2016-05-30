@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Configuration;
 using System.Windows.Forms;
+
 using MercadoEnvio.Login;
+
+
 
 namespace MercadoEnvio
 {
@@ -17,9 +21,26 @@ namespace MercadoEnvio
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MercadoEnvio.ABM_Rol.AltaRol());
+            Application.Run(new MercadoEnvio.Listado_Estadistico.ListadoPrincipal());
             //Application.Run(new MercadoEnvio.Templates.ABM());
             
+        }
+
+        public static String ip()
+        {
+            return ConfigurationManager.AppSettings["ip"];
+
+        }
+
+        public static String puerto()
+        {
+            return ConfigurationManager.AppSettings["puerto"];
+        }
+
+
+        public static String nuevaFechaSistema()
+        {
+            return ConfigurationManager.AppSettings["FechaGlobal"];
         }
     }
 }

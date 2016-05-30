@@ -19,6 +19,7 @@ CREATE TABLE DBME.rol (
 );
 GO
 
+
 CREATE TABLE DBME.rol_x_funcionalidad (
 	funcionalidad_id INT FOREIGN KEY REFERENCES DBME.funcionalidad(funcionalidad_id), 
 	rol_id INT FOREIGN KEY REFERENCES DBME.rol(rol_id) 
@@ -29,8 +30,8 @@ GO
 
 CREATE TABLE DBME.domicilio (
 	domicilio_id INT IDENTITY(1,1) PRIMARY KEY,
-	ciudad VARCHAR(25),
-	localidad VARCHAR(25),
+	ciudad NVARCHAR(255),
+	localidad NVARCHAR(255),
 	codigo_postal NVARCHAR(50),
 	piso NUMERIC(18,0),
 	departamento NVARCHAR(50),
@@ -41,15 +42,15 @@ GO
 
 CREATE TABLE DBME.usuario(
 	usuario_id INT IDENTITY(1,1) PRIMARY KEY,
-	username VARCHAR(21),
-	password VARCHAR(21),
+	username NVARCHAR(255),
+	password NVARCHAR(255),
 	habilitado bit,
 	cantidad_intentos_fallidos TINYINT DEFAULT '0',
 	mail NVARCHAR(255),
 	domicilio_id INT FOREIGN KEY REFERENCES DBME.domicilio(domicilio_id),
 	fecha_creacion DATETIME,
 	telefono BIGINT,
-	es_nuevo BIT,
+	es_nuevo BIT
 );
 GO
 
@@ -106,6 +107,7 @@ CREATE TABLE DBME.visibilidad(
 	visibilidad_costo_envio NUMERIC(10,2)
 );
 GO
+
 
 CREATE TABLE DBME.publicacion(
 	publicacion_id NUMERIC(18,0) IDENTITY(1,1) PRIMARY KEY,
@@ -216,32 +218,59 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DBME.enlazarRol_X_Funcionalidad 
+CREATE PROCEDURE DBME.enlazarRol_X_Funcionalidad  -- agregar funcionalidades para cada rol
 AS
 BEGIN
 	
 	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id)
-	SELECT rol_id,funcionalidad_id
-	FROM DBME.rol, DBME.funcionalidad
+	SELECT 1,funcionalidad_id
+	FROM DBME.funcionalidad
 
-	--- TERMINAR
+	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id)
+	SELECT 2,funcionalidad_id
+	FROM DBME.funcionalidad
+
+	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id)
+	SELECT 3,funcionalidad_id
+	FROM DBME.funcionalidad
+	
+
 END;
 GO
 
 
-
-
-CREATE PROCEDURE DBME.agregarFuncionalidadesAdministrador
+CREATE PROCEDURE DBME.migrarDomicilio2
 AS
 BEGIN
-	
-	INSERT INTO DBME.rol(nombre_rol) VALUES ('Administrador');
-	INSERT INTO DBME.rol(nombre_rol) VALUES ('Cliente');
-	INSERT INTO DBME.rol(nombre_rol) VALUES ('Empresa');
+
+	INSERT INTO DBME.domicilio(codigo_postal,domicilio_calle,numero_calle,piso,departamento)
+	SELECT Publ_Cli_Cod_Postal,Publ_Cli_Dom_Calle,Publ_Cli_Nro_Calle,Publ_Cli_Piso,Publ_Cli_Depto
+	FROM gd_esquema.Maestra
+	WHERE Publ_Cli_Cod_Postal IS NOT NULL
+	UNION
+	SELECT Publ_Empresa_Cod_Postal,Publ_Empresa_Dom_Calle,Publ_Empresa_Nro_Calle,Publ_Empresa_Piso,Publ_Empresa_Depto
+	FROM gd_esquema.Maestra
+	WHERE Publ_Empresa_Cod_Postal IS NOT NULL
 
 END;
 GO
 
+CREATE PROCEDURE DBME.migrarClientes
+AS
+BEGIN
+
+	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,fecha_creacion,telefono,es_nuevo)
+	SELECT DISTINCT Publ_Cli_Mail, Publ_Cli_Mail,Publ_Cli_Mail,1,0, 30/05/2016,NULL,1
+	FROM gd_esquema.Maestra
+	WHERE Publ_Cli_Mail IS NOT NULL
+	UNION 
+	SELECT DISTINCT Publ_Empresa_Mail,Publ_Empresa_Mail,Publ_Empresa_Mail,1,0, 30/05/2016,NULL,1
+	FROM gd_esquema.Maestra
+	WHERE Publ_Empresa_Razon_Social IS NOT NULL AND Publ_Empresa_Mail IS NOT NULL
+
+
+END;
+GO
 
 
 CREATE PROCEDURE DBME.migrarVisibilidad
@@ -272,10 +301,12 @@ GO
 
 	EXECUTE DBME.crearFuncionalidades
 	EXECUTE DBME.crearRoles
+	EXECUTE DBME.enlazarRol_X_Funcionalidad
 	EXECUTE DBME.migrarVisibilidad
+	EXECUTE DBME.migrarDomicilio2
 	GO
 
-
+	
 
 /* END MIGRACION */
 

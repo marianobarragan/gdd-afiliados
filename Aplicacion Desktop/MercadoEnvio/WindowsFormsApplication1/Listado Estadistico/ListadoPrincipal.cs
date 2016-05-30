@@ -21,5 +21,19 @@ namespace MercadoEnvio.Listado_Estadistico
         {
 
         }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            string dsd = textBox1.Text;
+            string query = "SELECT * FROM DBME.domicilio WHERE codigo_postal =" + dsd;
+            DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
+            if (dt.Rows.Count != 0)
+            {
+                MessageBox.Show("No se han encontrado resultados", "Problema" , MessageBoxButtons.OK);
+                dataGridView1.DataSource = null;
+                return;
+            }
+            dataGridView1.DataSource = dt;
+        }
     }
 }
