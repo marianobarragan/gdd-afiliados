@@ -75,8 +75,8 @@ GO
 
 CREATE TABLE DBME.rubro(
 	rubro_id INT IDENTITY(1,1) PRIMARY KEY,
-	descripcion_corta VARCHAR(30),
-	descripcion_larga VARCHAR(255),
+	descripcion_corta NVARCHAR(30),
+	descripcion_larga NVARCHAR(255),
 );
 GO
 
@@ -255,23 +255,42 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DBME.migrarClientes
+
+CREATE PROCEDURE DBME.migrarClientes  -- de PUBL CLI
 AS
 BEGIN
 
-	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,fecha_creacion,telefono,es_nuevo)
-	SELECT DISTINCT Publ_Cli_Mail, Publ_Cli_Mail,Publ_Cli_Mail,1,0, 30/05/2016,NULL,1
-	FROM gd_esquema.Maestra
+	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id ,fecha_creacion,telefono,es_nuevo)
+	SELECT DISTINCT Publ_Cli_Mail, Publ_Cli_Mail,Publ_Cli_Mail,1,0, d.domicilio_id ,GETDATE(),NULL,1
+	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Cli_Cod_Postal = d.codigo_postal)
 	WHERE Publ_Cli_Mail IS NOT NULL
-	UNION 
-	SELECT DISTINCT Publ_Empresa_Mail,Publ_Empresa_Mail,Publ_Empresa_Mail,1,0, 30/05/2016,NULL,1
-	FROM gd_esquema.Maestra
-	WHERE Publ_Empresa_Razon_Social IS NOT NULL AND Publ_Empresa_Mail IS NOT NULL
+	
+	INSERT INTO DBME.cliente(usuario_id,apellido,nombre,numero_documento,tipo_documento,fecha_nacimiento)
+	SELECT DISTINCT u.usuario_id, m.Publ_Cli_Apeliido, m.Publ_Cli_Nombre,m.Publ_Cli_Dni,'DNI',m.Publ_Cli_Fecha_Nac
+	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Cli_Mail = u.mail)
 
+	SELECT * FROM DBME.cliente
+	SELECT * FROM DBME.usuario
+	SELECT * FROM DBME.domicilio
 
+	SELECT DISTINCT domicilio_id FROM DBME.domicilio d JOIN gd_esquema.Maestra m ON (d.codigo_postal = m.Publ_Cli_Cod_Postal)
+	/*UNION
+	SELECT domicilio_id FROM DBME.domicilio d JOIN gd_esquema.Maestra m ON (d.codigo_postal = m.Publ_Empresa_Cod_Postal)*/
+	 
+	
 END;
 GO
 
+CREATE PROCEDURE DBME.migrarRubro
+AS 
+BEGIN
+
+	INSERT INTO DBME.rubro(descripcion_larga,descripcion_corta)
+	SELECT Publicacion_Rubro_Descripcion, NULL
+	FROM gd_esquema.Maestra
+
+END;
+GO
 
 CREATE PROCEDURE DBME.migrarVisibilidad
 AS
@@ -302,8 +321,9 @@ GO
 	EXECUTE DBME.crearFuncionalidades
 	EXECUTE DBME.crearRoles
 	EXECUTE DBME.enlazarRol_X_Funcionalidad
-	EXECUTE DBME.migrarVisibilidad
 	EXECUTE DBME.migrarDomicilio2
+	EXECUTE DBME.migrarRubro
+	EXECUTE DBME.migrarVisibilidad
 	GO
 
 	
