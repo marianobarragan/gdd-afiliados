@@ -16,5 +16,15 @@ namespace MercadoEnvio.ABM_Rol
         {
             InitializeComponent();
         }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void BajaRol_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

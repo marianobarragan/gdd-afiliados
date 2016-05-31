@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -101,6 +102,7 @@
     <Compile Include="ComprarOfertar\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controller\ConexionSQL.cs" />
     <Compile Include="Facturas\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -182,6 +184,12 @@
     </Compile>
     <EmbeddedResource Include="ABM Rol\AltaRol.resx">
       <DependentUpon>AltaRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rol\BajaRol.resx">
+      <DependentUpon>BajaRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rol\ModificarRol.resx">
+      <DependentUpon>ModificarRol.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Rol\SeleccionRol.resx">
       <DependentUpon>SeleccionRol.cs</DependentUpon>
