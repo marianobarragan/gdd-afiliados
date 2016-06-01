@@ -174,9 +174,9 @@ GO
 CREATE TABLE DBME.factura_detalle(
 	factura_detalle_id INT IDENTITY(1,1) PRIMARY KEY,
 	factura_cantidad NUMERIC(18,0),
-	tipo_de_item VARCHAR CHECK(tipo_de_item IN ('PRODUCTO','ENVIO','VISIBILIDAD')), /* costo de producto, o costo de envio, o costo de publicacion  */
+	tipo_de_item VARCHAR(64) CHECK(tipo_de_item IN ('PRODUCTO','ENVIO','VISIBILIDAD','INDEFINIDO')), /* costo de producto, o costo de envio, o costo de publicacion  */
 	factura_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.factura(factura_id),
-	monto_parcial NUMERIC(18,2) NOT NULL
+	monto_parcial NUMERIC(18,2)
 );
 GO
 
@@ -266,17 +266,48 @@ BEGIN
 	WHERE Publ_Cli_Mail IS NOT NULL
 	
 	INSERT INTO DBME.cliente(usuario_id,apellido,nombre,numero_documento,tipo_documento,fecha_nacimiento)
-	SELECT DISTINCT u.usuario_id, m.Publ_Cli_Apeliido, m.Publ_Cli_Nombre,m.Publ_Cli_Dni,'DNI',m.Publ_Cli_Fecha_Nac
+	SELECT DISTINCT u.usuario_id, m.Publ_Cli_Apeliido, m.Publ_Cli_Nombre,m.Publ_Cli_Dni,'D',m.Publ_Cli_Fecha_Nac
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Cli_Mail = u.mail)
-
-	SELECT * FROM DBME.cliente
+	/*
+	SELECT * FROM DBME.cliente c JOIN DBME.usuario u ON (c.usuario_id = u.usuario_id) JOIN DBME.domicilio d ON (d.)
 	SELECT * FROM DBME.usuario
 	SELECT * FROM DBME.domicilio
 
 	SELECT DISTINCT domicilio_id FROM DBME.domicilio d JOIN gd_esquema.Maestra m ON (d.codigo_postal = m.Publ_Cli_Cod_Postal)
-	/*UNION
+	UNION
 	SELECT domicilio_id FROM DBME.domicilio d JOIN gd_esquema.Maestra m ON (d.codigo_postal = m.Publ_Empresa_Cod_Postal)*/
 	 
+	
+END;
+GO
+
+CREATE PROCEDURE DBME.migrarEmpresas
+AS
+BEGIN
+	
+	
+
+	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id ,fecha_creacion,telefono,es_nuevo)
+	SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Mail,Publ_Empresa_Mail,1,0, d.domicilio_id ,GETDATE(),NULL,1
+	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Empresa_Cod_Postal = d.codigo_postal)
+	WHERE Publ_Empresa_Mail IS NOT NULL
+	
+	INSERT INTO DBME.empresa(usuario_id,razon_social,cuit,fecha_creacion)
+	SELECT DISTINCT u.usuario_id,Publ_Empresa_Razon_Social,Publ_Empresa_Cuit,Publ_Empresa_Fecha_Creacion
+	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Empresa_Mail = u.mail)
+	/*
+	SELECT * FROM DBME.cliente c JOIN DBME.usuario u ON (c.usuario_id = u.usuario_id) JOIN DBME.domicilio d ON (d.)
+	SELECT * FROM DBME.usuario
+	SELECT * FROM DBME.domicilio
+	empresa_id INT IDENTITY(1,1) PRIMARY KEY,
+	razon_social NVARCHAR(255) UNIQUE,
+	cuit NVARCHAR(50) UNIQUE,
+	fecha_creacion DATETIME,
+	nombre_contacto VARCHAR(25),
+	rubro_id INT FOREIGN KEY REFERENCES DBME.rubro(rubro_id),
+	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id)
+
+	*/ 
 	
 END;
 GO
@@ -312,6 +343,43 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE DBME.migrarFacturas
+AS
+BEGIN
+	
+	SET IDENTITY_INSERT DBME.factura ON;
+	SET IDENTITY_INSERT DBME.factura_detalle OFF;
+	
+	INSERT INTO DBME.factura(factura_id,fecha,monto_total,forma_pago_desc)
+	SELECT DISTINCT Factura_Nro,Factura_Fecha,Factura_Total,Forma_Pago_Desc
+	FROM gd_esquema.Maestra
+	WHERE Factura_Nro IS NOT NULL
+
+	INSERT INTO DBME.factura_detalle(factura_id,factura_cantidad,monto_parcial,tipo_de_item)
+	SELECT Factura_Nro,Item_Factura_Cantidad,Item_Factura_Monto,'INDEFINIDO'
+	FROM gd_esquema.Maestra 
+	WHERE Factura_Nro IS NOT NULL
+
+	SELECT * FROM DBME.factura_detalle
+
+	/*
+	factura_id NUMERIC(18,0) IDENTITY(1,1) PRIMARY KEY,
+	compra_id INT FOREIGN KEY REFERENCES DBME.compra(compra_id),
+	fecha DATETIME,
+	monto_total NUMERIC(18,2) NOT NULL,
+	forma_pago_desc NVARCHAR(255)
+	
+
+	factura_detalle_id INT IDENTITY(1,1) PRIMARY KEY,
+	factura_cantidad NUMERIC(18,0),
+	tipo_de_item VARCHAR CHECK(tipo_de_item IN ('PRODUCTO','ENVIO','VISIBILIDAD')), /* costo de producto, o costo de envio, o costo de publicacion  */
+	factura_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.factura(factura_id),
+	monto_parcial NUMERIC(18,2) NOT NULL
+	*/
+
+END;
+GO
+
 
 
 /* END BASES DE MIGRACION */ 
@@ -323,7 +391,10 @@ GO
 	EXECUTE DBME.enlazarRol_X_Funcionalidad
 	EXECUTE DBME.migrarDomicilio2
 	EXECUTE DBME.migrarRubro
-	EXECUTE DBME.migrarVisibilidad
+	EXECUTE DBME.migrarClientes
+	EXECUTE DBME.migrarEmpresas
+	EXECUTE DBME.migrarFacturas
+
 	GO
 
 	
