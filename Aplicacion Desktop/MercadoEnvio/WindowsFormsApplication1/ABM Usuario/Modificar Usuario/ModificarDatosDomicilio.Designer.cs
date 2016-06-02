@@ -1,6 +1,6 @@
-﻿namespace MercadoEnvio.ABM_Usuario.Alta_Usuario
+﻿namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
 {
-    partial class DatosDomicilio
+    partial class ModificarDatosDomicilio
     {
         /// <summary>
         /// Required designer variable.
@@ -68,10 +68,10 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(366, 321);
-            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Domicilio";
             // 
@@ -97,7 +97,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(185, 23);
             this.button1.TabIndex = 14;
-            this.button1.Text = "Finalizar";
+            this.button1.Text = "Guardar Domicilio";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // textBox7
@@ -212,14 +212,14 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Ciudad";
             // 
-            // DatosDomicilio
+            // ModificarDatosDomicilio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(378, 336);
+            this.ClientSize = new System.Drawing.Size(402, 348);
             this.Controls.Add(this.groupBox1);
-            this.Name = "DatosDomicilio";
-            this.Text = "Datos de Domicilio";
+            this.Name = "ModificarDatosDomicilio";
+            this.Text = "ModificarDatosDomicilio";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -229,6 +229,8 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.TextBox textBox6;
@@ -244,7 +246,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox8;
-        private System.Windows.Forms.Label label8;
+
     }
 }

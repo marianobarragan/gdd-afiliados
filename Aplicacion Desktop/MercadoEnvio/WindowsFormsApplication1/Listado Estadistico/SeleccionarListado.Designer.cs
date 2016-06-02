@@ -52,6 +52,7 @@
             this.btnIrVista.TabIndex = 4;
             this.btnIrVista.Text = "IR!";
             this.btnIrVista.UseVisualStyleBackColor = true;
+            this.btnIrVista.Click += new System.EventHandler(this.btnIrVista_Click);
             // 
             // lstOpciones
             // 

@@ -1,6 +1,6 @@
-﻿namespace MercadoEnvio.ABM_Usuario
+﻿namespace MercadoEnvio.ABM_Usuario.Alta_Usuario
 {
-    partial class Form2
+    partial class DatosClienteNuevo
     {
         /// <summary>
         /// Required designer variable.
@@ -56,10 +56,10 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(1, 2);
+            this.groupBox1.Location = new System.Drawing.Point(12, 8);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(388, 314);
-            this.groupBox1.TabIndex = 0;
+            this.groupBox1.Size = new System.Drawing.Size(392, 314);
+            this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos Cliente";
             // 
@@ -107,7 +107,7 @@
             // textBox1
             // 
             this.textBox1.BackColor = System.Drawing.SystemColors.Window;
-            this.textBox1.Location = new System.Drawing.Point(126, 24);
+            this.textBox1.Location = new System.Drawing.Point(126, 21);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(145, 20);
             this.textBox1.TabIndex = 5;
@@ -157,14 +157,14 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Apellido";
             // 
-            // Form2
+            // DatosClienteNuevo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(393, 328);
+            this.ClientSize = new System.Drawing.Size(420, 334);
             this.Controls.Add(this.groupBox1);
-            this.Name = "Form2";
-            this.Text = "Datos Del Cliente";
+            this.Name = "DatosClienteNuevo";
+            this.Text = "DatosClienteNuevo";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -185,5 +185,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+
     }
 }

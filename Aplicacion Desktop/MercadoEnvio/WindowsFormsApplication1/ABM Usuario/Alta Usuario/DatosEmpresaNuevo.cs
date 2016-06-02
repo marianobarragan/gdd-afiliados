@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace MercadoEnvio.ABM_Usuario.Alta_Usuario
 {
-    public partial class DatosEmpresa : Form
+    public partial class DatosEmpresaNuevo : Form
     {
-        public DatosEmpresa()
+        public DatosEmpresaNuevo()
         {
             InitializeComponent();
         }

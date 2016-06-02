@@ -78,11 +78,59 @@
     <Compile Include="ABM Rubro\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Usuario\Form1.cs">
+    <Compile Include="ABM Usuario\Alta Usuario\AltaUsuario.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Usuario\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ABM Usuario\Alta Usuario\AltaUsuario.Designer.cs">
+      <DependentUpon>AltaUsuario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Usuario\Alta Usuario\DatosClienteNuevo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Usuario\Alta Usuario\DatosClienteNuevo.Designer.cs">
+      <DependentUpon>DatosClienteNuevo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Usuario\Alta Usuario\DatosEmpresaNuevo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Usuario\Alta Usuario\DatosEmpresaNuevo.Designer.cs">
+      <DependentUpon>DatosEmpresaNuevo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Usuario\Modificar Usuario\ListadoParaCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Usuario\Modificar Usuario\ListadoParaCliente.Designer.cs">
+      <DependentUpon>ListadoParaCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Usuario\Modificar Usuario\ListadoParaEmpresa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Usuario\Modificar Usuario\ListadoParaEmpresa.Designer.cs">
+      <DependentUpon>ListadoParaEmpresa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Usuario\Modificar Usuario\MenuModificacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Usuario\Modificar Usuario\MenuModificacion.Designer.cs">
+      <DependentUpon>MenuModificacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Usuario\Modificar Usuario\ModificarDatosCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Usuario\Modificar Usuario\ModificarDatosCliente.Designer.cs">
+      <DependentUpon>ModificarDatosCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Usuario\Modificar Usuario\ModificarDatosDomicilio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Usuario\Modificar Usuario\ModificarDatosDomicilio.Designer.cs">
+      <DependentUpon>ModificarDatosDomicilio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Usuario\Modificar Usuario\ModificarDatosEmpresa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Usuario\Modificar Usuario\ModificarDatosEmpresa.Designer.cs">
+      <DependentUpon>ModificarDatosEmpresa.cs</DependentUpon>
     </Compile>
     <Compile Include="ABM Visibilidad\Form1.cs">
       <SubType>Form</SubType>
@@ -102,7 +150,9 @@
     <Compile Include="ComprarOfertar\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controller\Controller.cs" />
     <Compile Include="Controller\ConexionSQL.cs" />
+    <Compile Include="Domain\Usuario.cs" />
     <Compile Include="Facturas\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -193,6 +243,33 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Rol\SeleccionRol.resx">
       <DependentUpon>SeleccionRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\Alta Usuario\AltaUsuario.resx">
+      <DependentUpon>AltaUsuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\Alta Usuario\DatosClienteNuevo.resx">
+      <DependentUpon>DatosClienteNuevo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\Alta Usuario\DatosEmpresaNuevo.resx">
+      <DependentUpon>DatosEmpresaNuevo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\Modificar Usuario\ListadoParaCliente.resx">
+      <DependentUpon>ListadoParaCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\Modificar Usuario\ListadoParaEmpresa.resx">
+      <DependentUpon>ListadoParaEmpresa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\Modificar Usuario\MenuModificacion.resx">
+      <DependentUpon>MenuModificacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\Modificar Usuario\ModificarDatosCliente.resx">
+      <DependentUpon>ModificarDatosCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\Modificar Usuario\ModificarDatosDomicilio.resx">
+      <DependentUpon>ModificarDatosDomicilio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\Modificar Usuario\ModificarDatosEmpresa.resx">
+      <DependentUpon>ModificarDatosEmpresa.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

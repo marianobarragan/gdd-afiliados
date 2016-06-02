@@ -1,6 +1,6 @@
-﻿namespace WindowsFormsApplication1.ABM_Usuario
+﻿namespace MercadoEnvio.ABM_Usuario.Alta_Usuario
 {
-    partial class Form1
+    partial class AltaUsuario
     {
         /// <summary>
         /// Required designer variable.
@@ -60,10 +60,10 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(7, 5);
+            this.groupBox1.Location = new System.Drawing.Point(5, -19);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(274, 301);
-            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Creacion Usuario";
             // 
@@ -113,7 +113,6 @@
             this.label5.Size = new System.Drawing.Size(67, 13);
             this.label5.TabIndex = 8;
             this.label5.Text = "Tipo Usuario";
-            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // label4
             // 
@@ -123,7 +122,6 @@
             this.label4.Size = new System.Drawing.Size(23, 13);
             this.label4.TabIndex = 7;
             this.label4.Text = "Rol";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // button1
             // 
@@ -154,7 +152,6 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(149, 20);
             this.textBox1.TabIndex = 3;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label3
             // 
@@ -164,7 +161,6 @@
             this.label3.Size = new System.Drawing.Size(91, 13);
             this.label3.TabIndex = 2;
             this.label3.Text = "Confirm Password";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // label2
             // 
@@ -183,16 +179,16 @@
             this.label1.Size = new System.Drawing.Size(55, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Username";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
-            // Form1
+            // AltaUsuario
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 317);
+            this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.groupBox1);
-            this.Name = "Form1";
-            this.Text = "Alta Usuario";
+            this.Name = "AltaUsuario";
+            this.Text = "Form1";
+            this.Load += new System.EventHandler(this.AltaUsuario_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -202,18 +198,18 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Label label6;
     }
 }

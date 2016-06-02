@@ -26,5 +26,14 @@ namespace MercadoEnvio.Listado_Estadistico
         {
             lstOpciones.SelectedIndex = 0;
         }
+
+        private void btnIrVista_Click(object sender, EventArgs e)
+        {
+            int index = lstOpciones.SelectedIndex;
+            ListadoPrincipal listadoNuevo = new ListadoPrincipal(index);
+            listadoNuevo.Show();
+
+
+        }
     }
 }

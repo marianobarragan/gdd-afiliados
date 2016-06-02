@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MercadoEnvio.ABM_Usuario
+namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
 {
-    public partial class Form2 : Form
+    public partial class ListadoParaCliente : Form
     {
-        public Form2()
+        public ListadoParaCliente()
         {
             InitializeComponent();
         }
