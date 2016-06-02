@@ -300,24 +300,13 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DBME.crearAdministradores
-AS
-BEGIN
-	
-	INSERT INTO DBME.administrador(nombre,apellido,usuario_id)
-	VALUES 'pablo','guede',(SLECETGBGFGf)
-	
-
-END;
-GO
-
 
 CREATE PROCEDURE DBME.migrarRubro
 AS 
 BEGIN
 
 	INSERT INTO DBME.rubro(descripcion_larga,descripcion_corta)
-	SELECT Publicacion_Rubro_Descripcion, NULL
+	SELECT DISTINCT Publicacion_Rubro_Descripcion, NULL
 	FROM gd_esquema.Maestra
 
 END;
@@ -362,21 +351,6 @@ BEGIN
 
 	SELECT * FROM DBME.factura_detalle
 
-	/*
-	factura_id NUMERIC(18,0) IDENTITY(1,1) PRIMARY KEY,
-	compra_id INT FOREIGN KEY REFERENCES DBME.compra(compra_id),
-	fecha DATETIME,
-	monto_total NUMERIC(18,2) NOT NULL,
-	forma_pago_desc NVARCHAR(255)
-	
-
-	factura_detalle_id INT IDENTITY(1,1) PRIMARY KEY,
-	factura_cantidad NUMERIC(18,0),
-	tipo_de_item VARCHAR CHECK(tipo_de_item IN ('PRODUCTO','ENVIO','VISIBILIDAD')), /* costo de producto, o costo de envio, o costo de publicacion  */
-	factura_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.factura(factura_id),
-	monto_parcial NUMERIC(18,2) NOT NULL
-	*/
-
 END;
 GO
 
@@ -395,6 +369,7 @@ GO
 	EXECUTE DBME.migrarEmpresas
 	EXECUTE DBME.migrarFacturas
 	EXECUTE DBME.enlazarRol_X_Usuario
+	
 
 	GO
 
@@ -409,7 +384,57 @@ GO
 
 /* START FUNCTIONS */
 
+CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeProductosNoVendidos(@mes TINYINT,@anio INTEGER,@visibilidad NUMERIC (18,0))
+RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), cantidad_productos_sin_vender BIGINT)
+AS 
+BEGIN 
+	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,cantidad_productos_sin_vender)
+	select ciudad, localidad, codigo_postal from dbme.domicilio						
+	--aca va la funcion posta
+
+	RETURN
+END;
+GO
+
+
+CREATE FUNCTION DBME.topClientesConMayorCantidadDeProductosComprados(@mes TINYINT,@anio INTEGER,@rubro NVARCHAR(255))
+RETURNS @TABLA_RESULTADO TABLE ( id_cliente INT, nombre_cliente NVARCHAR(255), apellido_cliente NVARCHAR(255), cantidad_productos_comprados BIGINT)
+AS 
+BEGIN 
+	INSERT INTO @TABLA_RESULTADO(id_cliente,nombre_cliente,apellido_cliente,cantidad_productos_comprados)
+	select ciudad, localidad, codigo_postal from dbme.domicilio
+	--aca va la funcion posta
+
+	RETURN
+END;
+GO
+
+CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeFacturas(@mes TINYINT,@anio INTEGER)-- dentro de un mes y año particular
+RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), cantidad_facturas BIGINT)
+AS 
+BEGIN 
+	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,cantidad_facturas)
+	select ciudad, localidad, codigo_postal from dbme.domicilio						
+	--aca va la funcion posta
+
+	RETURN
+END;
+GO
+
+CREATE FUNCTION DBME.topVendedoresConMayorMontoFacturado(@mes TINYINT,@anio INTEGER)-- dentro de un mes y año particular
+RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), monto_facturado BIGINT)
+AS 
+BEGIN 
+	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,monto_facturado)
+	select ciudad, localidad, codigo_postal from dbme.domicilio						
+	--aca va la funcion posta
+
+	RETURN
+END;
+GO
+
 /* END FUNCTIONS */
+
 
 /* START PROCEDURES CREACIONALES */
 
@@ -435,57 +460,127 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DBME.crearCliente(
-	apellido NVARCHAR(255),
-	nombre NVARCHAR(255),
-	numero_documento NUMERIC(18,0) UNIQUE,
-	tipo_documento CHAR,
-	fecha_nacimiento DATETIME,
-	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id) )
-AS
-BEGIN
-
-
-
-END;
-GO
-
 CREATE PROCEDURE DBME.crearUsuario(
 	@username NVARCHAR(255),
 	@password NVARCHAR(255),
 	@mail NVARCHAR(255),
 	@telefono BIGINT,
-	@es_nuevo BIT,
 	@ciudad NVARCHAR(255),
 	@localidad NVARCHAR(255),
 	@codigo_postal NVARCHAR(50),
 	@piso NUMERIC(18,0),
 	@departamento NVARCHAR(50),
 	@domicilio_calle NVARCHAR(255),
-	@numero_calle NUMERIC(18,0))
+	@numero_calle NUMERIC(18,0),
+	@usuario_id INT OUT)
 AS
 BEGIN
-	DECLARE @usuario_id AS INT
+
 	DECLARE @domicilio_id AS INT 
 	EXECUTE DBME.crearDomicilio @ciudad,@localidad,@codigo_postal,@piso,@departamento,@domicilio_calle,@numero_calle,@domicilio_id OUT
 
 	INSERT INTO DBME.usuario(username,password,habilitado,cantidad_intentos_fallidos,mail,domicilio_id,fecha_creacion,telefono,es_nuevo)
 	VALUES (@username,@password,1,0,@mail,@domicilio_id,GETDATE(),@telefono,1)
 
-/*usuario_id INT IDENTITY(1,1) PRIMARY KEY,
-	username NVARCHAR(255),
-	password NVARCHAR(255),
-	habilitado bit,
-	cantidad_intentos_fallidos TINYINT DEFAULT '0',
-	mail NVARCHAR(255),
-	domicilio_id INT FOREIGN KEY REFERENCES DBME.domicilio(domicilio_id),
-	fecha_creacion DATETIME,
-	telefono BIGINT,
-	es_nuevo BIT*/
+	SET @usuario_id = SCOPE_IDENTITY()
 END;
 GO
 
+CREATE PROCEDURE DBME.crearCliente(
+	@apellido NVARCHAR(255),
+	@nombre NVARCHAR(255),
+	@numero_documento NUMERIC(18,0),
+	@tipo_documento CHAR,
+	@fecha_nacimiento DATETIME,
+	@username NVARCHAR(255),
+	@password NVARCHAR(255),
+	@mail NVARCHAR(255),
+	@telefono BIGINT,
+	@ciudad NVARCHAR(255),
+	@localidad NVARCHAR(255),
+	@codigo_postal NVARCHAR(50),
+	@piso NUMERIC(18,0),
+	@departamento NVARCHAR(50),
+	@domicilio_calle NVARCHAR(255),
+	@numero_calle NUMERIC(18,0),
+	@cliente_id INT OUT)
+AS
+BEGIN
+	
+	DECLARE @usuario_id AS INT
+
+	EXECUTE DBME.crearUsuario @username,@password,@mail,@telefono,@ciudad,@localidad,@codigo_postal,@piso,@departamento,@domicilio_calle,@numero_calle, @usuario_id OUT
+	
+	INSERT INTO DBME.cliente(apellido,nombre,numero_documento,tipo_documento,fecha_nacimiento,usuario_id)
+	VALUES (@apellido,@nombre,@numero_documento,@tipo_documento,@fecha_nacimiento,@usuario_id)
+
+	SET @cliente_id = SCOPE_IDENTITY()
+
+END;
+GO
+
+CREATE PROCEDURE DBME.crearEmpresa(
+	@razon_social NVARCHAR(255),
+	@cuit NVARCHAR(50),
+	@fecha_creacion DATETIME,
+	@nombre_contacto VARCHAR(25),
+	@rubro_id INT,
+	@username NVARCHAR(255),
+	@password NVARCHAR(255),
+	@mail NVARCHAR(255),
+	@telefono BIGINT,
+	@ciudad NVARCHAR(255),
+	@localidad NVARCHAR(255),
+	@codigo_postal NVARCHAR(50),
+	@piso NUMERIC(18,0),
+	@departamento NVARCHAR(50),
+	@domicilio_calle NVARCHAR(255),
+	@numero_calle NUMERIC(18,0),
+	@cliente_id INT OUT)
+AS
+BEGIN
+	
+	DECLARE @usuario_id AS INT
+
+	EXECUTE DBME.crearUsuario @username,@password,@mail,@telefono,@ciudad,@localidad,@codigo_postal,@piso,@departamento,@domicilio_calle,@numero_calle, @usuario_id OUT
+	
+	INSERT INTO DBME.empresa(razon_social,cuit,fecha_creacion,nombre_contacto,rubro_id,usuario_id)
+	VALUES (@razon_social,@cuit,@fecha_creacion,@nombre_contacto,@rubro_id,@usuario_id)
+
+	SET @cliente_id = SCOPE_IDENTITY()
+
+END;
+GO
+
+CREATE PROCEDURE DBME.crearAdministradores
+AS
+BEGIN
+
+	DECLARE @usuario_id AS INT
+	
+	EXECUTE DBME.crearUsuario 'admin','w23e',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, @usuario_id OUT
+	INSERT INTO DBME.administrador(nombre,apellido,usuario_id)
+	VALUES ('Administrador','General',@usuario_id)
 
 
+END;
+GO
+
+/*
+BEGIN TRANSACTION
+DECLARE @usuario_id AS INT
+EXECUTE DBME.crearUsuario 'a','a','metodoGuede@sanLorenzo.com.br',NULL,NULL,NULL,NULL,NULL,NULL,'Orticalle','1000', @usuario_id OUT
+INSERT INTO DBME.administrador(nombre,apellido,usuario_id)
+VALUES ('Pablo','Guede',@usuario_id)
+EXECUTE DBME.crearAdministradores
+SELECT * FROM DBME.administrador a JOIN DBME.usuario u ON (a.usuario_id=u.usuario_id)
+DROP PROCEDURE DBME.crearDomicilio
+DROP PROCEDURE DBME.crearUsuario
+DROP PROCEDURE DBME.crearCliente
+DECLARE @cliente_id AS INT
+EXECUTE DBME.crearCliente 'do interest','sapinho','38355825','D','20120618 10:34:09 AM','sapo','sapo','sapinhododeus@gemeil.com','1565212592','CABA','CABA','1102','1','6','Carlos Calvo','1781',@cliente_id OUT
+SELECT rubro_id,descripcion_larga FROM DBME.  
+SELECT nombre,apellido,numero_documento,tipo_documento FROM DBME.cliente WHERE numero_documento = '38355825'
+ROLLBACK TRANSACTION*/
 
 /* END PROCEDURES CREACIONALES */
