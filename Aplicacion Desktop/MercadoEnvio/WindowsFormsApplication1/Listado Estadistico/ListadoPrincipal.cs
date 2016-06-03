@@ -27,6 +27,7 @@ namespace MercadoEnvio.Listado_Estadistico
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
+            /*
             string dsd = textBox1.Text;
             string query = "SELECT * FROM DBME.domicilio ";
             DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
@@ -60,7 +61,12 @@ namespace MercadoEnvio.Listado_Estadistico
                 break;
             }           
              * /
-                
+              */  
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
        
          }

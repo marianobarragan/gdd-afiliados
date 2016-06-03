@@ -557,14 +557,19 @@ AS
 BEGIN
 
 	DECLARE @usuario_id AS INT
-	
-	EXECUTE DBME.crearUsuario 'admin','w23e',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, @usuario_id OUT
+										--w23e encriptado
+	EXECUTE DBME.crearUsuario 'admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, @usuario_id OUT
 	INSERT INTO DBME.administrador(nombre,apellido,usuario_id)
 	VALUES ('Administrador','General',@usuario_id)
 
 
 END;
 GO
+
+select username,'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',HASHBYTES('SHA2_256','w23e')
+FROM DBME.usuario
+WHERE username = 'admin'
+
 
 /*
 BEGIN TRANSACTION
@@ -584,3 +589,44 @@ SELECT nombre,apellido,numero_documento,tipo_documento FROM DBME.cliente WHERE n
 ROLLBACK TRANSACTION*/
 
 /* END PROCEDURES CREACIONALES */
+
+/* START PROCEDURES COMUNICACION */
+
+CREATE PROCEDURE DBME.loginUsuario (@username nvarchar(255),@contrasenia nvarchar(255))
+AS
+BEGIN
+	DECLARE @u_id INT
+	DECLARE @u_password NVARCHAR(255)
+	DECLARE @u_habilitado bit
+	DECLARE @cantidad_intentos_fallidos tinyint
+	DECLARE @mensaje_error varchar(100)
+	
+	
+	--SELECT @U_id = DBME.usuario.usuario_id, @U_password = password, @U_habilitado = habilitado, @cantidad_intentos = intentos_fallidos, @U_rol_id = tablaUporR.id_rol 
+	--FROM DBAS.usuarios tablaUsuarios, DBAS.usuariosPorRol tablaUporR 
+	--WHERE tablaUsuarios.username = @usuario AND tablaUporR.id_usuario = tablaUsuarios.id_usuario
+
+
+	-- ME FALTAN HACER MIL COSAS ACA:
+	-- VERIFICAR CONTRASEÑA
+	-- VERIFICAR SI ESTA HABILITADO
+	-- VERIFICAR CANT INTENTOS FALLIDOS
+	-- ACTUALIZAR INT FALLIDOS
+	-- VER SI DOY LISTA DE FUNCIONALIDADES O PAJA
+
+	IF (@U_id IS NULL)
+	BEGIN
+		-- Devuelvo un mensaje de error
+		SET @mensaje_error = 'El usuario ingresado no existe'
+		RAISERROR(@mensaje_error, 12, 1)
+	END
+	
+
+
+
+END;
+GO
+
+
+
+/* END PROCEDURES COMUNICACION */

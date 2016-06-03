@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
@@ -43,7 +44,6 @@
             this.lstTrimestre = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -70,6 +70,17 @@
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtros";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // button1
+            // 
+            this.button1.Enabled = false;
+            this.button1.Location = new System.Drawing.Point(675, 186);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(101, 40);
+            this.button1.TabIndex = 19;
+            this.button1.Text = "Limpiar";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // textBox1
             // 
@@ -181,7 +192,6 @@
             this.txtAño.Size = new System.Drawing.Size(142, 20);
             this.txtAño.TabIndex = 7;
             this.txtAño.Text = "año obligatorio";
-            
             // 
             // lstTrimestre
             // 
@@ -213,16 +223,6 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(835, 273);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // button1
-            // 
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(675, 186);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(101, 40);
-            this.button1.TabIndex = 19;
-            this.button1.Text = "Limpiar";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // ListadoPrincipal
             // 

@@ -38,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -152,6 +153,7 @@
     </Compile>
     <Compile Include="Controller\Controller.cs" />
     <Compile Include="Controller\ConexionSQL.cs" />
+    <Compile Include="Controller\Encriptador.cs" />
     <Compile Include="Domain\Usuario.cs" />
     <Compile Include="Facturas\Form1.cs">
       <SubType>Form</SubType>

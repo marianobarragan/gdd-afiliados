@@ -8,11 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using MercadoEnvio.Domain;
+
 namespace MercadoEnvio.Login
 {
     public partial class LoginAvanzado : Form
     {
-        public LoginAvanzado()
+        public LoginAvanzado(Usuario u)
         {
             InitializeComponent();
         }
