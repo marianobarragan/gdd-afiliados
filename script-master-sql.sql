@@ -349,7 +349,6 @@ BEGIN
 	FROM gd_esquema.Maestra 
 	WHERE Factura_Nro IS NOT NULL
 
-	SELECT * FROM DBME.factura_detalle
 
 END;
 GO
@@ -358,10 +357,23 @@ GO
 CREATE PROCEDURE DBME.migrarCalificaciones
 AS
 BEGIN
+	SET IDENTITY_INSERT DBME.calificacion ON;
+
 	INSERT INTO DBME.calificacion(calificacion_id,cantidad_estrellas,autor_id)
 	SELECT m.Calificacion_Codigo,m.Calificacion_Cant_Estrellas,u.usuario_id
 	FROM gd_esquema.Maestra m LEFT JOIN DBME.usuario u ON (m.Cli_Mail=u.mail)
 	WHERE Calificacion_Codigo IS NOT NULL
+END;
+GO
+
+CREATE PROCEDURE DBME.devolverIdDeMail(
+	@Publ_Mail NVARCHAR(255),
+	@usuario_id INT OUT)
+AS
+BEGIN
+	SELECT DISTINCT @usuario_id = usuario_id 
+	FROM DBME.usuario u
+	WHERE @Publ_Mail = u.mail
 END;
 GO
 
@@ -374,27 +386,36 @@ BEGIN
 	FROM gd_esquema.Maestra
 	WHERE Oferta_Fecha IS NOT NULL
 
-	DECLARE @Publ_Empresa_Mail INT
-	DECLARE @Publ_Cli_Mail INT
-	DECLARE @Publicacion_Cod NUMERIC(18,0)
-	DECLARE @Oferta_Monto NUMERIC(18,2)
-	DECLARE @Oferta_Fecha DATETIME
+	DECLARE @Publ_Empresa_Mail AS NVARCHAR(255)
+	DECLARE @Publ_Cli_Mail AS NVARCHAR(255)
+	DECLARE @Publicacion_Cod AS NUMERIC(18,0)
+	DECLARE @Oferta_Monto AS NUMERIC(18,2)
+	DECLARE @Oferta_Fecha AS DATETIME
+	DECLARE @usuario_id AS INT
 
 	OPEN cursor_para_ofertas 
 	FETCH cursor_para_ofertas INTO @Publ_Empresa_Mail,@Publ_Cli_Mail,@Publicacion_Cod,@Oferta_Monto,@Oferta_Fecha
+
 	WHILE (@@FETCH_STATUS = 0)
 		BEGIN
 			IF (@Publ_Empresa_Mail IS NOT NULL)
 				BEGIN
+					EXECUTE DBME.devolverIdDeMail @Publ_Empresa_Mail,@usuario_id OUT
+
 					INSERT INTO DBME.oferta (monto,fecha,autor_id,publicacion_id)
-					VALUES (@Oferta_Monto,@Oferta_Fecha,@Publ_Empresa_Mail,@Publicacion_Cod)
+					VALUES (@Oferta_Monto,@Oferta_Fecha,@usuario_id,@Publicacion_Cod)
 				END
 			ELSE
 				BEGIN
+					EXECUTE DBME.devolverIdDeMail @Publ_Cli_Mail,@usuario_id OUT
+
 					INSERT INTO DBME.oferta (monto,fecha,autor_id,publicacion_id)
-					VALUES (@Oferta_Monto,@Oferta_Fecha,@Publ_Cli_Mail,@Publicacion_Cod)
+					VALUES (@Oferta_Monto,@Oferta_Fecha,@usuario_id,@Publicacion_Cod)
 				END
+			FETCH cursor_para_ofertas INTO @Publ_Empresa_Mail,@Publ_Cli_Mail,@Publicacion_Cod,@Oferta_Monto,@Oferta_Fecha
 		END
+	CLOSE cursor_para_ofertas
+	DEALLOCATE cursor_para_ofertas
 END;
 GO
 
@@ -403,12 +424,11 @@ CREATE PROCEDURE DBME.devolverIdRubroDeDescripcion (
 	@rubro_id INT OUT)
 AS
 BEGIN
-	SELECT @rubro_id = rubro_id 
+	SELECT DISTINCT @rubro_id = rubro_id 
 	FROM DBME.rubro
 	WHERE descripcion_corta = @Publicacion_Rubro_Descripcion
 END;
 GO
-
 
 CREATE PROCEDURE DBME.migrarPublicaciones
 AS
@@ -418,9 +438,9 @@ BEGIN
 
 	DECLARE cursor_para_publicaciones CURSOR FOR
 	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,
-	Publicacion_Estado,Publicacion_Tipo,Publicacion_Rubro_Descripcion
+	Publicacion_Estado,Publicacion_Tipo,Publicacion_Rubro_Descripcion,Publicacion_Visibilidad_Cod
 	FROM gd_esquema.Maestra
-	
+
 	DECLARE @Publicacion_Cod AS NUMERIC(18,0)
 	DECLARE @Publicacion_Descripcion AS NVARCHAR(255) 
 	DECLARE @Publicacion_Tipo AS NVARCHAR(255)
@@ -431,32 +451,58 @@ BEGIN
 	DECLARE @Publicacion_Estado AS NVARCHAR(255)
 	DECLARE @Publicacion_Rubro_Descripcion AS NVARCHAR(255)
 	DECLARE @rubro_id AS INT
-	
+	DECLARE @Publicacion_Visibilidad_Cod AS NUMERIC(18,0)
 
 	OPEN cursor_para_publicaciones
 	FETCH cursor_para_publicaciones INTO @Publicacion_Cod,@Publicacion_Descripcion,@Publicacion_Stock,@Publicacion_Fecha,
-	@Publicacion_Fecha_Venc,@Publicacion_Precio,@Publicacion_Estado,@Publicacion_Tipo,@Publicacion_Rubro_Descripcion
+	@Publicacion_Fecha_Venc,@Publicacion_Precio,@Publicacion_Estado,@Publicacion_Tipo,@Publicacion_Rubro_Descripcion,@Publicacion_Visibilidad_Cod
 	WHILE (@@FETCH_STATUS = 0)
 		BEGIN
 			EXECUTE DBME.devolverIdRubroDeDescripcion @Publicacion_Rubro_Descripcion,@rubro_id OUT
 			IF (@publicacion_tipo = 'Compra Inmediata')
 				BEGIN
-					INSERT INTO DBME.publicacion(publicacion_id,descripcion,stock,fecha_creacion,fecha_vencimiento,precio,publicacion_tipo,estado,permite_preguntas,realiza_envio,rubro_id)
-					VALUES (@Publicacion_Cod,@Publicacion_Descripcion,@Publicacion_Stock,@Publicacion_Fecha,@Publicacion_Fecha_Venc,@Publicacion_Precio,@Publicacion_Tipo,'ACTIVA',1,0,@rubro_id)
+					INSERT INTO DBME.publicacion(publicacion_id,descripcion,stock,fecha_creacion,fecha_vencimiento,precio,publicacion_tipo,estado,permite_preguntas,realiza_envio,rubro_id,visibilidad_id)
+					VALUES (@Publicacion_Cod,@Publicacion_Descripcion,@Publicacion_Stock,@Publicacion_Fecha,@Publicacion_Fecha_Venc,@Publicacion_Precio,@Publicacion_Tipo,'ACTIVA',1,0,@rubro_id,@Publicacion_Visibilidad_Cod)
 				END
 			ELSE
 				BEGIN
-					INSERT INTO DBME.publicacion(publicacion_id,descripcion,stock,fecha_creacion,fecha_vencimiento,publicacion_tipo,estado,permite_preguntas,realiza_envio,rubro_id)
-					VALUES (@Publicacion_Cod,@Publicacion_Descripcion,@Publicacion_Stock,@Publicacion_Fecha,@Publicacion_Fecha_Venc,@Publicacion_Tipo,'ACTIVA',1,0,@rubro_id)
+					INSERT INTO DBME.publicacion(publicacion_id,descripcion,stock,fecha_creacion,fecha_vencimiento,publicacion_tipo,estado,permite_preguntas,realiza_envio,rubro_id,visibilidad_id)
+					VALUES (@Publicacion_Cod,@Publicacion_Descripcion,@Publicacion_Stock,@Publicacion_Fecha,@Publicacion_Fecha_Venc,@Publicacion_Tipo,'ACTIVA',1,0,@rubro_id,@Publicacion_Visibilidad_Cod)
 				END
-			FETCH cursor_para_publicaciones INTO @Publicacion_Cod,@Publicacion_Descripcion,@Publicacion_Stock,@Publicacion_Fecha,@Publicacion_Fecha_Venc,@Publicacion_Precio,@Publicacion_Estado,@Publicacion_Tipo,@Publicacion_Rubro_Descripcion
+			FETCH cursor_para_publicaciones INTO @Publicacion_Cod,@Publicacion_Descripcion,@Publicacion_Stock,@Publicacion_Fecha,@Publicacion_Fecha_Venc,@Publicacion_Precio,@Publicacion_Estado,@Publicacion_Tipo,@Publicacion_Rubro_Descripcion,@Publicacion_Visibilidad_Cod
 		END
 	CLOSE cursor_para_publicaciones
 	DEALLOCATE cursor_para_publicaciones
 END;
 GO
 
+CREATE PROCEDURE DBME.migrarCompras
+AS
+BEGIN
 
+	DECLARE cursor_para_compras CURSOR FOR
+	SELECT Compra_Fecha,Compra_Cantidad,Publicacion_Cod,u.usuario_id
+	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Cli_Mail=u.mail)
+	WHERE Compra_Fecha IS NOT NULL AND Calificacion_Codigo IS NOT NULL
+
+	DECLARE @Compra_Fecha AS DATETIME
+	DECLARE @Compra_Cantidad AS NUMERIC(18,0)
+	DECLARE @Publicacion_Cod AS NUMERIC(18,0)
+	DECLARE @usuario_id AS INT
+
+	OPEN cursor_para_compras
+	FETCH cursor_para_compras INTO @Compra_Fecha,@Compra_Cantidad,@Publicacion_Cod,@usuario_id
+	WHILE(@@FETCH_STATUS = 0)
+		BEGIN
+			INSERT INTO DBME.compra(fecha,cantidad,publicacion_id,autor_id,esta_calificada)
+			VALUES (@Compra_Fecha,@Compra_Cantidad,@Publicacion_Cod,@usuario_id,1)
+			FETCH cursor_para_compras INTO @Compra_Fecha,@Compra_Cantidad,@Publicacion_Cod,@usuario_id
+		END
+	CLOSE cursor_para_compras
+	DEALLOCATE cursor_para_compras
+	
+END;
+GO
 
 /* END BASES DE MIGRACION */ 
 
@@ -471,7 +517,7 @@ GO
 	EXECUTE DBME.migrarEmpresas
 	EXECUTE DBME.migrarFacturas
 	EXECUTE DBME.enlazarRol_X_Usuario
-	
+	EXECUTE DBME.migrarVisibilidad
 
 	GO
 
