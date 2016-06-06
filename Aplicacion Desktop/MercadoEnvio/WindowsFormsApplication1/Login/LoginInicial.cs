@@ -53,9 +53,10 @@ namespace MercadoEnvio.Login
             }
 
             try { 
-                Usuario usuarioValidado = new Controller.Controller().obtenerUsuario(textBox1.Text,textBox2.Text);
+                Usuario usuarioValidado = new Controller.Controller().loginUsuario(textBox1.Text,textBox2.Text);
                 LoginAvanzado elegirRol = new LoginAvanzado(usuarioValidado);
-                this.Hide();
+                elegirRol.Show();
+                //this.Hide();
             }
             catch(Exception er)
             {
@@ -64,6 +65,32 @@ namespace MercadoEnvio.Login
             }
 
             
+        }
+
+        public void textBox2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                button1_Click(this, new EventArgs());
+            }
+        }
+        /*
+        private void textBox2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                button1_Click(this, new EventArgs());
+            }
+        }
+        */
+        private void LoginInicial_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

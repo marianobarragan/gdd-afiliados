@@ -65,6 +65,7 @@
             this.button1.TabIndex = 1;
             this.button1.Text = "Acceder!";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // LoginAvanzado
             // 
@@ -78,6 +79,7 @@
             this.MinimizeBox = false;
             this.Name = "LoginAvanzado";
             this.Text = "LoginAvanzado";
+            this.Load += new System.EventHandler(this.LoginAvanzado_Load);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 

@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace MercadoEnvio.Domain
 {
-    public class Usuario
+    class Rol
     {
-        string nombreUsuario;
-        public int usuario_id;
+        public string nombre;
+        public bool habilitado;
+
+        public string getNombre(){
+            return nombre;
+        }
     }
 }

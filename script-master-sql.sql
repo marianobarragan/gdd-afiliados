@@ -714,10 +714,8 @@ BEGIN
 END;
 GO
 
-select username,'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',HASHBYTES('SHA2_256','w23e')
-FROM DBME.usuario
-WHERE username = 'admin'
-
+--UPDATE DBME.usuario SET habilitado = '0' WHERE username = 'sapo'
+--select * from DBME.usuario where usuario.username = 'sapo'
 
 /*
 BEGIN TRANSACTION
@@ -731,14 +729,17 @@ DROP PROCEDURE DBME.crearDomicilio
 DROP PROCEDURE DBME.crearUsuario
 DROP PROCEDURE DBME.crearCliente
 DECLARE @cliente_id AS INT
-EXECUTE DBME.crearCliente 'do interest','sapinho','38355825','D','20120618 10:34:09 AM','sapo','sapo','sapinhododeus@gemeil.com','1565212592','CABA','CABA','1102','1','6','Carlos Calvo','1781',@cliente_id OUT
+EXECUTE DBME.crearCliente 'do interest','sapinho','38355825','D','20120618 10:34:09 AM','sapo','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7','sapinhododeus@gemeil.com','1565212592','CABA','CABA','1102','1','6','Carlos Calvo','1781',@cliente_id OUT
 SELECT rubro_id,descripcion_larga FROM DBME.  
 SELECT nombre,apellido,numero_documento,tipo_documento FROM DBME.cliente WHERE numero_documento = '38355825'
-ROLLBACK TRANSACTION*/
-
+ROLLBACK TRANSACTION
+*/
 /* END PROCEDURES CREACIONALES */
 
 /* START PROCEDURES COMUNICACION */
+
+EXECUTE DBME.crearAdministradores 
+DROP PROCEDURE DBME.loginUsuario 
 
 CREATE PROCEDURE DBME.loginUsuario (@username nvarchar(255),@contrasenia nvarchar(255))
 AS
@@ -749,28 +750,52 @@ BEGIN
 	DECLARE @cantidad_intentos_fallidos tinyint
 	DECLARE @mensaje_error varchar(100)
 	
+
+	SELECT @u_id = DBME.usuario.usuario_id, @u_password = usuario.password, @u_habilitado = habilitado, @cantidad_intentos_fallidos = DBME.usuario.cantidad_intentos_fallidos
+	FROM DBME.usuario
+	WHERE DBME.usuario.username = @username 
+
 	
-	--SELECT @U_id = DBME.usuario.usuario_id, @U_password = password, @U_habilitado = habilitado, @cantidad_intentos = intentos_fallidos, @U_rol_id = tablaUporR.id_rol 
-	--FROM DBAS.usuarios tablaUsuarios, DBAS.usuariosPorRol tablaUporR 
-	--WHERE tablaUsuarios.username = @usuario AND tablaUporR.id_usuario = tablaUsuarios.id_usuario
-
-
-	-- ME FALTAN HACER MIL COSAS ACA:
-	-- VERIFICAR CONTRASEÑA
-	-- VERIFICAR SI ESTA HABILITADO
-	-- VERIFICAR CANT INTENTOS FALLIDOS
-	-- ACTUALIZAR INT FALLIDOS
-	-- VER SI DOY LISTA DE FUNCIONALIDADES O PAJA
 
 	IF (@U_id IS NULL)
 	BEGIN
-		-- Devuelvo un mensaje de error
+		-- no se encontro usuario
 		SET @mensaje_error = 'El usuario ingresado no existe'
 		RAISERROR(@mensaje_error, 12, 1)
+		--RETURN
 	END
 	
+	IF (@u_habilitado = 0)
+	BEGIN
+		-- el usuario esta deshabilitado
+		SET @mensaje_error = 'El usuario se encuentra deshabilitado'
+		RAISERROR(@mensaje_error, 12, 1)
+		--RETURN
+	END
 
+	IF (@contrasenia = @u_password)
+	BEGIN
+		UPDATE DBME.usuario SET cantidad_intentos_fallidos = 0 WHERE DBME.usuario.usuario_id = @u_id
 
+		--DEVOLVER EL USUARIO
+		--RETURN
+	END
+	ELSE
+	BEGIN
+		SET @cantidad_intentos_fallidos = @cantidad_intentos_fallidos + 1
+		UPDATE DBME.usuario SET cantidad_intentos_fallidos = 3 WHERE usuario_id = @u_id
+		SET @mensaje_error = 'Contrasenia incorrecta'
+		RAISERROR(@mensaje_error, 12, 1)
+
+		IF (@cantidad_intentos_fallidos = 3)
+		BEGIN
+			UPDATE DBME.usuario SET usuario.habilitado = 0 WHERE usuario_id = @u_id
+			SET @mensaje_error = 'Supero la cantidad de intentos fallidos: el usuario se encuentra deshabilitado a partir de ahora'
+			RAISERROR(@mensaje_error, 12, 1)
+			--RETURN 
+		END 
+
+	END
 
 END;
 GO

@@ -14,28 +14,28 @@ namespace MercadoEnvio.Controller
 {
     class Controller
     {
-        public Usuario obtenerUsuario(String usuario, String contraseña){
+        public Usuario loginUsuario(String usuario, String contraseña){
             
-            // mando la query y obetengo el usuario
-            // verifico q la query me trajo un usuario valido
-            // devuelvo el usuario
+            string comando = "execute dbme.loginUsuario '" + usuario + "', '" + new Encriptador().getHash(contraseña) + "'";
+            DataTable data = (new ConexionSQL()).cargarTablaSQL(comando);
 
-            string comando = "execute dbme.loginUsuario '" + usuario + "', '" + contraseña + "'";
-            DataTable dt = (new ConexionSQL()).cargarTablaSQL(comando);
-
-            // acafalta hacer banda de cosas
+            // acafalta obtener el objeto usuario a partir de la data
             
             Usuario usuario2 = new Usuario();
             return usuario2;
 
 
         }
-
-        public List<string> obtenerRolesDelUsuario(String usuario, String contraseña)
+        
+        public List<Rol> obtenerRolesDelUsuario(Usuario u)
         {
-            return List<string> rolesUsuario = new List<string>();
+            string comando = "execute dbme.getFuncionalidadesDeUsuario '" + u.usuario_id + "'";
+            DataTable data = (new ConexionSQL()).cargarTablaSQL(comando);
 
-            public List<String> pasajes = new List<String>();
+            var roles = new List<Rol>();
+
+            //obtener los roles de la data
+            return roles;
         }
     }
 }

@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace MercadoEnvio.Domain
 {
-    public class Usuario
+    class Funcionalidad
     {
-        string nombreUsuario;
-        public int usuario_id;
+        public string descripcion;
+
+        public string getDescripcion() {
+            return descripcion;
+        }
     }
 }

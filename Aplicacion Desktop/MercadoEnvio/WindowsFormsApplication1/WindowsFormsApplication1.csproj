@@ -154,6 +154,8 @@
     <Compile Include="Controller\Controller.cs" />
     <Compile Include="Controller\ConexionSQL.cs" />
     <Compile Include="Controller\Encriptador.cs" />
+    <Compile Include="Domain\Funcionalidad.cs" />
+    <Compile Include="Domain\Rol.cs" />
     <Compile Include="Domain\Usuario.cs" />
     <Compile Include="Facturas\Form1.cs">
       <SubType>Form</SubType>
