@@ -192,6 +192,7 @@
             this.txtAño.Size = new System.Drawing.Size(142, 20);
             this.txtAño.TabIndex = 7;
             this.txtAño.Text = "año obligatorio";
+            this.txtAño.TextChanged += new System.EventHandler(this.txtAño_TextChanged);
             // 
             // lstTrimestre
             // 

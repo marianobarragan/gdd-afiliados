@@ -14,6 +14,8 @@ namespace MercadoEnvio.Login
 {
     public partial class LoginAvanzado : Form
     {
+     
+
         public LoginAvanzado(Usuario u)
         {
             InitializeComponent();

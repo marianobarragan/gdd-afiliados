@@ -139,11 +139,11 @@
     <Compile Include="ABM Visibilidad\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Calificar\Form1.cs">
+    <Compile Include="Calificar\CalificarVendedor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Calificar\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Calificar\CalificarVendedor.Designer.cs">
+      <DependentUpon>CalificarVendedor.cs</DependentUpon>
     </Compile>
     <Compile Include="ComprarOfertar\Form1.cs">
       <SubType>Form</SubType>
@@ -179,6 +179,12 @@
     </Compile>
     <Compile Include="Historial Cliente\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Historial Cliente\GenerarHistorialCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Historial Cliente\GenerarHistorialCliente.Designer.cs">
+      <DependentUpon>GenerarHistorialCliente.cs</DependentUpon>
     </Compile>
     <Compile Include="Listado Estadistico\ListadoPrincipal.cs">
       <SubType>Form</SubType>
@@ -275,8 +281,14 @@
     <EmbeddedResource Include="ABM Usuario\Modificar Usuario\ModificarDatosEmpresa.resx">
       <DependentUpon>ModificarDatosEmpresa.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Calificar\CalificarVendedor.resx">
+      <DependentUpon>CalificarVendedor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Historial Cliente\GenerarHistorialCliente.resx">
+      <DependentUpon>GenerarHistorialCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Listado Estadistico\ListadoPrincipal.resx">
       <DependentUpon>ListadoPrincipal.cs</DependentUpon>

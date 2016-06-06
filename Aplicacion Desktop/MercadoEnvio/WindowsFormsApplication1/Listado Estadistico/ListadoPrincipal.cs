@@ -68,6 +68,22 @@ namespace MercadoEnvio.Listado_Estadistico
         {
 
         }
+
+        private void txtAño_TextChanged(object sender, EventArgs e)
+        {
+            //char caracterIngresado = e; Tratando de chequear que sea numerico
+
+
+            //if (caracterIngresado > '0' && caracterIngresado <'9')
+
+            //else
+            
+
+
+
+            
+           
+        }
        
          }
 }
