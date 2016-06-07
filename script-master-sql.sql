@@ -192,7 +192,6 @@ CREATE PROCEDURE DBME.crearFuncionalidades
 AS
 BEGIN
 	
-	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('CREAR USUARIO');
 	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE ROL');
 	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE USUARIOS');
 	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE RUBRO');

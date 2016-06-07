@@ -12,9 +12,12 @@ namespace MercadoEnvio.ABM_Rol
 {
     public partial class SeleccionRol : Form
     {
-        public SeleccionRol()
+        public Form vista;
+
+        public SeleccionRol(Form vista)
         {
             InitializeComponent();
+            this.vista = vista;
         }
 
         private void SeleccionRol_Load(object sender, EventArgs e)
@@ -24,7 +27,27 @@ namespace MercadoEnvio.ABM_Rol
 
         private void btnIrVista_Click(object sender, EventArgs e)
         {
+            switch (lstOpciones.SelectedIndex)
+            {
+                case 0:
+                    AltaRol alta = new AltaRol();
+                    alta.Show();
+                    break;
+                case 1:
+                    BajaRol baja = new BajaRol();
+                    baja.Show();
+                    break;
+                case 2:
+                    ModificarRol mod = new ModificarRol();
+                    mod.Show();
+                    break;
+            }
+        }
 
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            vista.Show();
+            this.Close();
         }
     }
 }

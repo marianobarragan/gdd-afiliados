@@ -54,9 +54,9 @@ namespace MercadoEnvio.Login
             try { 
                 Usuario usuarioValidado = new Controller.Controller().loginUsuario(textBox1.Text,textBox2.Text);
                 //MessageBox.Show("estoy aca", "Login", MessageBoxButtons.OK);
-                LoginAvanzado elegirRol = new LoginAvanzado(usuarioValidado);
-                elegirRol.Show();
-                this.Hide();
+                LoginAvanzado loginAvanzado = new LoginAvanzado(usuarioValidado);
+                loginAvanzado.Show();
+                //this.Hide();
             }
             catch(Exception er)
             {

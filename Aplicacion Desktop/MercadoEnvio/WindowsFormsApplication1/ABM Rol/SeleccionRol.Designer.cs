@@ -39,7 +39,7 @@
             // 
             this.groupBox1.Controls.Add(this.lstOpciones);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(55, 44);
+            this.groupBox1.Location = new System.Drawing.Point(59, 24);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(286, 146);
             this.groupBox1.TabIndex = 6;
@@ -63,17 +63,18 @@
             // btnVolver
             // 
             this.btnVolver.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnVolver.Location = new System.Drawing.Point(6, 232);
+            this.btnVolver.Location = new System.Drawing.Point(10, 212);
             this.btnVolver.Name = "btnVolver";
             this.btnVolver.Size = new System.Drawing.Size(97, 44);
             this.btnVolver.TabIndex = 5;
             this.btnVolver.Text = "Volver";
             this.btnVolver.UseVisualStyleBackColor = true;
+            this.btnVolver.Click += new System.EventHandler(this.btnVolver_Click);
             // 
             // btnIrVista
             // 
             this.btnIrVista.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnIrVista.Location = new System.Drawing.Point(308, 232);
+            this.btnIrVista.Location = new System.Drawing.Point(312, 212);
             this.btnIrVista.Name = "btnIrVista";
             this.btnIrVista.Size = new System.Drawing.Size(97, 44);
             this.btnIrVista.TabIndex = 4;
@@ -86,10 +87,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SkyBlue;
-            this.ClientSize = new System.Drawing.Size(410, 321);
+            this.ClientSize = new System.Drawing.Size(423, 274);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnVolver);
             this.Controls.Add(this.btnIrVista);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "SeleccionRol";
             this.Text = "SeleccionRol";
             this.Load += new System.EventHandler(this.SeleccionRol_Load);

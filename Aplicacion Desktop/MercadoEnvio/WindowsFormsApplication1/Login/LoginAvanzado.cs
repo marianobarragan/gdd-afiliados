@@ -34,6 +34,7 @@ namespace MercadoEnvio.Login
             if (rolesDisponibles.Count == 1)
             {
                 funcion_sapo();
+                this.Hide();
             }
             
         }

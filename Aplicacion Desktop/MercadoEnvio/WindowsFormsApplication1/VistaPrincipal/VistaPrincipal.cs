@@ -24,6 +24,19 @@ namespace MercadoEnvio.VistaPrincipal
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //MessageBox.Show(lstFunciones.GetItemText(lstFunciones.SelectedItem), "Login", MessageBoxButtons.OK);
+            if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "ABM DE ROL")
+            {
+                ABM_Rol.SeleccionRol seleccionRol = new ABM_Rol.SeleccionRol(this);
+                seleccionRol.Show();
+                this.Hide();
+            }
+
+            /*if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "ABM DE ROL")
+            {
+                ABM_Rol.SeleccionRol seleccionRol = new ABM_Rol.SeleccionRol();
+                seleccionRol.Show();
+            }*/
 
         }
 
@@ -42,9 +55,20 @@ namespace MercadoEnvio.VistaPrincipal
             {
                 lstFunciones.Items.Add(sesion.listaFuncionalidades[i].descripcion);
             }
+            lstFunciones.SelectedIndex = 0;
         }
 
         private void lstFunciones_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
         {
 
         }
