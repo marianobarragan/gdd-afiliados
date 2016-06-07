@@ -6,9 +6,18 @@ using System.Threading.Tasks;
 
 namespace MercadoEnvio.Domain
 {
-    class Funcionalidad
+    public class Funcionalidad
     {
+        public Funcionalidad(int funcionalidad_id, string descripcion) {
+            this.funcionalidad_id = funcionalidad_id;
+            this.descripcion = descripcion;
+
+        }
+
+        public int funcionalidad_id;
         public string descripcion;
+
+
 
         public string getDescripcion() {
             return descripcion;

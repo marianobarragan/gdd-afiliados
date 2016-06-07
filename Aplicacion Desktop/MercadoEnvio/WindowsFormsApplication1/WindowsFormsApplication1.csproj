@@ -156,6 +156,7 @@
     <Compile Include="Controller\Encriptador.cs" />
     <Compile Include="Domain\Funcionalidad.cs" />
     <Compile Include="Domain\Rol.cs" />
+    <Compile Include="Domain\Sesion.cs" />
     <Compile Include="Domain\Usuario.cs" />
     <Compile Include="Facturas\Form1.cs">
       <SubType>Form</SubType>
@@ -179,12 +180,6 @@
     </Compile>
     <Compile Include="Historial Cliente\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Historial Cliente\GenerarHistorialCliente.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Historial Cliente\GenerarHistorialCliente.Designer.cs">
-      <DependentUpon>GenerarHistorialCliente.cs</DependentUpon>
     </Compile>
     <Compile Include="Listado Estadistico\ListadoPrincipal.cs">
       <SubType>Form</SubType>
@@ -286,9 +281,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Historial Cliente\GenerarHistorialCliente.resx">
-      <DependentUpon>GenerarHistorialCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Listado Estadistico\ListadoPrincipal.resx">
       <DependentUpon>ListadoPrincipal.cs</DependentUpon>

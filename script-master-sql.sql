@@ -42,7 +42,7 @@ GO
 
 CREATE TABLE DBME.usuario(
 	usuario_id INT IDENTITY(1,1) PRIMARY KEY,
-	username NVARCHAR(255),
+	username NVARCHAR(255) UNIQUE,
 	password NVARCHAR(255),
 	habilitado bit,
 	cantidad_intentos_fallidos TINYINT DEFAULT '0',
@@ -235,7 +235,6 @@ BEGIN
 END;
 GO
 
-
 CREATE PROCEDURE DBME.migrarDomicilio2
 AS
 BEGIN
@@ -252,7 +251,6 @@ BEGIN
 END;
 GO
 
-
 CREATE PROCEDURE DBME.migrarClientes  -- de PUBL CLI
 AS
 BEGIN
@@ -265,6 +263,8 @@ BEGIN
 	INSERT INTO DBME.cliente(usuario_id,apellido,nombre,numero_documento,tipo_documento,fecha_nacimiento)
 	SELECT DISTINCT u.usuario_id, m.Publ_Cli_Apeliido, m.Publ_Cli_Nombre,m.Publ_Cli_Dni,'D',m.Publ_Cli_Fecha_Nac
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Cli_Mail = u.mail)
+
+
 	
 END;
 GO
@@ -281,10 +281,11 @@ BEGIN
 	INSERT INTO DBME.empresa(usuario_id,razon_social,cuit,fecha_creacion)
 	SELECT DISTINCT u.usuario_id,Publ_Empresa_Razon_Social,Publ_Empresa_Cuit,Publ_Empresa_Fecha_Creacion
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Empresa_Mail = u.mail) 
+
+
 	
 END;
 GO
-
 
 CREATE PROCEDURE DBME.enlazarRol_X_Usuario
 AS
@@ -299,7 +300,6 @@ BEGIN
 	
 END;
 GO
-
 
 CREATE PROCEDURE DBME.migrarRubro
 AS 
@@ -360,7 +360,7 @@ BEGIN
 	SET IDENTITY_INSERT DBME.calificacion ON;
 
 	INSERT INTO DBME.calificacion(calificacion_id,cantidad_estrellas,autor_id)
-	SELECT m.Calificacion_Codigo,m.Calificacion_Cant_Estrellas,u.usuario_id
+	SELECT m.Calificacion_Codigo,m.Calificacion_Cant_Estrellas/2,u.usuario_id
 	FROM gd_esquema.Maestra m LEFT JOIN DBME.usuario u ON (m.Cli_Mail=u.mail)
 	WHERE Calificacion_Codigo IS NOT NULL
 END;
@@ -392,6 +392,7 @@ BEGIN
 	DECLARE @Oferta_Monto AS NUMERIC(18,2)
 	DECLARE @Oferta_Fecha AS DATETIME
 	DECLARE @usuario_id AS INT
+	DECLARE @oferta_id AS INT
 
 	OPEN cursor_para_ofertas 
 	FETCH cursor_para_ofertas INTO @Publ_Empresa_Mail,@Publ_Cli_Mail,@Publicacion_Cod,@Oferta_Monto,@Oferta_Fecha
@@ -481,22 +482,29 @@ AS
 BEGIN
 
 	DECLARE cursor_para_compras CURSOR FOR
-	SELECT Compra_Fecha,Compra_Cantidad,Publicacion_Cod,u.usuario_id
+	SELECT Compra_Fecha,Compra_Cantidad,Publicacion_Cod,u.usuario_id,Calificacion_Codigo
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Cli_Mail=u.mail)
-	WHERE Compra_Fecha IS NOT NULL AND Calificacion_Codigo IS NOT NULL
+	WHERE Compra_Fecha IS NOT NULL 
 
 	DECLARE @Compra_Fecha AS DATETIME
 	DECLARE @Compra_Cantidad AS NUMERIC(18,0)
 	DECLARE @Publicacion_Cod AS NUMERIC(18,0)
 	DECLARE @usuario_id AS INT
+	DECLARE @Calificacion_Codigo AS INT
 
 	OPEN cursor_para_compras
-	FETCH cursor_para_compras INTO @Compra_Fecha,@Compra_Cantidad,@Publicacion_Cod,@usuario_id
+	FETCH cursor_para_compras INTO @Compra_Fecha,@Compra_Cantidad,@Publicacion_Cod,@usuario_id,@Calificacion_Codigo
 	WHILE(@@FETCH_STATUS = 0)
 		BEGIN
 			INSERT INTO DBME.compra(fecha,cantidad,publicacion_id,autor_id,esta_calificada)
-			VALUES (@Compra_Fecha,@Compra_Cantidad,@Publicacion_Cod,@usuario_id,1)
-			FETCH cursor_para_compras INTO @Compra_Fecha,@Compra_Cantidad,@Publicacion_Cod,@usuario_id
+			VALUES (@Compra_Fecha,@Compra_Cantidad,@Publicacion_Cod,@usuario_id)
+
+			IF(@Calificacion_Codigo IS NOT NULL)
+			BEGIN
+				UPDATE DBME.calificacion SET compra_id = SCOPE_IDENTITY() WHERE calificacion_id = @Calificacion_Codigo
+			END
+
+			FETCH cursor_para_compras INTO @Compra_Fecha,@Compra_Cantidad,@Publicacion_Cod,@usuario_id,@Calificacion_Codigo
 		END
 	CLOSE cursor_para_compras
 	DEALLOCATE cursor_para_compras
@@ -518,6 +526,11 @@ GO
 	EXECUTE DBME.migrarFacturas
 	EXECUTE DBME.enlazarRol_X_Usuario
 	EXECUTE DBME.migrarVisibilidad
+	EXECUTE DBME.migrarPublicaciones
+	EXECUTE DBME.migrarCompras
+	EXECUTE DBME.migrarCalificaciones
+	EXECUTE DBME.migrarOfertas
+
 
 	GO
 
@@ -663,6 +676,9 @@ BEGIN
 	VALUES (@apellido,@nombre,@numero_documento,@tipo_documento,@fecha_nacimiento,@usuario_id)
 
 	SET @cliente_id = SCOPE_IDENTITY()
+	
+	INSERT INTO DBME.rol_x_usuario (usuario_id,rol_id)
+	VALUES (@usuario_id,2)
 
 END;
 GO
@@ -697,6 +713,9 @@ BEGIN
 
 	SET @cliente_id = SCOPE_IDENTITY()
 
+	INSERT INTO DBME.rol_x_usuario (usuario_id,rol_id)
+	VALUES (@usuario_id,3)
+
 END;
 GO
 
@@ -709,15 +728,15 @@ BEGIN
 	EXECUTE DBME.crearUsuario 'admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, @usuario_id OUT
 	INSERT INTO DBME.administrador(nombre,apellido,usuario_id)
 	VALUES ('Administrador','General',@usuario_id)
-
-
+	INSERT INTO DBME.rol_x_usuario (usuario_id,rol_id)
+	VALUES (@usuario_id,1)
 END;
 GO
 
 --UPDATE DBME.usuario SET habilitado = '0' WHERE username = 'sapo'
 --select * from DBME.usuario where usuario.username = 'sapo'
 
-/*
+
 BEGIN TRANSACTION
 DECLARE @usuario_id AS INT
 EXECUTE DBME.crearUsuario 'a','a','metodoGuede@sanLorenzo.com.br',NULL,NULL,NULL,NULL,NULL,NULL,'Orticalle','1000', @usuario_id OUT
@@ -729,17 +748,26 @@ DROP PROCEDURE DBME.crearDomicilio
 DROP PROCEDURE DBME.crearUsuario
 DROP PROCEDURE DBME.crearCliente
 DECLARE @cliente_id AS INT
-EXECUTE DBME.crearCliente 'do interest','sapinho','38355825','D','20120618 10:34:09 AM','sapo','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7','sapinhododeus@gemeil.com','1565212592','CABA','CABA','1102','1','6','Carlos Calvo','1781',@cliente_id OUT
+EXECUTE DBME.crearCliente 'do interest','sapinho','38355825','D','20120618 10:34:09 AM','sapo','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7','sapinhododeus@gemeil.com','1565212592','CABA','CABA','1102','0','6','Carlos Calvo','1781',@cliente_id OUT
 SELECT rubro_id,descripcion_larga FROM DBME.  
 SELECT nombre,apellido,numero_documento,tipo_documento FROM DBME.cliente WHERE numero_documento = '38355825'
 ROLLBACK TRANSACTION
-*/
+
+
+select nombre_rol,rxu.rol_id 
+from dbme.rol r join dbme.rol_x_usuario rxu ON (rxu.rol_id = r.rol_id)
+--WHERE usuario_id = 100 AND es_rol_habilitado = 1
+
 /* END PROCEDURES CREACIONALES */
 
 /* START PROCEDURES COMUNICACION */
 
-EXECUTE DBME.crearAdministradores 
-DROP PROCEDURE DBME.loginUsuario 
+EXECUTE DBME.crearAdministradores
+
+
+
+
+EXECUTE DBME.loginUsuario 'sapo','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7'
 
 CREATE PROCEDURE DBME.loginUsuario (@username nvarchar(255),@contrasenia nvarchar(255))
 AS
@@ -756,13 +784,12 @@ BEGIN
 	WHERE DBME.usuario.username = @username 
 
 	
-
 	IF (@U_id IS NULL)
 	BEGIN
 		-- no se encontro usuario
 		SET @mensaje_error = 'El usuario ingresado no existe'
 		RAISERROR(@mensaje_error, 12, 1)
-		--RETURN
+		
 	END
 	
 	IF (@u_habilitado = 0)
@@ -770,36 +797,52 @@ BEGIN
 		-- el usuario esta deshabilitado
 		SET @mensaje_error = 'El usuario se encuentra deshabilitado'
 		RAISERROR(@mensaje_error, 12, 1)
-		--RETURN
+		
 	END
-
-	IF (@contrasenia = @u_password)
-	BEGIN
-		UPDATE DBME.usuario SET cantidad_intentos_fallidos = 0 WHERE DBME.usuario.usuario_id = @u_id
-
-		--DEVOLVER EL USUARIO
-		--RETURN
-	END
-	ELSE
+	
+	IF (@contrasenia != @u_password)
 	BEGIN
 		SET @cantidad_intentos_fallidos = @cantidad_intentos_fallidos + 1
-		UPDATE DBME.usuario SET cantidad_intentos_fallidos = 3 WHERE usuario_id = @u_id
-		SET @mensaje_error = 'Contrasenia incorrecta'
-		RAISERROR(@mensaje_error, 12, 1)
-
-		IF (@cantidad_intentos_fallidos = 3)
+		UPDATE DBME.usuario SET cantidad_intentos_fallidos = @cantidad_intentos_fallidos WHERE usuario_id = @u_id
+		
+		IF (@cantidad_intentos_fallidos > 2)
 		BEGIN
 			UPDATE DBME.usuario SET usuario.habilitado = 0 WHERE usuario_id = @u_id
 			SET @mensaje_error = 'Supero la cantidad de intentos fallidos: el usuario se encuentra deshabilitado a partir de ahora'
 			RAISERROR(@mensaje_error, 12, 1)
-			--RETURN 
-		END 
+			
+		END
+		ELSE
+		BEGIN 
+			SET @mensaje_error = 'Contrasenia incorrecta'
+			RAISERROR(@mensaje_error, 12, 1)
+		
+		END
+	END 
 
+	IF (@contrasenia = @u_password)
+	BEGIN
+		UPDATE DBME.usuario SET cantidad_intentos_fallidos = 0 WHERE DBME.usuario.usuario_id = @u_id
+		
+		SELECT DBME.usuario.usuario_id
+		FROM DBME.usuario
+		WHERE DBME.usuario.username = @username 
 	END
-
+	
 END;
 GO
 
+SELECT f.funcionalidad_id,descripcion FROM DBME.funcionalidad f JOIN DBME.rol_x_funcionalidad rxf ON (f.funcionalidad_id=rxf.funcionalidad_id) WHERE rol_id = 1
 
+SELECT r.rol_id,nombre_rol
+FROM DBME.rol r JOIN DBME.rol_x_usuario rxu
+	ON (r.rol_id=rxu.rol_id) 
+WHERE r.es_rol_habilitado = 1 AND rxu.usuario_id = 96
 
+SELECT * FROM DBME.usuario WHERE username = 'admin'
+
+SELECT r.rol_id,nombre_rol 
+FROM DBME.rol r JOIN DBME.rol_x_usuario rxu 
+	ON (r.rol_id=rxu.rol_id) 
+WHERE r.es_rol_habilitado = 1 AND usuario_id = 102--JOIN DBME.funcionalidad
 /* END PROCEDURES COMUNICACION */

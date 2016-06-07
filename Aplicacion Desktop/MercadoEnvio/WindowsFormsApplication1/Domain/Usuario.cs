@@ -8,7 +8,13 @@ namespace MercadoEnvio.Domain
 {
     public class Usuario
     {
-        string nombreUsuario;
+        public string nombreUsuario;
         public int usuario_id;
+
+        public Usuario(int usuario_id, string nombre) {
+            this.nombreUsuario = nombre;
+            this.usuario_id = usuario_id;
+
+        }
     }
 }

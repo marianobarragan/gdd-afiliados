@@ -72,6 +72,7 @@
             this.lstFunciones.Name = "lstFunciones";
             this.lstFunciones.Size = new System.Drawing.Size(513, 304);
             this.lstFunciones.TabIndex = 1;
+            this.lstFunciones.SelectedIndexChanged += new System.EventHandler(this.lstFunciones_SelectedIndexChanged);
             // 
             // btnLogout
             // 
@@ -138,6 +139,7 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "VistaPrincipal";
             this.Text = "MERCADO ENVIO - Menu Principal";
+            this.Load += new System.EventHandler(this.VistaPrincipal_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
