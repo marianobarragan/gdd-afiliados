@@ -31,7 +31,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.lstFuncionesActuales = new System.Windows.Forms.ListBox();
             this.lstTodasLasFunciones = new System.Windows.Forms.ListBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -71,13 +71,13 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "Nombre";
             // 
-            // listBox1
+            // lstFuncionesActuales
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(12, 92);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(241, 121);
-            this.listBox1.TabIndex = 4;
+            this.lstFuncionesActuales.FormattingEnabled = true;
+            this.lstFuncionesActuales.Location = new System.Drawing.Point(12, 92);
+            this.lstFuncionesActuales.Name = "lstFuncionesActuales";
+            this.lstFuncionesActuales.Size = new System.Drawing.Size(241, 160);
+            this.lstFuncionesActuales.TabIndex = 4;
             // 
             // lstTodasLasFunciones
             // 
@@ -108,11 +108,11 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.listBox1);
+            this.groupBox1.Controls.Add(this.lstFuncionesActuales);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(269, 227);
+            this.groupBox1.Size = new System.Drawing.Size(269, 272);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Rol Actual";
@@ -137,6 +137,7 @@
             this.button3.TabIndex = 10;
             this.button3.Text = "è";
             this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
@@ -146,6 +147,7 @@
             this.button4.TabIndex = 11;
             this.button4.Text = "Crear Rol";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // AltaRol
             // 
@@ -177,7 +179,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox lstFuncionesActuales;
         private System.Windows.Forms.ListBox lstTodasLasFunciones;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;

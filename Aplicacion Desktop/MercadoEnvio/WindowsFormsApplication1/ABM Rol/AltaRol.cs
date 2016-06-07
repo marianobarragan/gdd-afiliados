@@ -49,17 +49,40 @@ namespace MercadoEnvio.ABM_Rol
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            
+            lstFuncionesActuales.Items.Add(lstTodasLasFunciones.SelectedItem.ToString());
+            lstTodasLasFunciones.Items.RemoveAt(lstTodasLasFunciones.SelectedIndex);
+            lstFuncionesActuales.SelectedIndex = 0;
+            button3.Enabled = true;
+            if (lstTodasLasFunciones.Items.Count == 0) { button1.Enabled = false; }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            
 
         }
 
         private void label3_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text == "") {
+                MessageBox.Show("No ingreso el nombre del rol nuevo", "NUEVO ROL", MessageBoxButtons.OK);
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //if (lstFuncionesActuales.Items.Count == 0) { return; };
+            lstTodasLasFunciones.Items.Add(lstFuncionesActuales.SelectedItem.ToString());
+            lstFuncionesActuales.Items.RemoveAt(lstFuncionesActuales.SelectedIndex);
+            lstTodasLasFunciones.SelectedIndex = 0;
+            button1.Enabled = true;
+            if (lstFuncionesActuales.Items.Count == 0) { button3.Enabled = false; };
         }
     }
 }
