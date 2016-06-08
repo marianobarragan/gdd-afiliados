@@ -529,9 +529,6 @@ BEGIN
 END;
 GO
 
-SELECT * FROM DBME.publicacion
-
-
 /* END BASES DE MIGRACION */ 
 
 /* START MIGRACION*/ --      EJECUTAR LOS PROCEDURES !!!!
@@ -551,8 +548,7 @@ SELECT * FROM DBME.publicacion
 	EXECUTE DBME.migrarCompras
 	EXECUTE DBME.migrarOfertas
 
-	GO
-
+GO
 
 /* END MIGRACION */
 
