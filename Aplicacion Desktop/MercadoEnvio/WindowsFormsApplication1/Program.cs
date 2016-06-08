@@ -22,7 +22,7 @@ namespace MercadoEnvio
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MercadoEnvio.ABM_Rol.AltaRol());
+            Application.Run(new MercadoEnvio.ABM_Rol.ListadoRol());
             //Application.Run(new MercadoEnvio.Templates.ABM());
             
         }

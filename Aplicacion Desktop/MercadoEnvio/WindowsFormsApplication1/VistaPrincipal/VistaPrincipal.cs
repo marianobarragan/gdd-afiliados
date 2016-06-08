@@ -43,10 +43,10 @@ namespace MercadoEnvio.VistaPrincipal
         private void button2_Click(object sender, EventArgs e)
         {
             //boton Logout
-            Login.LoginInicial loginView = new Login.LoginInicial();
-            loginView.Show();
+            //Login.LoginInicial loginView = new Login.LoginInicial();
+            //loginView.Show();
             //this.Hide();  TODO
-            //this.Close();
+            this.Close();
         }
 
         private void VistaPrincipal_Load(object sender, EventArgs e)

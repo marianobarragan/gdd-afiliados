@@ -61,6 +61,12 @@
     <Compile Include="ABM Rol\BajaRol.Designer.cs">
       <DependentUpon>BajaRol.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM Rol\ListadoRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Rol\ListadoRol.Designer.cs">
+      <DependentUpon>ListadoRol.cs</DependentUpon>
+    </Compile>
     <Compile Include="ABM Rol\ModificarRol.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -160,6 +166,7 @@
     <Compile Include="Controller\Controller.cs" />
     <Compile Include="Controller\ConexionSQL.cs" />
     <Compile Include="Controller\Encriptador.cs" />
+    <Compile Include="Controller\TraductorDeQuery.cs" />
     <Compile Include="Domain\Funcionalidad.cs" />
     <Compile Include="Domain\Rol.cs" />
     <Compile Include="Domain\Sesion.cs" />
@@ -248,6 +255,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Rol\BajaRol.resx">
       <DependentUpon>BajaRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rol\ListadoRol.resx">
+      <DependentUpon>ListadoRol.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Rol\ModificarRol.resx">
       <DependentUpon>ModificarRol.cs</DependentUpon>

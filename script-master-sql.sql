@@ -8,13 +8,13 @@ GO
 
 CREATE TABLE DBME.funcionalidad (
 	funcionalidad_id INT IDENTITY(1,1) PRIMARY KEY,
-	descripcion NVARCHAR(255)
+	descripcion NVARCHAR(255) UNIQUE
 );
 GO
 
 CREATE TABLE DBME.rol (
 	rol_id INT IDENTITY(1,1) PRIMARY KEY,
-	nombre_rol NVARCHAR(255),
+	nombre_rol NVARCHAR(255) UNIQUE,
 	es_rol_habilitado bit
 );
 GO
@@ -180,6 +180,10 @@ CREATE TABLE DBME.factura_detalle(
 );
 GO
 
+CREATE TABLE DBME.reloj(
+	hora DATE
+);
+GO
 /* END CREACION TABLAS*/
 --*****************************************************************
 
@@ -250,21 +254,22 @@ BEGIN
 END;
 GO
 
+--SELECT SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', 'w23e')), 3, 250) 
+
+--SELECT HASHBYTES('SHA2_256','w23e'),'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7' FROM 
 CREATE PROCEDURE DBME.migrarClientes  -- de PUBL CLI
 AS
 BEGIN
 
-	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id ,fecha_creacion,telefono,es_nuevo)
-	SELECT DISTINCT Publ_Cli_Mail, Publ_Cli_Mail,Publ_Cli_Mail,1,0, d.domicilio_id ,GETDATE(),NULL,1
+	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id,fecha_creacion,telefono,es_nuevo)
+	SELECT DISTINCT Publ_Cli_Mail,Publ_Cli_Mail, (SELECT SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', Publ_Cli_Mail)), 3, 250)),1,0, d.domicilio_id ,NULL,NULL,1
 	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Cli_Cod_Postal = d.codigo_postal)
 	WHERE Publ_Cli_Mail IS NOT NULL
 	
 	INSERT INTO DBME.cliente(usuario_id,apellido,nombre,numero_documento,tipo_documento,fecha_nacimiento)
 	SELECT DISTINCT u.usuario_id, m.Publ_Cli_Apeliido, m.Publ_Cli_Nombre,m.Publ_Cli_Dni,'D',m.Publ_Cli_Fecha_Nac
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Cli_Mail = u.mail)
-
-
-	
+		
 END;
 GO
 
@@ -273,7 +278,7 @@ AS
 BEGIN
 	
 	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id ,fecha_creacion,telefono,es_nuevo)
-	SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Mail,Publ_Empresa_Mail,1,0, d.domicilio_id ,GETDATE(),NULL,1
+	SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Mail,(SELECT SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', Publ_Empresa_Mail)), 3, 250)),1,0, d.domicilio_id ,NULL,NULL,1
 	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Empresa_Cod_Postal = d.codigo_postal)
 	WHERE Publ_Empresa_Mail IS NOT NULL
 	
@@ -767,10 +772,30 @@ SELECT rubro_id,descripcion_larga FROM DBME.
 SELECT nombre,apellido,numero_documento,tipo_documento FROM DBME.cliente WHERE numero_documento = '38355825'
 ROLLBACK TRANSACTION
 
+SELECT * FROM DBME.rol_x_funcionalidad
+SELECT * FROM DBME.rol
 
-select nombre_rol,rxu.rol_id 
-from dbme.rol r join dbme.rol_x_usuario rxu ON (rxu.rol_id = r.rol_id)
---WHERE usuario_id = 100 AND es_rol_habilitado = 1
+
+CREATE PROCEDURE DBME.enlazarRolXFuncionalidad (@nombre_rol NVARCHAR(255),@nombre_funcionalidad NVARCHAR(255) )
+AS
+BEGIN
+	
+	DECLARE @rol_id AS INT
+	DECLARE @funcionalidad_id AS INT
+
+	SELECT @rol_id = rol_id
+	FROM DBME.rol 
+	WHERE @nombre_rol = nombre_rol
+
+	SELECT @funcionalidad_id = funcionalidad_id
+	FROM DBME.funcionalidad 
+	WHERE @nombre_funcionalidad = descripcion
+
+	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id)
+	VALUES (@rol_id,@funcionalidad_id)
+
+END;
+GO
 
 /* END PROCEDURES CREACIONALES */
 
