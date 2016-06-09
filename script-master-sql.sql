@@ -772,8 +772,6 @@ SELECT rubro_id,descripcion_larga FROM DBME.
 SELECT nombre,apellido,numero_documento,tipo_documento FROM DBME.cliente WHERE numero_documento = '38355825'
 ROLLBACK TRANSACTION
 
-SELECT * FROM DBME.rol_x_funcionalidad
-SELECT * FROM DBME.rol
 
 
 CREATE PROCEDURE DBME.enlazarRolXFuncionalidad (@nombre_rol NVARCHAR(255),@nombre_funcionalidad NVARCHAR(255) )
@@ -804,10 +802,6 @@ GO
 EXECUTE DBME.crearAdministradores
 
 
-
-
-EXECUTE DBME.loginUsuario 'sapo','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7'
-
 CREATE PROCEDURE DBME.loginUsuario (@username nvarchar(255),@contrasenia nvarchar(255))
 AS
 BEGIN
@@ -816,7 +810,6 @@ BEGIN
 	DECLARE @u_habilitado bit
 	DECLARE @cantidad_intentos_fallidos tinyint
 	DECLARE @mensaje_error varchar(100)
-	
 
 	SELECT @u_id = DBME.usuario.usuario_id, @u_password = usuario.password, @u_habilitado = habilitado, @cantidad_intentos_fallidos = DBME.usuario.cantidad_intentos_fallidos
 	FROM DBME.usuario
@@ -871,17 +864,5 @@ BEGIN
 END;
 GO
 
-SELECT f.funcionalidad_id,descripcion FROM DBME.funcionalidad f JOIN DBME.rol_x_funcionalidad rxf ON (f.funcionalidad_id=rxf.funcionalidad_id) WHERE rol_id = 1
 
-SELECT r.rol_id,nombre_rol
-FROM DBME.rol r JOIN DBME.rol_x_usuario rxu
-	ON (r.rol_id=rxu.rol_id) 
-WHERE r.es_rol_habilitado = 1 AND rxu.usuario_id = 96
-
-SELECT * FROM DBME.usuario WHERE username = 'admin'
-
-SELECT r.rol_id,nombre_rol 
-FROM DBME.rol r JOIN DBME.rol_x_usuario rxu 
-	ON (r.rol_id=rxu.rol_id) 
-WHERE r.es_rol_habilitado = 1 AND usuario_id = 102--JOIN DBME.funcionalidad
 /* END PROCEDURES COMUNICACION */

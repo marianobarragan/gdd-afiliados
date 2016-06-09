@@ -34,11 +34,13 @@ namespace MercadoEnvio.ABM_Rol
                     alta.Show();
                     break;
                 case 1:
-                    BajaRol baja = new BajaRol();
+                   
+                    ListadoRol baja = new ListadoRol("Eliminar Rol");
                     baja.Show();
                     break;
                 case 2:
-                    ModificarRol mod = new ModificarRol();
+                   
+                    ListadoRol mod = new ListadoRol("Modificar Rol");
                     mod.Show();
                     break;
             }
@@ -48,6 +50,11 @@ namespace MercadoEnvio.ABM_Rol
         {
             vista.Show();
             this.Close();
+        }
+
+        private void lstOpciones_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

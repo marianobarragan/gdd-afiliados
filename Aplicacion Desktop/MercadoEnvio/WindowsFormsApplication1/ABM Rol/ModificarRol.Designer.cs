@@ -32,11 +32,11 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.listBox2 = new System.Windows.Forms.ListBox();
+            this.lstTodasLasFunciones = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.lstFuncionalidadesActuales = new System.Windows.Forms.ListBox();
             this.label2 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
@@ -82,13 +82,13 @@
             this.label3.TabIndex = 22;
             this.label3.Text = "Listado de todas las Funcionalidades ";
             // 
-            // listBox2
+            // lstTodasLasFunciones
             // 
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.Location = new System.Drawing.Point(412, 49);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(241, 316);
-            this.listBox2.TabIndex = 21;
+            this.lstTodasLasFunciones.FormattingEnabled = true;
+            this.lstTodasLasFunciones.Location = new System.Drawing.Point(412, 49);
+            this.lstTodasLasFunciones.Name = "lstTodasLasFunciones";
+            this.lstTodasLasFunciones.Size = new System.Drawing.Size(241, 316);
+            this.lstTodasLasFunciones.TabIndex = 21;
             // 
             // label1
             // 
@@ -108,7 +108,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.listBox1);
+            this.groupBox1.Controls.Add(this.lstFuncionalidadesActuales);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Location = new System.Drawing.Point(12, 49);
             this.groupBox1.Name = "groupBox1";
@@ -117,13 +117,13 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Rol Actual";
             // 
-            // listBox1
+            // lstFuncionalidadesActuales
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(12, 91);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(241, 134);
-            this.listBox1.TabIndex = 4;
+            this.lstFuncionalidadesActuales.FormattingEnabled = true;
+            this.lstFuncionalidadesActuales.Location = new System.Drawing.Point(12, 91);
+            this.lstFuncionalidadesActuales.Name = "lstFuncionalidadesActuales";
+            this.lstFuncionalidadesActuales.Size = new System.Drawing.Size(241, 134);
+            this.lstFuncionalidadesActuales.TabIndex = 4;
             // 
             // label2
             // 
@@ -153,12 +153,13 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.listBox2);
+            this.Controls.Add(this.lstTodasLasFunciones);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.groupBox1);
             this.Name = "ModificarRol";
             this.Text = "ModificarRol";
+            this.Load += new System.EventHandler(this.ModificarRol_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -172,11 +173,11 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ListBox listBox2;
+        private System.Windows.Forms.ListBox lstTodasLasFunciones;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox lstFuncionalidadesActuales;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button4;
     }

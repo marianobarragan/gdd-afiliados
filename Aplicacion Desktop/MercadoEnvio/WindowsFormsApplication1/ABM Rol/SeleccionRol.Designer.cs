@@ -59,6 +59,7 @@
             this.lstOpciones.Name = "lstOpciones";
             this.lstOpciones.Size = new System.Drawing.Size(200, 84);
             this.lstOpciones.TabIndex = 1;
+            this.lstOpciones.SelectedIndexChanged += new System.EventHandler(this.lstOpciones_SelectedIndexChanged);
             // 
             // btnVolver
             // 
