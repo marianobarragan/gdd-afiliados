@@ -52,12 +52,12 @@ namespace MercadoEnvio.ABM_Visibilidad
             string query;
             if (radioButton1.Checked)
             {
-                query = "SELECT visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje,visibilidad_costo_envio FROM DBME.visibilidad where visibilidad_descripcion LIKE '%" + textBox2.Text + "%'";
+                query = "SELECT visibilidad_id, visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje,visibilidad_costo_envio FROM DBME.visibilidad where visibilidad_descripcion LIKE '%" + textBox2.Text + "%'";
 
             }
             else
             {
-                query = "SELECT visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje,visibilidad_costo_envio FROM DBME.visibilidad where visibilidad_descripcion =  '" + textBox1.Text + "'";
+                query = "SELECT visibilidad_id, visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje,visibilidad_costo_envio FROM DBME.visibilidad where visibilidad_descripcion =  '" + textBox1.Text + "'";
             }
 
             DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
@@ -74,29 +74,47 @@ namespace MercadoEnvio.ABM_Visibilidad
         {
 
 
-            if (dataGridView1.Rows.Count == 0) //si la tabla esta vacia, no apuntas a nadie
+            if (dataGridView1.Rows.Count == 0 || dataGridView1.CurrentRow == null) //si la tabla esta vacia, no apuntas a nadie
             {
                 return;
             }
+            
 
-            string contenido = dataGridView1[dataGridView1.CurrentCell.ColumnIndex, dataGridView1.CurrentCell.RowIndex].Value.ToString();
 
-            if (tipo == "Modificar visibilidad")
+            int id = Int32.Parse( dataGridView1[dataGridView1.CurrentCell.ColumnIndex, dataGridView1.CurrentCell.RowIndex].Value.ToString());
+
+            //MessageBox.Show(this.tipo, "BORRAR ROL", MessageBoxButtons.OK);
+
+            if (this.tipo == "Modificar visibilidad")
             {   //TODO terminar esto
-                //MessageBox.Show(contenido, "Problema", MessageBoxButtons.OK);
-                ModificarVisibilidad mod = new ModificarVisibilidad(contenido);
+                //MessageBox.Show(id.ToString(), "Problema", MessageBoxButtons.OK);
+                ModificarVisibilidad mod = new ModificarVisibilidad(id);
                 mod.Show();
                 this.Close();
                 return;
-            }
-            else { 
+            } else { 
                 
                 //TODO eliminar la visibilidad
+                
+                //DialogResult h = MessageBox.Show("¿Seguro que desea borrar?", "BORRAR ROL", MessageBoxButtons.YesNo);
+                /*
+                if (h == DialogResult.Yes)
+                {
+                    query2 = "UPDATE DBME.rol SET es_rol_habilitado = 0 WHERE nombre_rol = '" + contenido + "'";
+                    (new ConexionSQL()).ejecutarComandoSQL(query2);
+                }
+                else
+                {
+                    return;
+                }
+                */
+
+
+                
             }
 
 
-
-            button2_Click(null, null);
+            button2_Click(null, null); //actualizar la tablita
         }
     }
 }

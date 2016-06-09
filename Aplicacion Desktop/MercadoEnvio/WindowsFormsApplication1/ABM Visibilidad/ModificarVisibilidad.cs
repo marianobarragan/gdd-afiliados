@@ -12,12 +12,16 @@ namespace MercadoEnvio.ABM_Visibilidad
 {
     public partial class ModificarVisibilidad : Form
     {
-        public string contenido;
+        public int id;
+        public string descripcion;
+        public int precio;
+        public int porcentaje;
+        public int costo_envio;
 
-        public ModificarVisibilidad(string contenido)
+        public ModificarVisibilidad(int id)
         {
             InitializeComponent();
-            this.contenido = contenido;
+            this.id = id;
         }
 
         private void ModificarVisibilidad_Load(object sender, EventArgs e)

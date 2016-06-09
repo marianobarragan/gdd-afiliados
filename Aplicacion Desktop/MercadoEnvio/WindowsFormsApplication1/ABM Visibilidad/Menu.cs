@@ -25,13 +25,14 @@ namespace MercadoEnvio.ABM_Visibilidad
                     alta.Show();
                     break;
                 case 1:
-                    ListadoVisibilidad mod = new ListadoVisibilidad("Modificar visibilidad");
-                    mod.Show();
-                    break;
-                case 2:
                     ListadoVisibilidad baja = new ListadoVisibilidad("Eliminar visibilidad");
                     baja.Show();
                     break;
+                case 2:
+                    ListadoVisibilidad mod = new ListadoVisibilidad("Modificar visibilidad");
+                    mod.Show();
+                    break;
+                
             }
         }
 
