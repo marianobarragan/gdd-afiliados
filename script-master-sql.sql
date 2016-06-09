@@ -46,7 +46,7 @@ CREATE TABLE DBME.usuario(
 	password NVARCHAR(255),
 	habilitado bit,
 	cantidad_intentos_fallidos TINYINT DEFAULT '0',
-	mail NVARCHAR(255),
+	mail NVARCHAR(255) UNIQUE,
 	domicilio_id INT FOREIGN KEY REFERENCES DBME.domicilio(domicilio_id),
 	fecha_creacion DATETIME,
 	telefono BIGINT,
@@ -99,15 +99,15 @@ CREATE TABLE DBME.administrador(
 );
 GO
 
-CREATE TABLE DBME.visibilidad(
-	visibilidad_id NUMERIC(18,0) PRIMARY KEY,
-	visibilidad_descripcion NVARCHAR(255),
+CREATE TABLE DBME.visibilidad( --INT IDENTITY(1,1) PRIMARY KEY
+	visibilidad_id NUMERIC(18,0) IDENTITY(1,1) PRIMARY KEY,
+	visibilidad_descripcion NVARCHAR(255) UNIQUE,
 	visibilidad_precio NUMERIC(18,2), 
-	visibilidad_porcentaje NUMERIC(18,2),
+	visibilidad_porcentaje NUMERIC(18,2) CHECK(visibilidad_porcentaje BETWEEN '0' AND '1'),
 	visibilidad_costo_envio NUMERIC(10,2)
 );
 GO
-
+select * from dBMe.visibilidad
 
 CREATE TABLE DBME.publicacion(
 	publicacion_id NUMERIC(18,0) IDENTITY(1,1) PRIMARY KEY,
@@ -198,7 +198,7 @@ BEGIN
 	
 	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE ROL');
 	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE USUARIOS');
-	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE RUBRO');
+	--INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE RUBRO');
 	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE VISIBILIDAD DE PUBLICACION');
 	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('GENERAR PUBLICACION');
 	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('COMPRAR/OFERTAR');

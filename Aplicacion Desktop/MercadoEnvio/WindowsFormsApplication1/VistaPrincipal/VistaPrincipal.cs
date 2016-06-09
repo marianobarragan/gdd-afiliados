@@ -29,7 +29,14 @@ namespace MercadoEnvio.VistaPrincipal
             {
                 ABM_Rol.SeleccionRol seleccionRol = new ABM_Rol.SeleccionRol(this);
                 seleccionRol.Show();
-                this.Hide();
+                //this.Hide();
+            }
+
+            if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "ABM DE VISIBILIDAD DE PUBLICACION")
+            {
+                ABM_Visibilidad.Menu menu = new ABM_Visibilidad.Menu();
+                menu.Show();
+                //this.Hide();
             }
 
             /*if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "ABM DE ROL")

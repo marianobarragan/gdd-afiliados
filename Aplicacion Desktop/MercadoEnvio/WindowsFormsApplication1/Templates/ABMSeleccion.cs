@@ -22,7 +22,7 @@ namespace MercadoEnvio.Templates
             lstOpciones.SelectedIndex = 0;
         }
 
-        private void btnIrVista_Click(object sender, EventArgs e)
+        protected virtual void btnIrVista_Click(object sender, EventArgs e)
         {
             //System.Diagnostics.Debug.WriteLine(lstOpciones.SelectedIndex);
         }

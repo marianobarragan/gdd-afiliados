@@ -95,7 +95,7 @@ namespace MercadoEnvio.ABM_Rol
    
             if (tipo == "Modificar Rol")
             {
-                MessageBox.Show(contenido, "Problema", MessageBoxButtons.OK);
+                //MessageBox.Show(contenido, "Problema", MessageBoxButtons.OK);
                 ModificarRol mod = new ModificarRol(contenido);
                 mod.Show();
                 this.Close();

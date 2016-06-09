@@ -1,6 +1,6 @@
-﻿namespace MercadoEnvio.ABM_Rol
+﻿namespace MercadoEnvio.ABM_Visibilidad
 {
-    partial class SeleccionRol
+    partial class Menu
     {
         /// <summary>
         /// Required designer variable.
@@ -39,13 +39,12 @@
             // 
             this.groupBox1.Controls.Add(this.lstOpciones);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(59, 24);
+            this.groupBox1.Location = new System.Drawing.Point(65, 29);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(286, 146);
-            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Seleccione qué acción quiere realizar";
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // lstOpciones
             // 
@@ -60,15 +59,14 @@
             this.lstOpciones.Name = "lstOpciones";
             this.lstOpciones.Size = new System.Drawing.Size(200, 84);
             this.lstOpciones.TabIndex = 1;
-            this.lstOpciones.SelectedIndexChanged += new System.EventHandler(this.lstOpciones_SelectedIndexChanged);
             // 
             // btnVolver
             // 
             this.btnVolver.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnVolver.Location = new System.Drawing.Point(10, 212);
+            this.btnVolver.Location = new System.Drawing.Point(16, 217);
             this.btnVolver.Name = "btnVolver";
             this.btnVolver.Size = new System.Drawing.Size(97, 44);
-            this.btnVolver.TabIndex = 5;
+            this.btnVolver.TabIndex = 8;
             this.btnVolver.Text = "Volver";
             this.btnVolver.UseVisualStyleBackColor = true;
             this.btnVolver.Click += new System.EventHandler(this.btnVolver_Click);
@@ -76,28 +74,26 @@
             // btnIrVista
             // 
             this.btnIrVista.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnIrVista.Location = new System.Drawing.Point(312, 212);
+            this.btnIrVista.Location = new System.Drawing.Point(318, 217);
             this.btnIrVista.Name = "btnIrVista";
             this.btnIrVista.Size = new System.Drawing.Size(97, 44);
-            this.btnIrVista.TabIndex = 4;
+            this.btnIrVista.TabIndex = 7;
             this.btnIrVista.Text = "IR!";
             this.btnIrVista.UseVisualStyleBackColor = true;
             this.btnIrVista.Click += new System.EventHandler(this.btnIrVista_Click);
             // 
-            // SeleccionRol
+            // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SkyBlue;
-            this.ClientSize = new System.Drawing.Size(423, 274);
+            this.ClientSize = new System.Drawing.Size(439, 300);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnVolver);
             this.Controls.Add(this.btnIrVista);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
-            this.Name = "SeleccionRol";
-            this.Text = "SeleccionRol";
-            this.Load += new System.EventHandler(this.SeleccionRol_Load);
+            this.Name = "Menu";
+            this.Text = "Menu";
+            this.Load += new System.EventHandler(this.Menu_Load);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 

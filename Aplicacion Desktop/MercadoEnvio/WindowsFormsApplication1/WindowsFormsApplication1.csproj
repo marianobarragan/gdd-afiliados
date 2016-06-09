@@ -47,6 +47,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ABM Rol\AltaRol.cs">
@@ -109,6 +110,12 @@
     <Compile Include="ABM Usuario\Alta Usuario\DatosEmpresaNuevo.Designer.cs">
       <DependentUpon>DatosEmpresaNuevo.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM Usuario\Alta Usuario\SAPO.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Usuario\Alta Usuario\SAPO.Designer.cs">
+      <DependentUpon>SAPO.cs</DependentUpon>
+    </Compile>
     <Compile Include="ABM Usuario\Modificar Usuario\ListadoParaCliente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,11 +152,35 @@
     <Compile Include="ABM Usuario\Modificar Usuario\ModificarDatosEmpresa.Designer.cs">
       <DependentUpon>ModificarDatosEmpresa.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Visibilidad\Form1.cs">
+    <Compile Include="ABM Usuario\SeleccionUsuario.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Visibilidad\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ABM Usuario\SeleccionUsuario.Designer.cs">
+      <DependentUpon>SeleccionUsuario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Visibilidad\AltaVisibilidad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Visibilidad\AltaVisibilidad.Designer.cs">
+      <DependentUpon>AltaVisibilidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Visibilidad\ListadoVisibilidad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Visibilidad\ListadoVisibilidad.Designer.cs">
+      <DependentUpon>ListadoVisibilidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Visibilidad\Menu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Visibilidad\Menu.Designer.cs">
+      <DependentUpon>Menu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Visibilidad\ModificarVisibilidad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Visibilidad\ModificarVisibilidad.Designer.cs">
+      <DependentUpon>ModificarVisibilidad.cs</DependentUpon>
     </Compile>
     <Compile Include="Calificar\CalificarVendedor.cs">
       <SubType>Form</SubType>
@@ -294,6 +325,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Usuario\Modificar Usuario\ModificarDatosEmpresa.resx">
       <DependentUpon>ModificarDatosEmpresa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\SeleccionUsuario.resx">
+      <DependentUpon>SeleccionUsuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Visibilidad\AltaVisibilidad.resx">
+      <DependentUpon>AltaVisibilidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Visibilidad\ListadoVisibilidad.resx">
+      <DependentUpon>ListadoVisibilidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Visibilidad\Menu.resx">
+      <DependentUpon>Menu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Visibilidad\ModificarVisibilidad.resx">
+      <DependentUpon>ModificarVisibilidad.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Calificar\CalificarVendedor.resx">
       <DependentUpon>CalificarVendedor.cs</DependentUpon>

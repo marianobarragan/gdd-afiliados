@@ -21,5 +21,20 @@ namespace MercadoEnvio.Templates
         {
             this.Close();
         }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        public virtual void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Alta_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
