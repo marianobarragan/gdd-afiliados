@@ -107,7 +107,6 @@ CREATE TABLE DBME.visibilidad( --INT IDENTITY(1,1) PRIMARY KEY
 	visibilidad_costo_envio NUMERIC(10,2)
 );
 GO
-select * from dBMe.visibilidad
 
 CREATE TABLE DBME.publicacion(
 	publicacion_id NUMERIC(18,0) IDENTITY(1,1) PRIMARY KEY,
@@ -321,10 +320,9 @@ AS
 BEGIN
 
 	--Se migran los fabricante de la tabla Maestra
-	INSERT INTO DBME.visibilidad(visibilidad_id, visibilidad_descripcion, visibilidad_porcentaje, visibilidad_precio, visibilidad_costo_envio)
-	SELECT DISTINCT Publicacion_Visibilidad_Cod, Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio, (180 - Publicacion_Visibilidad_Precio)
+	INSERT INTO DBME.visibilidad( visibilidad_descripcion, visibilidad_porcentaje, visibilidad_precio, visibilidad_costo_envio)
+	SELECT DISTINCT Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio, (180 - Publicacion_Visibilidad_Precio)
 	FROM gd_esquema.Maestra
-	ORDER BY Publicacion_Visibilidad_Cod
 
 	UPDATE DBME.visibilidad
 	SET visibilidad_costo_envio = (180 - visibilidad_precio)
@@ -442,8 +440,8 @@ BEGIN
 
 	DECLARE cursor_para_publicaciones CURSOR FOR
 	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,
-	Publicacion_Estado,Publicacion_Tipo,Publicacion_Rubro_Descripcion,Publicacion_Visibilidad_Cod,Publ_Cli_Mail,Publ_Empresa_Mail
-	FROM gd_esquema.Maestra
+	Publicacion_Estado,Publicacion_Tipo,Publicacion_Rubro_Descripcion,v.visibilidad_id,Publ_Cli_Mail,Publ_Empresa_Mail
+	FROM gd_esquema.Maestra m LEFT JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion)
 
 	DECLARE @Publicacion_Cod AS NUMERIC(18,0)
 	DECLARE @Publicacion_Descripcion AS NVARCHAR(255) 
@@ -455,7 +453,7 @@ BEGIN
 	DECLARE @Publicacion_Estado AS NVARCHAR(255)
 	DECLARE @Publicacion_Rubro_Descripcion AS NVARCHAR(255)
 	DECLARE @rubro_id AS INT
-	DECLARE @Publicacion_Visibilidad_Cod AS NUMERIC(18,0)
+	DECLARE @Publicacion_Visibilidad_Cod AS INT
 	DECLARE @Publ_Cli_Mail AS NVARCHAR(255)
 	DECLARE @Publ_Empresa_Mail AS NVARCHAR(255)
 	DECLARE @usuario_id AS INT
