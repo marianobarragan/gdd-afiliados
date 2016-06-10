@@ -22,8 +22,10 @@ namespace MercadoEnvio
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MercadoEnvio.ABM_Visibilidad.ModificarVisibilidad(1));
-            //Application.Run(new MercadoEnvio.Templates.ABM());
+
+            Application.Run(new MercadoEnvio.ABM_Usuario.Alta_Usuario.DatosEmpresaNuevo("1", "2", "email"));
+            //Application.Run(new MercadoEnvio.Login.LoginInicial());
+
             
         }
 
@@ -39,9 +41,9 @@ namespace MercadoEnvio
         }
 
 
-        public static String nuevaFechaSistema()
+        public static String fechaSistema()
         {
-            return ConfigurationManager.AppSettings["FechaGlobal"];
+            return ConfigurationManager.AppSettings["FechaDelSistema"];
         }
     }
 }

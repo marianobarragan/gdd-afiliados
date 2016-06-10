@@ -10,6 +10,9 @@ namespace MercadoEnvio.Domain
     {
         public string nombreUsuario;
         public int usuario_id;
+        public string contraseña;
+        public string mail;
+        public Rol rol;
 
         public Usuario(int usuario_id, string nombre) {
             this.nombreUsuario = nombre;

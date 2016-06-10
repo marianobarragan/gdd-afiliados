@@ -67,7 +67,7 @@ CREATE TABLE DBME.cliente(
 	apellido NVARCHAR(255),
 	nombre NVARCHAR(255),
 	numero_documento NUMERIC(18,0) UNIQUE,
-	tipo_documento CHAR,
+	tipo_documento CHAR(3) CHECK(tipo_documento IN ('DNI','LE','LC')),
 	fecha_nacimiento DATETIME,
 	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id) 
 );
@@ -266,7 +266,7 @@ BEGIN
 	WHERE Publ_Cli_Mail IS NOT NULL
 	
 	INSERT INTO DBME.cliente(usuario_id,apellido,nombre,numero_documento,tipo_documento,fecha_nacimiento)
-	SELECT DISTINCT u.usuario_id, m.Publ_Cli_Apeliido, m.Publ_Cli_Nombre,m.Publ_Cli_Dni,'D',m.Publ_Cli_Fecha_Nac
+	SELECT DISTINCT u.usuario_id, m.Publ_Cli_Apeliido, m.Publ_Cli_Nombre,m.Publ_Cli_Dni,'DNI',m.Publ_Cli_Fecha_Nac
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Cli_Mail = u.mail)
 		
 END;
@@ -862,5 +862,5 @@ BEGIN
 END;
 GO
 
-
+select Distinct publ_cli_dni from gd_esquema.Maestra
 /* END PROCEDURES COMUNICACION */

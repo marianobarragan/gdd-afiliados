@@ -81,23 +81,27 @@
             // 
             // txtCostoEnvio
             // 
+
+            this.txtCostoEnvio.BackColor = System.Drawing.Color.PaleGreen;
             this.txtCostoEnvio.Location = new System.Drawing.Point(107, 101);
             this.txtCostoEnvio.Name = "txtCostoEnvio";
-            this.txtCostoEnvio.Size = new System.Drawing.Size(83, 20);
+            this.txtCostoEnvio.Size = new System.Drawing.Size(126, 20);
             this.txtCostoEnvio.TabIndex = 7;
             // 
             // txtPorcentaje
             // 
+
+            this.txtPorcentaje.Size = new System.Drawing.Size(83, 20);
+            this.txtPorcentaje.BackColor = System.Drawing.Color.PaleGreen;
             this.txtPorcentaje.Location = new System.Drawing.Point(107, 74);
             this.txtPorcentaje.Name = "txtPorcentaje";
-            this.txtPorcentaje.Size = new System.Drawing.Size(83, 20);
             this.txtPorcentaje.TabIndex = 6;
             // 
             // txtPrecio
             // 
+            this.txtPrecio.BackColor = System.Drawing.Color.PaleGreen;
             this.txtPrecio.Location = new System.Drawing.Point(107, 48);
             this.txtPrecio.Name = "txtPrecio";
-            this.txtPrecio.Size = new System.Drawing.Size(83, 20);
             this.txtPrecio.TabIndex = 5;
             // 
             // txtDescripcion
