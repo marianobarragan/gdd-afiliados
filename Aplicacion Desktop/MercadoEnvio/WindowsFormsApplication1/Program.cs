@@ -6,7 +6,7 @@ using System.Configuration;
 using System.Windows.Forms;
 
 using MercadoEnvio.Login;
-using MercadoEnvio.ABM_Usuario;
+//using MercadoEnvio.ABM_Usuario;
 
 
 
@@ -22,7 +22,7 @@ namespace MercadoEnvio
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MercadoEnvio.Login.LoginInicial());
+            Application.Run(new MercadoEnvio.ABM_Visibilidad.ModificarVisibilidad(1));
             //Application.Run(new MercadoEnvio.Templates.ABM());
             
         }

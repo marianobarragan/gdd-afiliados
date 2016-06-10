@@ -29,11 +29,16 @@ namespace MercadoEnvio.ABM_Visibilidad
             float precio;
             float porcentaje;
             float costo;
+            float precioDecimal;
+
+            float costoDecimal;
             try
             {
                 precio = float.Parse(txtPrecio.Text);
                 porcentaje = float.Parse(txtPorcentaje.Text);
                 costo = float.Parse(txtCostoEnvio.Text);
+                precioDecimal = float.Parse(txtPrecioDecimal.Text);
+                costoDecimal = float.Parse(txtCostoEnvioDecimal.Text);
             }
             catch (System.FormatException)
             {
@@ -57,11 +62,12 @@ namespace MercadoEnvio.ABM_Visibilidad
                 return;
             }
 
-            try {
-
-                string comando = "INSERT INTO DBME.visibilidad (visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje,visibilidad_costo_envio) VALUES ('" + txtDescripcion.Text + "','" +precio + "','" +porcentaje/100 + "','"  + costo + "')";
-                MessageBox.Show(comando, "Alta Visibilidad", MessageBoxButtons.OK);
-                //(new ConexionSQL()).ejecutarComandoSQL(comando);
+            try 
+            {
+                string porcentajeString = porcentaje.ToString().Insert(0, "0.");
+                string comando = "INSERT INTO DBME.visibilidad (visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje,visibilidad_costo_envio) VALUES ('" + txtDescripcion.Text + "'," + precio+ "." + precioDecimal + "," + porcentajeString + "," + costo +"."+costoDecimal+ ")";
+                MessageBox.Show("¿Está seguro de que desea crear la visibilidad?", "Alta Visibilidad", MessageBoxButtons.OK);
+                (new ConexionSQL()).ejecutarComandoSQL(comando);
             }
             catch (Exception er) {
                 MessageBox.Show(er.Message, "Alta Visibilidad", MessageBoxButtons.OK);
@@ -72,6 +78,16 @@ namespace MercadoEnvio.ABM_Visibilidad
         }
 
         private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AltaVisibilidad_Load(object sender, EventArgs e)
         {
 
         }
