@@ -86,12 +86,6 @@
     <Compile Include="ABM Rubro\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Usuario\Acciones.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ABM Usuario\Acciones.Designer.cs">
-      <DependentUpon>Acciones.cs</DependentUpon>
-    </Compile>
     <Compile Include="ABM Usuario\Alta Usuario\AltaUsuario.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,11 +104,11 @@
     <Compile Include="ABM Usuario\Alta Usuario\DatosEmpresaNuevo.Designer.cs">
       <DependentUpon>DatosEmpresaNuevo.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Usuario\Alta Usuario\SAPO.cs">
+    <Compile Include="ABM Usuario\Menu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Usuario\Alta Usuario\SAPO.Designer.cs">
-      <DependentUpon>SAPO.cs</DependentUpon>
+    <Compile Include="ABM Usuario\Menu.Designer.cs">
+      <DependentUpon>Menu.cs</DependentUpon>
     </Compile>
     <Compile Include="ABM Usuario\Modificar Usuario\ListadoParaCliente.cs">
       <SubType>Form</SubType>
@@ -151,12 +145,6 @@
     </Compile>
     <Compile Include="ABM Usuario\Modificar Usuario\ModificarDatosEmpresa.Designer.cs">
       <DependentUpon>ModificarDatosEmpresa.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ABM Usuario\SeleccionUsuario.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ABM Usuario\SeleccionUsuario.Designer.cs">
-      <DependentUpon>SeleccionUsuario.cs</DependentUpon>
     </Compile>
     <Compile Include="ABM Visibilidad\AltaVisibilidad.cs">
       <SubType>Form</SubType>
@@ -296,9 +284,6 @@
     <EmbeddedResource Include="ABM Rol\SeleccionRol.resx">
       <DependentUpon>SeleccionRol.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ABM Usuario\Acciones.resx">
-      <DependentUpon>Acciones.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ABM Usuario\Alta Usuario\AltaUsuario.resx">
       <DependentUpon>AltaUsuario.cs</DependentUpon>
     </EmbeddedResource>
@@ -307,6 +292,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Usuario\Alta Usuario\DatosEmpresaNuevo.resx">
       <DependentUpon>DatosEmpresaNuevo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\Menu.resx">
+      <DependentUpon>Menu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Usuario\Modificar Usuario\ListadoParaCliente.resx">
       <DependentUpon>ListadoParaCliente.cs</DependentUpon>
@@ -325,9 +313,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Usuario\Modificar Usuario\ModificarDatosEmpresa.resx">
       <DependentUpon>ModificarDatosEmpresa.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ABM Usuario\SeleccionUsuario.resx">
-      <DependentUpon>SeleccionUsuario.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Visibilidad\AltaVisibilidad.resx">
       <DependentUpon>AltaVisibilidad.cs</DependentUpon>

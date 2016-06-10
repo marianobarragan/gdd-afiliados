@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtDescripcion = new System.Windows.Forms.TextBox();
-            this.txtPrecio = new System.Windows.Forms.TextBox();
-            this.txtPorcentaje = new System.Windows.Forms.TextBox();
-            this.txtCostoEnvio = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.txtCostoEnvio = new System.Windows.Forms.TextBox();
+            this.txtPorcentaje = new System.Windows.Forms.TextBox();
+            this.txtPrecio = new System.Windows.Forms.TextBox();
+            this.txtDescripcion = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -60,32 +60,46 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Visibilidad";
             // 
-            // label1
+            // button1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Descripcion:";
+            this.button1.Location = new System.Drawing.Point(107, 139);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(126, 24);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "Crear nueva visibilidad";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // label2
+            // txtCostoEnvio
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 104);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(64, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Costo Envio";
+            this.txtCostoEnvio.BackColor = System.Drawing.Color.PaleGreen;
+            this.txtCostoEnvio.Location = new System.Drawing.Point(107, 101);
+            this.txtCostoEnvio.Name = "txtCostoEnvio";
+            this.txtCostoEnvio.Size = new System.Drawing.Size(126, 20);
+            this.txtCostoEnvio.TabIndex = 7;
             // 
-            // label3
+            // txtPorcentaje
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 46);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(37, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Precio";
+            this.txtPorcentaje.BackColor = System.Drawing.Color.PaleGreen;
+            this.txtPorcentaje.Location = new System.Drawing.Point(107, 74);
+            this.txtPorcentaje.Name = "txtPorcentaje";
+            this.txtPorcentaje.Size = new System.Drawing.Size(126, 20);
+            this.txtPorcentaje.TabIndex = 6;
+            // 
+            // txtPrecio
+            // 
+            this.txtPrecio.BackColor = System.Drawing.Color.PaleGreen;
+            this.txtPrecio.Location = new System.Drawing.Point(107, 48);
+            this.txtPrecio.Name = "txtPrecio";
+            this.txtPrecio.Size = new System.Drawing.Size(126, 20);
+            this.txtPrecio.TabIndex = 5;
+            // 
+            // txtDescripcion
+            // 
+            this.txtDescripcion.Location = new System.Drawing.Point(107, 22);
+            this.txtDescripcion.Name = "txtDescripcion";
+            this.txtDescripcion.Size = new System.Drawing.Size(126, 20);
+            this.txtDescripcion.TabIndex = 4;
             // 
             // label4
             // 
@@ -97,43 +111,32 @@
             this.label4.Text = "Porcentaje (0-100) ";
             this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
-            // txtDescripcion
+            // label3
             // 
-            this.txtDescripcion.Location = new System.Drawing.Point(107, 22);
-            this.txtDescripcion.Name = "txtDescripcion";
-            this.txtDescripcion.Size = new System.Drawing.Size(126, 20);
-            this.txtDescripcion.TabIndex = 4;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(7, 46);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(37, 13);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Precio";
             // 
-            // txtPrecio
+            // label2
             // 
-            this.txtPrecio.Location = new System.Drawing.Point(107, 48);
-            this.txtPrecio.Name = "txtPrecio";
-            this.txtPrecio.Size = new System.Drawing.Size(126, 20);
-            this.txtPrecio.TabIndex = 5;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 104);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(64, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Costo Envio";
             // 
-            // txtPorcentaje
+            // label1
             // 
-            this.txtPorcentaje.Location = new System.Drawing.Point(107, 74);
-            this.txtPorcentaje.Name = "txtPorcentaje";
-            this.txtPorcentaje.Size = new System.Drawing.Size(126, 20);
-            this.txtPorcentaje.TabIndex = 6;
-            // 
-            // txtCostoEnvio
-            // 
-            this.txtCostoEnvio.Location = new System.Drawing.Point(107, 101);
-            this.txtCostoEnvio.Name = "txtCostoEnvio";
-            this.txtCostoEnvio.Size = new System.Drawing.Size(126, 20);
-            this.txtCostoEnvio.TabIndex = 7;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(107, 139);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(126, 24);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Crear nueva visibilidad";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(66, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Descripcion:";
             // 
             // button2
             // 
