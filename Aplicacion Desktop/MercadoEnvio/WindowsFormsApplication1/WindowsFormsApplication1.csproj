@@ -215,6 +215,12 @@
     <Compile Include="Historial Cliente\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Historial Cliente\HistorialDelCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Historial Cliente\HistorialDelCliente.Designer.cs">
+      <DependentUpon>HistorialDelCliente.cs</DependentUpon>
+    </Compile>
     <Compile Include="Listado Estadistico\ListadoPrincipal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -333,6 +339,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Historial Cliente\HistorialDelCliente.resx">
+      <DependentUpon>HistorialDelCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Listado Estadistico\ListadoPrincipal.resx">
       <DependentUpon>ListadoPrincipal.cs</DependentUpon>

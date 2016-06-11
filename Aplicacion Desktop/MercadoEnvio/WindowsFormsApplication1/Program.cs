@@ -23,8 +23,8 @@ namespace MercadoEnvio
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Application.Run(new MercadoEnvio.ABM_Usuario.Alta_Usuario.DatosEmpresaNuevo("1", "2", "email"));
-            //Application.Run(new MercadoEnvio.Login.LoginInicial());
+            //Application.Run(new MercadoEnvio.ABM_Usuario.Alta_Usuario.DatosEmpresaNuevo("1", "2", "email"));
+            Application.Run(new MercadoEnvio.Historial_Cliente.HistorialDelCliente(20));
 
             
         }

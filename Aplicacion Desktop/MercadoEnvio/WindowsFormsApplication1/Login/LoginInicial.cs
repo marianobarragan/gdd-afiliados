@@ -27,7 +27,8 @@ namespace MercadoEnvio.Login
         {
 
         }
-
+        
+       
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
@@ -70,14 +71,7 @@ namespace MercadoEnvio.Login
 
             
         }
-
-        public void textBox2_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                button1_Click(this, new EventArgs());
-            }
-        }
+  
         /*
         private void textBox2_KeyDown(object sender, KeyEventArgs e)
         {
