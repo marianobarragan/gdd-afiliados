@@ -24,7 +24,7 @@ namespace MercadoEnvio
             Application.SetCompatibleTextRenderingDefault(false);
 
             //Application.Run(new MercadoEnvio.ABM_Usuario.Alta_Usuario.DatosEmpresaNuevo("1", "2", "email"));
-            Application.Run(new MercadoEnvio.ABM_Visibilidad.Menu());
+            Application.Run(new MercadoEnvio.Historial_Cliente.HistorialDelCliente(3));
 
             
         }

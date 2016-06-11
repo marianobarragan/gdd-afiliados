@@ -28,6 +28,17 @@ CREATE TABLE DBME.rol_x_funcionalidad (
 );
 GO
 
+CREATE PROCEDURE DBME.cantidadDeCalificacionesDelUsuario (@usuario_id INT)
+AS
+BEGIN
+	SELECT cantidad_estrellas, COUNT(cantidad_estrellas) 
+	FROM DBME.calificacion
+	WHERE autor_id = @usuario_id
+	Group By cantidad_estrellas
+	Order By cantidad_estrellas
+END;
+GO
+
 CREATE TABLE DBME.domicilio (
 	domicilio_id INT IDENTITY(1,1) PRIMARY KEY,
 	ciudad NVARCHAR(255),

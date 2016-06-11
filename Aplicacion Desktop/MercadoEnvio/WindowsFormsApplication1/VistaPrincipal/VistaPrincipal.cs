@@ -44,7 +44,12 @@ namespace MercadoEnvio.VistaPrincipal
                 ABM_Rol.SeleccionRol seleccionRol = new ABM_Rol.SeleccionRol();
                 seleccionRol.Show();
             }*/
+            if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "HISTORIAL DEL CLIENTE")
+            {
+               Historial_Cliente.HistorialDelCliente historialPropio = new Historial_Cliente.HistorialDelCliente(sesion.usuarioActual.usuario_id);
+               historialPropio.Show();
 
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
