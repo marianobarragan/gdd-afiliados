@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MercadoEnvio.Controller;
 
 namespace MercadoEnvio.ABM_Visibilidad
 {
@@ -24,7 +25,7 @@ namespace MercadoEnvio.ABM_Visibilidad
 
         private void ListadoVisibilidad_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         private void btnBorrarDatos_Click(object sender, EventArgs e)
@@ -68,6 +69,11 @@ namespace MercadoEnvio.ABM_Visibilidad
                 return;
             }
             dataGridView1.DataSource = dt;
+            for(int i = 0;i<dataGridView1.Columns.Count;i++)
+            {
+                dataGridView1.Columns[i].HeaderText = dataGridView1.Columns[i].HeaderText.Substring(12);
+            }
+            
         }
 
         private void btnEditar_Click(object sender, EventArgs e)
@@ -79,35 +85,38 @@ namespace MercadoEnvio.ABM_Visibilidad
                 return;
             }
             
-
-
-            int id = Int32.Parse( dataGridView1[dataGridView1.CurrentCell.ColumnIndex, dataGridView1.CurrentCell.RowIndex].Value.ToString());
-
+            //int id = Int32.Parse( dataGridView1[dataGridView1.CurrentCell.ColumnIndex, dataGridView1.CurrentCell.RowIndex].Value.ToString());
+            
             //MessageBox.Show(this.tipo, "BORRAR ROL", MessageBoxButtons.OK);
-
+            if (dataGridView1.SelectedCells.Count == 0)
+            {
+                MessageBox.Show("Debe seleccionar un elemento antes", "Problema", MessageBoxButtons.OK);
+                return;
+            }
+            int id2 = Int32.Parse(dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString());
             if (this.tipo == "Modificar visibilidad")
             {   //TODO terminar esto
                 //MessageBox.Show(id.ToString(), "Problema", MessageBoxButtons.OK);
-                ModificarVisibilidad mod = new ModificarVisibilidad(id);
+                
+                ModificarVisibilidad mod = new ModificarVisibilidad(id2);
                 mod.Show();
                 this.Close();
                 return;
             } else { 
                 
                 //TODO eliminar la visibilidad
+                DialogResult h = MessageBox.Show("¿Seguro que desea borrar el rol seleccionado?", "BORRAR ROL", MessageBoxButtons.YesNo);
                 
-                //DialogResult h = MessageBox.Show("¿Seguro que desea borrar?", "BORRAR ROL", MessageBoxButtons.YesNo);
-                /*
                 if (h == DialogResult.Yes)
                 {
-                    query2 = "UPDATE DBME.rol SET es_rol_habilitado = 0 WHERE nombre_rol = '" + contenido + "'";
-                    (new ConexionSQL()).ejecutarComandoSQL(query2);
+                    string query = "DELETE FROM DBME.visibilidad WHERE visibilidad_id = " + id2;
+                    (new ConexionSQL()).ejecutarComandoSQL(query);
                 }
                 else
                 {
                     return;
                 }
-                */
+                
 
 
                 

@@ -114,17 +114,25 @@ namespace MercadoEnvio.ABM_Visibilidad
                 try
                 {
                     string porcentajeString = txtPorcentaje.Text.Insert(0, "0.");
-                    string comando = "UPDATE DBME.visibilidad SET visibilidad_descripcion = '"+ txtDescripcion.Text+"',visibilidad_precio = "+txtPrecio.Text+"."+txtPrecioDecimal.Text+",visibilidad_porcentaje = "+porcentajeString+",visibilidad_costo_envio = "+txtCostoEnvio.Text+"."+txtCostoEnvioDecimal.Text+" WHERE visibilidad_id = "+id;
-                    MessageBox.Show(comando, "Alta Visibilidad", MessageBoxButtons.OK);
-                    MessageBox.Show("¿Está seguro de que desea guardar la visibilidad?", "Alta Visibilidad", MessageBoxButtons.OK);
-                    (new ConexionSQL()).ejecutarComandoSQL(comando);
-                    txtDescripcion.Enabled = false;
-                    txtPrecio.Enabled = false;
-                    txtPorcentaje.Enabled = false;
-                    txtCostoEnvio.Enabled = false;
-                    txtCostoEnvioDecimal.Enabled = false;
-                    txtPrecioDecimal.Enabled = false;
-                    estadoVentana = "deshabilitado";
+                    DialogResult h = MessageBox.Show("¿Seguro que desea modificar la visibilidad?", "MODIFICAR VISIBILIDAD", MessageBoxButtons.YesNo);
+                    string comando;
+                    if (h == DialogResult.Yes)
+                    {
+                        comando = "UPDATE DBME.visibilidad SET visibilidad_descripcion = '" + txtDescripcion.Text + "',visibilidad_precio = " + txtPrecio.Text + "." + txtPrecioDecimal.Text + ",visibilidad_porcentaje = " + porcentajeString + ",visibilidad_costo_envio = " + txtCostoEnvio.Text + "." + txtCostoEnvioDecimal.Text + " WHERE visibilidad_id = " + id;
+                        (new ConexionSQL()).ejecutarComandoSQL(comando);
+                        txtDescripcion.Enabled = false;
+                        txtPrecio.Enabled = false;
+                        txtPorcentaje.Enabled = false;
+                        txtCostoEnvio.Enabled = false;
+                        txtCostoEnvioDecimal.Enabled = false;
+                        txtPrecioDecimal.Enabled = false;
+                        estadoVentana = "deshabilitado";
+                    }
+                    else
+                    {
+                        return;
+                    }
+                    
                 }
                 catch (Exception er)
                 {
@@ -134,6 +142,14 @@ namespace MercadoEnvio.ABM_Visibilidad
 
                 
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ListadoVisibilidad ventana = new ListadoVisibilidad("Modificar visibilidad");
+            ventana.Show();
+            this.Close();
+                       
         }
     }
 }
