@@ -7,17 +7,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MercadoEnvio.Controller;
 
 namespace MercadoEnvio.Listado_Estadistico
 {
     public partial class ListadoPrincipal : Form
     {
+        public int indice;
         public ListadoPrincipal(int index)
         {
             InitializeComponent();
             int indice = index;
             textBox1.Text = indice.ToString();
             //Sacar esto de aca arriba
+
+            if (indice == 1)
+            {
+                comboBox1.Enabled = true;
+                string comando = "SELECT descripcion_corta FROM DBME.rubro";
+                DataTable dataCalificacion = (new ConexionSQL()).cargarTablaSQL(comando);
+
+                foreach (DataRow row in dataCalificacion.Rows)
+                {
+                    comboBox1.Items.Add(row[0].ToString());
+                }
+                comboBox1.SelectedIndex = 0;
+            }
         }
 
         private void lstTrimestre_SelectedIndexChanged(object sender, EventArgs e)
@@ -81,6 +96,14 @@ namespace MercadoEnvio.Listado_Estadistico
 
 
 
+            
+           
+        }
+
+        private void ListadoPrincipal_Load(object sender, EventArgs e)
+        {
+            
+            
             
            
         }
