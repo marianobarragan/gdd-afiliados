@@ -51,6 +51,10 @@ CREATE TABLE DBME.domicilio (
 );
 GO
 
+SELECT mail
+from DBME.usuario 
+
+
 CREATE TABLE DBME.usuario(
 	usuario_id INT IDENTITY(1,1) PRIMARY KEY,
 	username NVARCHAR(255) UNIQUE,
@@ -597,6 +601,10 @@ BEGIN
 	RETURN
 END;
 GO
+/*
+
+*/
+
 
 CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeFacturas(@mes TINYINT,@anio INTEGER)-- dentro de un mes y año particular
 RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), cantidad_facturas BIGINT)
@@ -764,7 +772,7 @@ GO
 --UPDATE DBME.usuario SET habilitado = '0' WHERE username = 'sapo'
 --select * from DBME.usuario where usuario.username = 'sapo'
 
-
+/*
 BEGIN TRANSACTION
 DECLARE @usuario_id AS INT
 EXECUTE DBME.crearUsuario 'a','a','metodoGuede@sanLorenzo.com.br',NULL,NULL,NULL,NULL,NULL,NULL,'Orticalle','1000', @usuario_id OUT
@@ -780,7 +788,7 @@ EXECUTE DBME.crearCliente 'do interest','sapinho','38355825','D','20120618 10:34
 SELECT rubro_id,descripcion_larga FROM DBME.  
 SELECT nombre,apellido,numero_documento,tipo_documento FROM DBME.cliente WHERE numero_documento = '38355825'
 ROLLBACK TRANSACTION
-
+*/
 
 
 CREATE PROCEDURE DBME.enlazarRolXFuncionalidad (@nombre_rol NVARCHAR(255),@nombre_funcionalidad NVARCHAR(255) )
@@ -874,4 +882,18 @@ END;
 GO
 
 select Distinct publ_cli_dni from gd_esquema.Maestra
+
+
+CREATE PROCEDURE DBME.calificarAlVendedor (@compra_id INT,@cliente_id INT, @comentario NVARCHAR(255), @calificacion numeric(18,0))
+AS
+BEGIN
+
+		INSERT INTO DBME.calificacion(cantidad_estrellas,descripcion,fecha,autor_id,compra_id) VALUES(@calificacion,@comentario, GETDATE(),@cliente_id,@compra_id)
+		UPDATE DBME.compra
+		SET esta_calificada = 1
+		WHERE compra_id = @compra_id	
+ 
+END;
+GO
+
 /* END PROCEDURES COMUNICACION */

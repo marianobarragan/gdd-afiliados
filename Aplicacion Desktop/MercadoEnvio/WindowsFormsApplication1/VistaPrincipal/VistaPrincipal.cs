@@ -50,6 +50,15 @@ namespace MercadoEnvio.VistaPrincipal
                historialPropio.Show();
 
             }
+            if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "COMPRAR/OFERTAR") 
+            {
+               /*
+                *Si el cliente posee más de 3 compras inmediatas o subastas sin calificar, el sistema
+                 no le permitirá realizar ninguna otra operación de compra u oferta hasta que no califique
+                 todo lo que tiene pendiente.
+                * */
+           
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
