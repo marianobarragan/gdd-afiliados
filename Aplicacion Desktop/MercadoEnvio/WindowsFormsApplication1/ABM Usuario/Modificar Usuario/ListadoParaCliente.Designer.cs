@@ -56,7 +56,7 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(494, 142);
+            this.groupBox1.Size = new System.Drawing.Size(494, 429);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtrar Busqueda";
@@ -147,7 +147,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(549, 180);
+            this.ClientSize = new System.Drawing.Size(869, 485);
             this.Controls.Add(this.groupBox1);
             this.Name = "ListadoParaCliente";
             this.Text = "ListadoParaCliente";

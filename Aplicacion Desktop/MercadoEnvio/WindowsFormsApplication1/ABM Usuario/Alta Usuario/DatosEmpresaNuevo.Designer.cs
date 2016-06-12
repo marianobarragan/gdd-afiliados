@@ -53,13 +53,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtRubro = new System.Windows.Forms.TextBox();
+            this.cmbRubros = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.txtRubro);
+            this.groupBox1.Controls.Add(this.cmbRubros);
             this.groupBox1.Controls.Add(this.txtNumeroTelefono);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.txtDepartamento);
@@ -90,11 +90,12 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos Empresa";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // txtNumeroTelefono
             // 
             this.txtNumeroTelefono.BackColor = System.Drawing.Color.PaleGreen;
-            this.txtNumeroTelefono.Location = new System.Drawing.Point(126, 141);
+            this.txtNumeroTelefono.Location = new System.Drawing.Point(126, 163);
             this.txtNumeroTelefono.Name = "txtNumeroTelefono";
             this.txtNumeroTelefono.Size = new System.Drawing.Size(233, 20);
             this.txtNumeroTelefono.TabIndex = 59;
@@ -102,7 +103,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 141);
+            this.label8.Location = new System.Drawing.Point(7, 163);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(104, 13);
             this.label8.TabIndex = 58;
@@ -236,7 +237,7 @@
             // 
             // txtCUIT
             // 
-            this.txtCUIT.BackColor = System.Drawing.Color.PaleGreen;
+            this.txtCUIT.BackColor = System.Drawing.Color.White;
             this.txtCUIT.Location = new System.Drawing.Point(126, 78);
             this.txtCUIT.Name = "txtCUIT";
             this.txtCUIT.Size = new System.Drawing.Size(233, 20);
@@ -294,12 +295,14 @@
             this.label1.TabIndex = 33;
             this.label1.Text = "Razón Social";
             // 
-            // txtRubro
+            // cmbRubros
             // 
-            this.txtRubro.Location = new System.Drawing.Point(126, 109);
-            this.txtRubro.Name = "txtRubro";
-            this.txtRubro.Size = new System.Drawing.Size(233, 20);
-            this.txtRubro.TabIndex = 60;
+            this.cmbRubros.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbRubros.FormattingEnabled = true;
+            this.cmbRubros.Location = new System.Drawing.Point(126, 106);
+            this.cmbRubros.Name = "cmbRubros";
+            this.cmbRubros.Size = new System.Drawing.Size(233, 21);
+            this.cmbRubros.TabIndex = 62;
             // 
             // DatosEmpresaNuevo
             // 
@@ -344,6 +347,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtRubro;
+        private System.Windows.Forms.ComboBox cmbRubros;
     }
 }

@@ -93,10 +93,10 @@ namespace MercadoEnvio.ABM_Usuario.Alta_Usuario
             /* insertar nuevo cliente */
             
             try {
-                //string comando = "INSERT INTO DBME.rol (nombre_rol,es_rol_habilitado) VALUES ('" + txtNombreRol.Text + "','" + chkEstaHabilitado.Checked.ToString() + "')";
-                string comando = "EXECUTE DBME.nuevoCliente '" + username + "','" + password + "','" + email + "','" + nombre + "','" + apellido + "','" + fechaNacimiento + "','" + tipoDocumento + "','" + documento + "','" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "','" + altura_calle + "','" + numero_piso + "','" + departamento + "','" + numero_telefono + "'";
-                MessageBox.Show(comando, "A", MessageBoxButtons.OK);
-                //(new ConexionSQL()).ejecutarComandoSQL(comando);
+                
+                string comando = "EXECUTE DBME.nuevoCliente '" + username + "','" + password + "','" + email + "','" + nombre + "','" + apellido + "','" + fechaNacimiento + "','" + tipoDocumento + "'," + documento + ",'" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "'," + altura_calle + "," + numero_piso + ",'" + departamento + "'," + numero_telefono ;
+                //MessageBox.Show(comando, "A", MessageBoxButtons.OK);
+                (new ConexionSQL()).ejecutarComandoSQL(comando);
                 
                 MessageBox.Show("Cliente creado exitosamente", "A", MessageBoxButtons.OK);
             }

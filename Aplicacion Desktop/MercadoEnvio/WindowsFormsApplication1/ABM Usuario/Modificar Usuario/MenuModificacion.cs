@@ -12,9 +12,19 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
 {
     public partial class MenuModificacion : Form
     {
-        public MenuModificacion()
+        public string tipo;
+
+        public MenuModificacion(string discriminador)
         {
+            
             InitializeComponent();
+            button1.Text = discriminador + " Cliente";
+            button2.Text = discriminador + " Empresa";
+        }
+
+        private void MenuModificacion_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

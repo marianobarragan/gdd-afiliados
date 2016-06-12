@@ -31,11 +31,11 @@ namespace MercadoEnvio.ABM_Usuario
                     alta.Show();
                     break;
                 case 1:
-                    Modificar_Usuario.MenuModificacion baja = new Modificar_Usuario.MenuModificacion();
+                    Modificar_Usuario.MenuModificacion baja = new Modificar_Usuario.MenuModificacion("Borrar");
                     baja.Show();
                     break;
                 case 2:
-                    Modificar_Usuario.MenuModificacion mod = new Modificar_Usuario.MenuModificacion();
+                    Modificar_Usuario.MenuModificacion mod = new Modificar_Usuario.MenuModificacion("Modificar");
                     mod.Show();
                     break;
             }
