@@ -44,7 +44,21 @@ namespace MercadoEnvio.VistaPrincipal
                 ABM_Rol.SeleccionRol seleccionRol = new ABM_Rol.SeleccionRol();
                 seleccionRol.Show();
             }*/
+            if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "HISTORIAL DEL CLIENTE")
+            {
+               Historial_Cliente.HistorialDelCliente historialPropio = new Historial_Cliente.HistorialDelCliente(sesion.usuarioActual.usuario_id);
+               historialPropio.Show();
 
+            }
+            if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "COMPRAR/OFERTAR") 
+            {
+               /*
+                *Si el cliente posee más de 3 compras inmediatas o subastas sin calificar, el sistema
+                 no le permitirá realizar ninguna otra operación de compra u oferta hasta que no califique
+                 todo lo que tiene pendiente.
+                * */
+           
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)

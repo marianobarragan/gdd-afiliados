@@ -28,6 +28,17 @@ CREATE TABLE DBME.rol_x_funcionalidad (
 );
 GO
 
+CREATE PROCEDURE DBME.cantidadDeCalificacionesDelUsuario (@usuario_id INT)
+AS
+BEGIN
+	SELECT cantidad_estrellas, COUNT(cantidad_estrellas) 
+	FROM DBME.calificacion
+	WHERE autor_id = @usuario_id
+	Group By cantidad_estrellas
+	Order By cantidad_estrellas
+END;
+GO
+
 CREATE TABLE DBME.domicilio (
 	domicilio_id INT IDENTITY(1,1) PRIMARY KEY,
 	ciudad NVARCHAR(255),
@@ -39,6 +50,10 @@ CREATE TABLE DBME.domicilio (
 	numero_calle NUMERIC(18,0),
 );
 GO
+
+SELECT mail
+from DBME.usuario 
+
 
 CREATE TABLE DBME.usuario(
 	usuario_id INT IDENTITY(1,1) PRIMARY KEY,
@@ -603,6 +618,10 @@ BEGIN
 	RETURN
 END;
 GO
+/*
+
+*/
+
 
 CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeFacturas(@mes TINYINT,@anio INTEGER)-- dentro de un mes y año particular
 RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), cantidad_facturas BIGINT)
@@ -861,6 +880,7 @@ END;
 GO*/
 
 
+
 CREATE PROCEDURE DBME.enlazarRolXFuncionalidad (@nombre_rol NVARCHAR(255),@nombre_funcionalidad NVARCHAR(255) )
 AS
 BEGIN
@@ -948,6 +968,21 @@ BEGIN
 		WHERE DBME.usuario.username = @username 
 	END
 	
+END;
+GO
+
+select Distinct publ_cli_dni from gd_esquema.Maestra
+
+
+CREATE PROCEDURE DBME.calificarAlVendedor (@compra_id INT,@cliente_id INT, @comentario NVARCHAR(255), @calificacion numeric(18,0))
+AS
+BEGIN
+
+		INSERT INTO DBME.calificacion(cantidad_estrellas,descripcion,fecha,autor_id,compra_id) VALUES(@calificacion,@comentario, GETDATE(),@cliente_id,@compra_id)
+		UPDATE DBME.compra
+		SET esta_calificada = 1
+		WHERE compra_id = @compra_id	
+ 
 END;
 GO
 
