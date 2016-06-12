@@ -189,6 +189,7 @@
     <Compile Include="Controller\TraductorDeQuery.cs" />
     <Compile Include="Domain\Funcionalidad.cs" />
     <Compile Include="Domain\Rol.cs" />
+    <Compile Include="Domain\Rubro.cs" />
     <Compile Include="Domain\Sesion.cs" />
     <Compile Include="Domain\Usuario.cs" />
     <Compile Include="Domain\Visibilidad.cs" />

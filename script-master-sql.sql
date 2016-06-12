@@ -67,7 +67,7 @@ CREATE TABLE DBME.cliente(
 	apellido NVARCHAR(255),
 	nombre NVARCHAR(255),
 	numero_documento NUMERIC(18,0) UNIQUE,
-	tipo_documento CHAR(3) CHECK(tipo_documento IN ('DNI','LE','LC')),
+	tipo_documento NVARCHAR(3) CHECK(tipo_documento IN ('DNI','LE','LC')),
 	fecha_nacimiento DATETIME,
 	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id) 
 );
@@ -180,7 +180,7 @@ CREATE TABLE DBME.factura_detalle(
 GO
 
 CREATE TABLE DBME.reloj(
-	hora DATE
+	hora_actual DATETIME
 );
 GO
 /* END CREACION TABLAS*/
@@ -260,8 +260,10 @@ CREATE PROCEDURE DBME.migrarClientes  -- de PUBL CLI
 AS
 BEGIN
 
+--(SELECT SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', Publ_Cli_Mail)), 3, 250))
+
 	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id,fecha_creacion,telefono,es_nuevo)
-	SELECT DISTINCT Publ_Cli_Mail,Publ_Cli_Mail, (SELECT SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', Publ_Cli_Mail)), 3, 250)),1,0, d.domicilio_id ,NULL,NULL,1
+	SELECT DISTINCT Publ_Cli_Mail,Publ_Cli_Mail,Publ_Cli_Mail,1,0, d.domicilio_id ,NULL,NULL,1
 	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Cli_Cod_Postal = d.codigo_postal)
 	WHERE Publ_Cli_Mail IS NOT NULL
 	
@@ -272,12 +274,14 @@ BEGIN
 END;
 GO
 
+--(SELECT SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', Publ_Empresa_Mail)), 3, 250))
+
 CREATE PROCEDURE DBME.migrarEmpresas
 AS
 BEGIN
 	
 	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id ,fecha_creacion,telefono,es_nuevo)
-	SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Mail,(SELECT SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', Publ_Empresa_Mail)), 3, 250)),1,0, d.domicilio_id ,NULL,NULL,1
+	SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Mail,Publ_Empresa_Mail,1,0, d.domicilio_id ,NULL,NULL,1
 	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Empresa_Cod_Postal = d.codigo_postal)
 	WHERE Publ_Empresa_Mail IS NOT NULL
 	
@@ -557,11 +561,24 @@ GO
 
 
 /* START TRIGGERS */
+/*
+CREATE TRIGGER InsertarEnFuncionalidadXRolLuegoDeRol
+ON DBME.rol
+AFTER INSERT
+AS 
+BEGIN
+	INSERT INTO DBME.rol_x_funcionalidad (rol_id,funcionalidad_id)
+	SELECT rol_id,funcionalidad_id FROM inserted
+	
+
+
+GO
+*/
 
 /* END TRIGGERS */
 
 /* START FUNCTIONS */
-
+/*
 CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeProductosNoVendidos(@mes TINYINT,@anio INTEGER,@visibilidad NUMERIC (18,0))
 RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), cantidad_productos_sin_vender BIGINT)
 AS 
@@ -610,7 +627,7 @@ BEGIN
 	RETURN
 END;
 GO
-
+*/
 /* END FUNCTIONS */
 
 
@@ -668,7 +685,7 @@ CREATE PROCEDURE DBME.crearCliente(
 	@apellido NVARCHAR(255),
 	@nombre NVARCHAR(255),
 	@numero_documento NUMERIC(18,0),
-	@tipo_documento CHAR,
+	@tipo_documento NVARCHAR(3),
 	@fecha_nacimiento DATETIME,
 	@username NVARCHAR(255),
 	@password NVARCHAR(255),
@@ -750,10 +767,8 @@ BEGIN
 END;
 GO
 
---UPDATE DBME.usuario SET habilitado = '0' WHERE username = 'sapo'
---select * from DBME.usuario where usuario.username = 'sapo'
 
-
+/*
 BEGIN TRANSACTION
 DECLARE @usuario_id AS INT
 EXECUTE DBME.crearUsuario 'a','a','metodoGuede@sanLorenzo.com.br',NULL,NULL,NULL,NULL,NULL,NULL,'Orticalle','1000', @usuario_id OUT
@@ -769,7 +784,81 @@ EXECUTE DBME.crearCliente 'do interest','sapinho','38355825','D','20120618 10:34
 SELECT rubro_id,descripcion_larga FROM DBME.  
 SELECT nombre,apellido,numero_documento,tipo_documento FROM DBME.cliente WHERE numero_documento = '38355825'
 ROLLBACK TRANSACTION
+*/
 
+--CREATE PROCEDURE DBME.nuevoCliente string comando = "EXECUTE DBME.nuevoCliente '" + username + "','" + password + "','" + email + "','" + nombre + "','" + apellido + "','" + fechaNacimiento + "','" + tipoDocumento + "','" + documento + "','" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "','" + altura_calle + "','" + numero_piso + "','" + departamento + "','" + numero_telefono + "'";
+
+CREATE PROCEDURE DBME.nuevoCliente (@username NVARCHAR(255), @password NVARCHAR(255), @mail NVARCHAR(255), @nombre NVARCHAR(255), @apellido NVARCHAR(255),@fechaNacimiento DATETIME, @tipoDocumento NVARCHAR(3),@numero_documento NUMERIC(18,0),@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT)
+AS
+BEGIN
+
+	DECLARE @mensaje_error varchar(100)
+	DECLARE @cliente_id INT
+
+	BEGIN TRY
+		BEGIN TRANSACTION	
+		EXECUTE DBME.crearCliente @apellido,@nombre,@numero_documento,@tipoDocumento,NULL,@username,@password,@mail,@numero_telefono,@ciudad,@localidad,@codigo_postal,@numero_piso,@departamento,@domicilio_calle,@altura_calle ,@cliente_id OUT
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		SET @mensaje_error = 'Error en insertar nuevos datos. Se deshace la operacion entera. Lo sentimos.'
+		RAISERROR(@mensaje_error, 12, 1)
+		ROLLBACK TRANSACTION 
+	END CATCH
+
+	
+END;
+GO
+select rubro_id, descripcion_corta from dbme.rubro
+--string comando = "EXECUTE DBME.nuevaEmpresa '" + username + "','" + password + "','" + email + "','" + nombre + "','" + razon_social + "','" + CUIT + "','" + rubro  + "','" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "','" + altura_calle + "','" + numero_piso + "','" + departamento + "','" + numero_telefono + "'";
+
+EXECUTE DBME.nuevaEmpresa 'username','password','mail','nombre','razon social','ciutttt',4,'ciudad del pecado','localidad','codigo postal','domicilio calle',455,4,'departamento',49017112
+CREATE PROCEDURE DBME.nuevaEmpresa (@username NVARCHAR(255), @password NVARCHAR(255), @mail NVARCHAR(255), @nombre NVARCHAR(255),@razon_social NVARCHAR(255), @cuit NVARCHAR(50), @rubro_id INT, @ciudad NVARCHAR(255), @localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@numero_calle NUMERIC(18,0),@piso NUMERIC(18,0),@departamento NVARCHAR(50), @telefono BIGINT)
+AS
+BEGIN
+
+	DECLARE @mensaje_error varchar(100)
+	DECLARE @empresa_id INT
+	DECLARE @date DATETIME
+
+	SET @date = GETDATE()
+
+	BEGIN TRY
+		BEGIN TRANSACTION			
+		EXECUTE DBME.crearEmpresa @razon_social,@cuit,@date,@nombre,@rubro_id,@username,@password,@mail, @telefono, @ciudad, @localidad, @codigo_postal, @piso, @departamento,@domicilio_calle,@numero_calle, @empresa_id OUT
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		SET @mensaje_error = 'Error en insertar nuevos datos. Se deshace la operacion entera. Lo sentimos.'
+		RAISERROR(@mensaje_error, 12, 1)
+		ROLLBACK TRANSACTION 
+	END CATCH
+
+	
+END;
+GO
+
+
+drop procedure DBME.nuevoCliente
+select * FROM dbme.usuario u
+
+/*
+create procedure DBME.sida
+AS
+BEGIN
+	
+	DECLARE @mensaje_error varchar(100)
+	DECLAre @sida VARCHAR (5)
+	SET @sida = 'ho'
+	BEGIN TRY
+		INSERT INTO DBME.domicilio (numero_calle) VALUES (@sida)
+	END TRY
+	BEGIN CATCH
+		SET @mensaje_error = 'El usuario ingresado no existe'
+		RAISERROR(@mensaje_error, 12, 1)
+	END CATCH 
+END;
+GO*/
 
 
 CREATE PROCEDURE DBME.enlazarRolXFuncionalidad (@nombre_rol NVARCHAR(255),@nombre_funcionalidad NVARCHAR(255) )
@@ -851,7 +940,7 @@ BEGIN
 	END 
 
 	IF (@contrasenia = @u_password)
-	BEGIN
+	BEGIN 
 		UPDATE DBME.usuario SET cantidad_intentos_fallidos = 0 WHERE DBME.usuario.usuario_id = @u_id
 		
 		SELECT DBME.usuario.usuario_id
@@ -862,5 +951,5 @@ BEGIN
 END;
 GO
 
-select Distinct publ_cli_dni from gd_esquema.Maestra
+
 /* END PROCEDURES COMUNICACION */
