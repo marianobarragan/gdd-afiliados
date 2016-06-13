@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using MercadoEnvio.Domain;
+using MercadoEnvio.Controller;
 
 namespace MercadoEnvio.VistaPrincipal
 {
@@ -84,6 +85,10 @@ namespace MercadoEnvio.VistaPrincipal
             lstFunciones.SelectedIndex = 0;
             label5.Text = sesion.usuarioActual.nombreUsuario;
             label4.Text = sesion.rolActual.nombre;
+
+            string c = "EXEC ";
+            DataTable dt = new ConexionSQL().ejecutarComandoSQL(c);
+            //new Controller.Controller().
         }
 
         private void lstFunciones_SelectedIndexChanged(object sender, EventArgs e)

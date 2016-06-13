@@ -113,9 +113,10 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
             {
 
                 string comando = "EXECUTE DBME.updateEmpresa " + empresa_id + ",'" + nombre + "','" + razon_social + "','" + CUIT + "'," + rubro + ",'" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "','" + altura_calle + "','" + numero_piso + "','" + departamento + "','" + numero_telefono + "'";
-                MessageBox.Show(comando, "Update", MessageBoxButtons.OK);
-                //(new ConexionSQL()).ejecutarComandoSQL(comando);
-                //MessageBox.Show("Empresa actualizada exitosamente", "Update", MessageBoxButtons.OK);
+                //MessageBox.Show(comando, "Update", MessageBoxButtons.OK);
+                (new ConexionSQL()).ejecutarComandoSQL(comando);
+                MessageBox.Show("Empresa actualizada exitosamente", "Update", MessageBoxButtons.OK);
+                this.Close();
             }
             catch (Exception er)
             {

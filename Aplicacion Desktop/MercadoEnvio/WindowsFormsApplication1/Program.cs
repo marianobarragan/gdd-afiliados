@@ -24,8 +24,8 @@ namespace MercadoEnvio
             Application.SetCompatibleTextRenderingDefault(false);
 
             //Application.Run(new MercadoEnvio
-            Application.Run(new MercadoEnvio.Listado_Estadistico.ListadoPrincipal(1));
-            //Application.Run(new MercadoEnvio.Login.LoginInicial());
+            //Application.Run(new MercadoEnvio.Listado_Estadistico.ListadoPrincipal(1));
+            Application.Run(new MercadoEnvio.Login.LoginInicial());
 
             
         }

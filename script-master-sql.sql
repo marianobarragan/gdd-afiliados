@@ -549,19 +549,18 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DBME.crearAdministradores
+CREATE PROCEDURE DBME.migrarFacturasXCompras 
 AS
 BEGIN
-
-	DECLARE @usuario_id AS INT
-										--w23e encriptado
-	EXECUTE DBME.crearUsuario 'admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, @usuario_id OUT
-	INSERT INTO DBME.administrador(nombre,apellido,usuario_id)
-	VALUES ('Administrador','General',@usuario_id)
-	INSERT INTO DBME.rol_x_usuario (usuario_id,rol_id)
-	VALUES (@usuario_id,1)
+	UPDATE DBME.factura 
+	SET compra_id = c.compra_id 
+	FROM DBME.factura f 
+		JOIN gd_esquema.Maestra m ON (f.factura_id = m.Factura_Nro)
+		JOIN DBME.compra c ON (c.publicacion_id = m.Publicacion_Cod)
 END;
 GO
+
+
 
 /* END BASES DE MIGRACION */ 
 
@@ -581,7 +580,7 @@ GO
 	EXECUTE DBME.migrarCalificaciones
 	EXECUTE DBME.migrarCompras
 	EXECUTE DBME.migrarOfertas
-	EXECUTE DBME.crearAdministradores
+	EXECUTE DBME.migrarFacturasXCompras
 
 GO
 
@@ -651,7 +650,7 @@ BEGIN
 	RETURN
 END;
 GO
-SELECT estado FROM DBME.publicacion WHERE estado != 'FINALIZADA'
+
 /*
 CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeFacturas(@trimestre TINYINT,@anio INTEGER)-- dentro de un mes y año particular
 RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), cantidad_facturas BIGINT)
@@ -820,7 +819,22 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE DBME.crearAdministradores
+AS
+BEGIN
 
+	DECLARE @usuario_id AS INT
+										--w23e encriptado
+	EXECUTE DBME.crearUsuario 'admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, @usuario_id OUT
+	INSERT INTO DBME.administrador(nombre,apellido,usuario_id)
+	VALUES ('Administrador','General',@usuario_id)
+	INSERT INTO DBME.rol_x_usuario (usuario_id,rol_id)
+	VALUES (@usuario_id,1)
+END;
+GO
+
+EXECUTE DBME.crearAdministradores
+GO
 
 /*
 BEGIN TRANSACTION
@@ -840,7 +854,7 @@ SELECT nombre,apellido,numero_documento,tipo_documento FROM DBME.cliente WHERE n
 ROLLBACK TRANSACTION
 */
 
---CREATE PROCEDURE DBME.nuevoCliente string comando = "EXECUTE DBME.nuevoCliente '" + username + "','" + password + "','" + email + "','" + nombre + "','" + apellido + "','" + fechaNacimiento + "','" + tipoDocumento + "','" + documento + "','" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "','" + altura_calle + "','" + numero_piso + "','" + departamento + "','" + numero_telefono + "'";
+
 
 CREATE PROCEDURE DBME.nuevoCliente (@username NVARCHAR(255), @password NVARCHAR(255), @mail NVARCHAR(255), @nombre NVARCHAR(255), @apellido NVARCHAR(255),@fechaNacimiento DATETIME, @tipoDocumento NVARCHAR(3),@numero_documento NUMERIC(18,0),@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT)
 AS
@@ -864,28 +878,40 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DBME.updateCliente (@usuario_id INT, @nombre NVARCHAR(255), @apellido NVARCHAR(255),@fechaNacimiento DATETIME, @tipoDocumento NVARCHAR(3),@numero_documento NUMERIC(18,0),@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT)
+--EXECUTE DBME.updateCliente 30,'Marce7','Guitarrista','13/06/1987 0:00:00','DNI',23237,'marce_ciudad7','marce_localidad7','1447','calle marce7',2337,2337,'marce depto7',2337
+CREATE PROCEDURE DBME.updateCliente (@cliente_id INT, @nombre NVARCHAR(255), @apellido NVARCHAR(255),@fechaNacimiento DATETIME, @tipoDocumento NVARCHAR(3),@numero_documento NUMERIC(18,0),@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT)
 AS
 BEGIN
 
 	DECLARE @mensaje_error varchar(100)
-	DECLARE @cliente_id INT
+	DECLARE @usuario_id INT
 
-	BEGIN TRY
-		BEGIN TRANSACTION	
-		--EXECUTE DBME.crearCliente @apellido,@nombre,@numero_documento,@tipoDocumento,@fechaNacimiento,@username,@password,@mail,@numero_telefono,@ciudad,@localidad,@codigo_postal,@numero_piso,@departamento,@domicilio_calle,@altura_calle ,@cliente_id OUT
-		COMMIT TRANSACTION
-	END TRY
-	BEGIN CATCH
-		SET @mensaje_error = 'Error en actualizar los datos. Se deshace la operacion entera. Lo sentimos.'
-		RAISERROR(@mensaje_error, 12, 1)
-		ROLLBACK TRANSACTION 
-	END CATCH
+	SET @usuario_id = (SELECT usuario_id FROM DBME.cliente WHERE cliente_id = @cliente_id)
+	--BEGIN TRY
+		--BEGIN TRANSACTION	
+		
+		UPDATE DBME.domicilio 
+		SET ciudad = @ciudad, localidad = @localidad, codigo_postal = @codigo_postal, piso = @numero_piso, departamento = @departamento,domicilio_calle = @domicilio_calle, numero_calle = @altura_calle 
+		WHERE domicilio_id = @usuario_id
+		
+		UPDATE DBME.cliente 
+		SET apellido = @apellido, nombre = @nombre, numero_documento = @numero_documento, tipo_documento = @tipoDocumento, fecha_nacimiento = @fechaNacimiento 
+		WHERE usuario_id = @usuario_id
+		
+		UPDATE DBME.usuario 
+		SET telefono = @numero_telefono 
+		WHERE usuario_id = @usuario_id
+		
+		--COMMIT TRANSACTION
+	--END TRY
+	--BEGIN CATCH
+		--SET @mensaje_error = 'Error en actualizar los datos. Se deshace la operacion entera. Lo sentimos.'
+		--RAISERROR(@mensaje_error, 12, 1)
+		--ROLLBACK TRANSACTION 
+	--END CATCH
 
-	
 END;
 GO
-
 
 CREATE PROCEDURE DBME.nuevaEmpresa (@username NVARCHAR(255), @password NVARCHAR(255), @mail NVARCHAR(255), @nombre NVARCHAR(255),@razon_social NVARCHAR(255), @cuit NVARCHAR(50), @rubro_id INT, @ciudad NVARCHAR(255), @localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@numero_calle NUMERIC(18,0),@piso NUMERIC(18,0),@departamento NVARCHAR(50), @telefono BIGINT)
 AS
@@ -912,6 +938,52 @@ BEGIN
 END;
 GO
 
+
+CREATE PROCEDURE DBME.updateEmpresa (@empresa_id INT, @nombre NVARCHAR(255), @razon_social NVARCHAR(255),@cuit NVARCHAR(50),@rubro_id INT ,@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT)
+AS
+BEGIN
+
+	DECLARE @mensaje_error varchar(100)
+	DECLARE @usuario_id INT
+
+	SET @usuario_id = (SELECT usuario_id FROM DBME.empresa WHERE empresa_id = @empresa_id)
+	--BEGIN TRY
+		--BEGIN TRANSACTION	
+		
+		UPDATE DBME.domicilio 
+		SET ciudad = @ciudad, localidad = @localidad, codigo_postal = @codigo_postal, piso = @numero_piso, departamento = @departamento,domicilio_calle = @domicilio_calle, numero_calle = @altura_calle 
+		WHERE domicilio_id = @usuario_id
+		
+		UPDATE DBME.empresa 
+		SET razon_social = @razon_social, cuit = @cuit, nombre_contacto = @nombre, rubro_id = @rubro_id
+		WHERE empresa_id = @empresa_id
+		
+		UPDATE DBME.usuario 
+		SET telefono = @numero_telefono 
+		WHERE usuario_id = @usuario_id
+		
+		--COMMIT TRANSACTION
+	--END TRY
+	--BEGIN CATCH
+		--SET @mensaje_error = 'Error en actualizar los datos. Se deshace la operacion entera. Lo sentimos.'
+		--RAISERROR(@mensaje_error, 12, 1)
+		--ROLLBACK TRANSACTION 
+	--END CATCH
+
+END;
+GO
+
+CREATE PROCEDURE DBME.chequearVencimientoPublicaciones (@hora_actual DATETIME)
+AS
+BEGIN
+
+	DELETE FROM DBME.reloj
+	INSERT INTO DBME.reloj (hora_actual) VALUES (@hora_actual)
+
+	UPDATE DBME.publicacion SET estado = 'FINALIZADA' WHERE fecha_vencimiento>@hora_actual AND estado = 'ACTIVA'
+
+END;
+GO
 
 /*
 create procedure DBME.sida
@@ -1031,6 +1103,30 @@ BEGIN
 		SET esta_calificada = 1
 		WHERE compra_id = @compra_id	
  
+END;
+GO
+
+CREATE PROCEDURE DBME.crearPublicacion (@publicacion_tipo NVARCHAR(255),@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), )
+AS
+BEGIN
+
+
+/*  
+	
+	
+	
+	costo DECIMAL(10,2),
+	rubro_id INT FOREIGN KEY REFERENCES DBME.rubro(rubro_id),
+	visibilidad_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.visibilidad(visibilidad_id),
+	autor_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id),
+	estado NVARCHAR(255) CHECK (estado IN ('BORRADOR','ACTIVA','PAUSADA','FINALIZADA')) DEFAULT 'BORRADOR',
+	permite_preguntas bit,
+	realiza_envio bit,
+	cantidad INT,
+	fecha_finalizacion DATE,
+	valor_inicial DECIMAL(10,2),
+	valor_actual DECIMAL(10,2)*/
+
 END;
 GO
 

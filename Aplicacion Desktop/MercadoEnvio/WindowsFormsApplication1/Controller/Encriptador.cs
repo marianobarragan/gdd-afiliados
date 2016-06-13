@@ -16,7 +16,7 @@ namespace MercadoEnvio.Controller
             byte[] inputEnBytes = Encoding.UTF8.GetBytes(input);
             byte[] inputHashBytes = encriptador.ComputeHash(inputEnBytes);
             return BitConverter.ToString(inputHashBytes).Replace("-", String.Empty).ToLower();
-        
+            
         }
 
         public bool cadenaSoloContieneNumeros(String str)
