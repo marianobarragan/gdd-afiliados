@@ -24,10 +24,22 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
 
         private void ModificarDatosCliente_Load(object sender, EventArgs e)
         {
-            string comando = "select c.apellido, c.nombre, c.tipo_documento, c.numero_documento, c.fecha_nacimiento, u.telefono, d.ciudad, d.localidad, d.codigo_postal,d.domicilio_calle,d.numero_calle, d.piso, d.departamento from dbme.cliente JOIN DBME.usuario ON (u.usuario_id = c.usuario_id) JOIN DBME.domicilio d ON (u.domicilio_id = d.domicilio_id) WHERE cliente_id = " + cliente_id;
+            string comando = "select c.apellido, c.nombre, c.tipo_documento, c.numero_documento, c.fecha_nacimiento, u.telefono, d.ciudad, d.localidad, d.codigo_postal,d.domicilio_calle,d.numero_calle, d.piso, d.departamento from dbme.cliente c JOIN DBME.usuario u ON (u.usuario_id = c.usuario_id) JOIN DBME.domicilio d ON (u.domicilio_id = d.domicilio_id) WHERE cliente_id = " + cliente_id;
             DataTable dt = (new ConexionSQL()).cargarTablaSQL(comando);
 
             txtApellido.Text = dt.Rows[0][0].ToString();
+            txtNombre.Text = dt.Rows[0][1].ToString();
+            cmbTipoDocumento.SelectedIndex = 0;
+            txtDocumento.Text = dt.Rows[0][3].ToString();
+            dateNacimiento.Value = DateTime.Parse(dt.Rows[0][4].ToString());
+            txtNumeroTelefono.Text = dt.Rows[0][5].ToString();
+            txtCiudad.Text = dt.Rows[0][6].ToString();
+            txtLocalidad.Text = dt.Rows[0][7].ToString();
+            txtCodigoPostal.Text = dt.Rows[0][8].ToString();
+            txtDomicilioCalle.Text = dt.Rows[0][9].ToString();
+            txtAlturaCalle.Text = dt.Rows[0][10].ToString();
+            txtNumeroPiso.Text = dt.Rows[0][11].ToString();
+            txtDepartamento.Text = dt.Rows[0][12].ToString();
 
             //DataTable dataVisibilidad = (new ConexionSQL()).cargarTablaSQL(comando);
         }
@@ -69,6 +81,37 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
                 MessageBox.Show("Ingrese numeros positivos en los formularios verdes", "Nuevo Cliente", MessageBoxButtons.OK);
                 return;
             }
+
+            int ant1 = DateTime.Compare(fechaNacimiento, DateTime.Parse(Program.fechaSistema()));
+
+            if (ant1 != -1)
+            {
+                MessageBox.Show("Ingrese una fecha de nacimiento válida", "Nuevo Cliente", MessageBoxButtons.OK);
+                return;
+            }
+
+            /* insertar nuevo cliente */
+
+            try
+            {
+
+                string comando = "EXECUTE DBME.updateCliente "+cliente_id+",'" + nombre + "','" + apellido + "','" + fechaNacimiento + "','" + tipoDocumento + "'," + documento + ",'" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "'," + altura_calle + "," + numero_piso + ",'" + departamento + "'," + numero_telefono;
+                MessageBox.Show(comando, "A", MessageBoxButtons.OK);
+                //(new ConexionSQL()).ejecutarComandoSQL(comando);
+
+                //MessageBox.Show("Cliente actualizado exitosamente", "Update", MessageBoxButtons.OK);
+                //this.Close();
+            }
+            catch (Exception er)
+            {
+                MessageBox.Show(er.Message, "Error", MessageBoxButtons.OK);
+                return;
+            }
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

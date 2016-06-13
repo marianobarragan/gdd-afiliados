@@ -299,6 +299,9 @@
     <EmbeddedResource Include="ABM Rol\SeleccionRol.resx">
       <DependentUpon>SeleccionRol.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rubro\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ABM Usuario\Alta Usuario\AltaUsuario.resx">
       <DependentUpon>AltaUsuario.cs</DependentUpon>
     </EmbeddedResource>
