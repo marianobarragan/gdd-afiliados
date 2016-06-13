@@ -69,6 +69,7 @@
             this.btnVolver.TabIndex = 11;
             this.btnVolver.Text = "Volver";
             this.btnVolver.UseVisualStyleBackColor = true;
+            this.btnVolver.Click += new System.EventHandler(this.btnVolver_Click);
             // 
             // btnIrVista
             // 
@@ -90,6 +91,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnVolver);
             this.Controls.Add(this.btnIrVista);
+            this.MaximizeBox = false;
             this.Name = "Menu";
             this.Text = "Menu";
             this.Load += new System.EventHandler(this.Menu_Load);

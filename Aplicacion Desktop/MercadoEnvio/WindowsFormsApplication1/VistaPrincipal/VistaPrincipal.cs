@@ -65,8 +65,7 @@ namespace MercadoEnvio.VistaPrincipal
         private void button2_Click(object sender, EventArgs e)
         {
 
-            label5.Text = sesion.usuarioActual.nombreUsuario;
-            label4.Text = sesion.rolActual.nombre;
+            
 
             this.Close();
         }
@@ -78,6 +77,8 @@ namespace MercadoEnvio.VistaPrincipal
                 lstFunciones.Items.Add(sesion.listaFuncionalidades[i].descripcion);
             }
             lstFunciones.SelectedIndex = 0;
+            label5.Text = sesion.usuarioActual.nombreUsuario;
+            label4.Text = sesion.rolActual.nombre;
         }
 
         private void lstFunciones_SelectedIndexChanged(object sender, EventArgs e)
