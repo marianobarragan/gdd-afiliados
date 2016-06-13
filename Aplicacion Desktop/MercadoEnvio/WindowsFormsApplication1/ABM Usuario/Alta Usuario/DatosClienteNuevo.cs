@@ -99,6 +99,7 @@ namespace MercadoEnvio.ABM_Usuario.Alta_Usuario
                 (new ConexionSQL()).ejecutarComandoSQL(comando);
                 
                 MessageBox.Show("Cliente creado exitosamente", "A", MessageBoxButtons.OK);
+                this.Close();
             }
             catch (Exception er) {
                 MessageBox.Show(er.Message,"Error",MessageBoxButtons.OK);

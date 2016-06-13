@@ -606,6 +606,19 @@ GO
 /* END TRIGGERS */
 
 /* START FUNCTIONS */
+
+CREATE FUNCTION DBME.getHoraDelSistema()
+RETURNS DATETIME
+AS
+BEGIN
+
+	DECLARE @hora_actual AS DATETIME
+	SELECT @hora_actual = hora_actual FROM DBME.reloj
+	
+	RETURN @hora_actual
+END;
+GO
+
 /*
 CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeProductosNoVendidos(@trimestre TINYINT,@anio INTEGER,@visibilidad VARCHAR(255))
 RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), cantidad_productos_sin_vender BIGINT)
@@ -822,11 +835,33 @@ BEGIN
 
 	BEGIN TRY
 		BEGIN TRANSACTION	
-		EXECUTE DBME.crearCliente @apellido,@nombre,@numero_documento,@tipoDocumento,NULL,@username,@password,@mail,@numero_telefono,@ciudad,@localidad,@codigo_postal,@numero_piso,@departamento,@domicilio_calle,@altura_calle ,@cliente_id OUT
+		EXECUTE DBME.crearCliente @apellido,@nombre,@numero_documento,@tipoDocumento,@fechaNacimiento,@username,@password,@mail,@numero_telefono,@ciudad,@localidad,@codigo_postal,@numero_piso,@departamento,@domicilio_calle,@altura_calle ,@cliente_id OUT
 		COMMIT TRANSACTION
 	END TRY
 	BEGIN CATCH
 		SET @mensaje_error = 'Error en insertar nuevos datos. Se deshace la operacion entera. Lo sentimos.'
+		RAISERROR(@mensaje_error, 12, 1)
+		ROLLBACK TRANSACTION 
+	END CATCH
+
+	
+END;
+GO
+
+CREATE PROCEDURE DBME.updateCliente (@usuario_id INT, @nombre NVARCHAR(255), @apellido NVARCHAR(255),@fechaNacimiento DATETIME, @tipoDocumento NVARCHAR(3),@numero_documento NUMERIC(18,0),@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT)
+AS
+BEGIN
+
+	DECLARE @mensaje_error varchar(100)
+	DECLARE @cliente_id INT
+
+	BEGIN TRY
+		BEGIN TRANSACTION	
+		--EXECUTE DBME.crearCliente @apellido,@nombre,@numero_documento,@tipoDocumento,@fechaNacimiento,@username,@password,@mail,@numero_telefono,@ciudad,@localidad,@codigo_postal,@numero_piso,@departamento,@domicilio_calle,@altura_calle ,@cliente_id OUT
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		SET @mensaje_error = 'Error en actualizar los datos. Se deshace la operacion entera. Lo sentimos.'
 		RAISERROR(@mensaje_error, 12, 1)
 		ROLLBACK TRANSACTION 
 	END CATCH
@@ -984,4 +1019,4 @@ END;
 GO
 
 /* END PROCEDURES COMUNICACION */
-SELECT * from dbme.cliente c JOIN dbme.usuario u ON (u.usuario_id = c.usuario_id)
+INSERT INTO DBME.reloj (hora_actual) VALUES(GETDATE())

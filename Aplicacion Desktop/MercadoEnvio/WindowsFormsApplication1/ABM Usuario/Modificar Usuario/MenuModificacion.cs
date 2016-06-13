@@ -36,8 +36,8 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //ListadoParaEmpresa listado_empresa = new ListadoParaEmpresa(tipo);
-            //listado_empresa.Show();
+            ListadoParaEmpresa listado_empresa = new ListadoParaEmpresa(tipo);
+            listado_empresa.Show();
             this.Close();
         }
     }
