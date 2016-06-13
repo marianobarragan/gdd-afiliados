@@ -658,19 +658,19 @@ RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255),
 AS 
 BEGIN 
 	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,cantidad_facturas)
-	select ciudad, localidad, codigo_postal from dbme.domicilio						
-	--aca va la funcion posta
 	
-	-- si es empresa podemos poner el nombre de contacto Como sabes si es empresa o cliente el que vende
-
 	--podemos obtener las mejores 5 empresas y dsp las mejores 5 clientes y dsp agarrar top 5 de esos 10
 	-pero por que compra id es null? Yo le pregunte a SAPo y me dijo que no pudo migrar bien eso
 
-	SELECT TOP 5 e.empresa_id, e.razon_social, COUNT(f.factura_id) as facturas_Realizadas FROM DBME.empresa e JOIN DBME.publicacion p ON (e.empresa_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
+	-- TOP 5 EMPRESAS
+	SELECT TOP 5 e.empresa_id, e.razon_social, e.nombre_contacto, COUNT(f.factura_id) as facturas_Realizadas FROM DBME.empresa e JOIN DBME.publicacion p ON (e.empresa_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
 	GROUP BY e.empresa_id, e.razon_social
 
-	SELECT * from DBME.factura
-
+	-- TOP 5 CLIENTES
+	
+	SELECT TOP 5 c1.cliente_id, c1.nombre, c1.apellido, COUNT(f.factura_id) as facturas_Realizadas FROM DBME.cliente c1 JOIN DBME.publicacion p ON (c1.cliente_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
+	GROUP BY c1.cliente_id, c1.nombre
+	
 	RETURN
 END;
 GO
@@ -680,11 +680,16 @@ RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255),
 AS 
 BEGIN 
 	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,monto_facturado)
-	select ciudad, localidad, codigo_postal from dbme.domicilio						
-	--aca va la funcion posta
-
+	
+	
+	-- TOP 5 EMPRESAS
 	SELECT TOP 5 e.empresa_id, e.razon_social, f.factura_id, SUM(f.monto_total) as facturas_Realizadas FROM DBME.empresa e JOIN DBME.publicacion p ON (e.empresa_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
 	GROUP BY e.empresa_id, e.razon_social, f.factura_id
+
+	-- TOP 5 CLIENTES
+	SELECT TOP 5 c1.cliente_id, c1.nombre, c1.apellido, SUM(f.monto_total) as facturas_Realizadas FROM DBME.cliente c JOIN DBME.publicacion p ON (c1.cliente_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
+	GROUP BY e.empresa_id, e.razon_social, f.factura_id
+
 
 	RETURN
 END;

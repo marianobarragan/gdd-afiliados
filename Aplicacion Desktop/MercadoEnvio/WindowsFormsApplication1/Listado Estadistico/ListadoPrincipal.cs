@@ -64,8 +64,9 @@ namespace MercadoEnvio.Listado_Estadistico
                 {
                 case 0:
                     //topVendedoresConMayorCantidadDeProductosNoVendidos();
-                        //string comando2 = "EXECUTE DBME.topVendedoresConMayorCantidadDeProductosNoVendidos '" + trimestre + "','" + anio + "'" + visibilidad + "";
-                   //string comando2 = "EXECUTE DBME.topVendedoresConMayorCantidadDeProductosNoVendidos '" + 1 + "','" + 2016 + "'" + "hola" + "";
+                    //string comando2 = "EXECUTE DBME.topVendedoresConMayorCantidadDeProductosNoVendidos '" + trimestre + "','" + anio + "'" + visibilidad + "";
+                   string comando2 = "SELECT DBME.topVendedoresConMayorCantidadDeProductosNoVendidos (1,2015,'1')";
+                   this.ejecutarComando(comando2);
                    
                 break;
                 case 1:
@@ -78,10 +79,14 @@ namespace MercadoEnvio.Listado_Estadistico
                 case 2:
                     //topVendedoresConMayorCantidadDeFacturas();
                    //string comando4 = "EXECUTE DBME.topVendedoresConMayorCantidadDeFacturas '" + trimestre + "','" + anio + "'";
-                break;
+                   string comando4 = "SELECT * FROM DBME.topVendedoresConMayorCantidadDeFacturas (1,2015,'1')";
+                   this.ejecutarComando(comando4);
+                   break;
                 case 3:
                     //topVendedoresConMayorMontoFacturado();
                    //string comando5 = "EXECUTE DBME.topVendedoresConMayorMontoFacturado '" + trimestre + "','" + anio + "'";
+                   string comando5 = "SELECT * FROM DBME.topVendedoresConMayorMontoFacturado (1,2015,'1')";
+                   this.ejecutarComando(comando5);
                 break;
 
                 default:
