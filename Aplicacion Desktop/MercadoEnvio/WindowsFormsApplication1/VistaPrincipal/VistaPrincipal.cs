@@ -60,6 +60,11 @@ namespace MercadoEnvio.VistaPrincipal
                 * */
            
             }
+            if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "LISTADO ESTADISTICO")
+            {
+                Listado_Estadistico.SeleccionarListado listadoEstadistico = new Listado_Estadistico.SeleccionarListado();
+                listadoEstadistico.Show();
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)

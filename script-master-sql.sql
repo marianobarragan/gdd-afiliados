@@ -540,7 +540,7 @@ BEGIN
 			VALUES (@Compra_Fecha,@Compra_Cantidad,@Publicacion_Cod,@usuario_id,1)
 
 			UPDATE DBME.calificacion SET compra_id = SCOPE_IDENTITY() WHERE calificacion_id = @Calificacion_Codigo
-
+			
 			FETCH cursor_para_compras INTO @Compra_Fecha,@Compra_Cantidad,@Publicacion_Cod,@usuario_id,@Calificacion_Codigo
 		END
 	CLOSE cursor_para_compras
@@ -632,6 +632,7 @@ BEGIN
 	RETURN
 END;
 GO
+*/
 
 
 CREATE FUNCTION DBME.topClientesConMayorCantidadDeProductosComprados(@trimestre TINYINT,@anio INTEGER,@rubro NVARCHAR(255))
@@ -639,17 +640,19 @@ RETURNS @TABLA_RESULTADO TABLE ( id_cliente INT, nombre_cliente NVARCHAR(255), a
 AS 
 BEGIN 
 	INSERT INTO @TABLA_RESULTADO(id_cliente,nombre_cliente,apellido_cliente,cantidad_productos_comprados)
-	select ciudad, localidad, codigo_postal from dbme.domicilio
-	--aca va la funcion posta
-	SELECT TOP 5 c.cliente_id, c.nombre, COUNT(c2.compra_id) as compras_Realizadas from DBME.cliente c JOIN DBME.compra c2 ON (c.cliente_id = compra_id)
-	Group By c.cliente_id, c.nombre
+
+	--Falta Filtrado por Rubro, Fecha y Visibilidad
 	
+	SELECT TOP 5 c.cliente_id, c.nombre,c.apellido, COUNT(c2.compra_id) as compras_Realizadas from DBME.cliente c JOIN DBME.compra c2 ON (c.cliente_id = c2.autor_id)
+	Group By c.cliente_id, c.nombre, c.apellido
+	Order By COUNT(c2.compra_id)
 	
+
 	RETURN
 END;
 GO
-
-
+SELECT estado FROM DBME.publicacion WHERE estado != 'FINALIZADA'
+/*
 CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeFacturas(@trimestre TINYINT,@anio INTEGER)-- dentro de un mes y año particular
 RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), cantidad_facturas BIGINT)
 AS 
@@ -658,8 +661,15 @@ BEGIN
 	select ciudad, localidad, codigo_postal from dbme.domicilio						
 	--aca va la funcion posta
 	
+	-- si es empresa podemos poner el nombre de contacto Como sabes si es empresa o cliente el que vende
+
+	--podemos obtener las mejores 5 empresas y dsp las mejores 5 clientes y dsp agarrar top 5 de esos 10
+	-pero por que compra id es null? Yo le pregunte a SAPo y me dijo que no pudo migrar bien eso
+
 	SELECT TOP 5 e.empresa_id, e.razon_social, COUNT(f.factura_id) as facturas_Realizadas FROM DBME.empresa e JOIN DBME.publicacion p ON (e.empresa_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
 	GROUP BY e.empresa_id, e.razon_social
+
+	SELECT * from DBME.factura
 
 	RETURN
 END;
@@ -681,6 +691,7 @@ END;
 GO
 */
 /* END FUNCTIONS */
+
 
 
 /* START PROCEDURES CREACIONALES */
@@ -1020,3 +1031,6 @@ GO
 
 /* END PROCEDURES COMUNICACION */
 INSERT INTO DBME.reloj (hora_actual) VALUES(GETDATE())
+
+-- COMO EJECUTAR FUNCIONES select * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2015,'1')
+ 

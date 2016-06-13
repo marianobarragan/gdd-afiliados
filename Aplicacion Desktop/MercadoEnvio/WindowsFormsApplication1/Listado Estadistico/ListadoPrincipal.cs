@@ -42,9 +42,9 @@ namespace MercadoEnvio.Listado_Estadistico
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            int anio = Int32.Parse(txtAño.Text);
-            int trimestre = lstTrimestre.SelectedIndex + 1;
-            string visibilidad = lstVisibilidad.SelectedItem.ToString();
+            //int anio = Int32.Parse(txtAño.Text);
+            //int trimestre = lstTrimestre.SelectedIndex + 1;
+            //string visibilidad = lstVisibilidad.SelectedItem.ToString();
             
             /*
             string dsd = textBox1.Text;
@@ -57,35 +57,45 @@ namespace MercadoEnvio.Listado_Estadistico
                 return;
             }
             dataGridView1.DataSource = dt;
-
-            /*
-             * 
-             * switch (indice)
+            */
+            
+              
+              switch (indice)
                 {
                 case 0:
-                    topVendedoresConMayorCantidadDeProductosNoVendidos();
-             *      string comando2 = "EXECUTE DBME.topVendedoresConMayorCantidadDeProductosNoVendidos '" + trimestre + "','" + anio + "'" + visitbilidad + "";
-
+                    //topVendedoresConMayorCantidadDeProductosNoVendidos();
+                        //string comando2 = "EXECUTE DBME.topVendedoresConMayorCantidadDeProductosNoVendidos '" + trimestre + "','" + anio + "'" + visibilidad + "";
+                   //string comando2 = "EXECUTE DBME.topVendedoresConMayorCantidadDeProductosNoVendidos '" + 1 + "','" + 2016 + "'" + "hola" + "";
+                   
                 break;
                 case 1:
-                    topClientesConMayorCantidadDeProductosComprados();
-             *      string comando2 = "EXECUTE DBME.topClientesConMayorCantidadDeProductosComprados '" + trimestre + "','" + anio + "'" + lstRubro.SelectedItem.ToString() + "";
-                break;
+                    //topClientesConMayorCantidadDeProductosComprados();
+                   //string comando3 = "EXECUTE DBME.topClientesConMayorCantidadDeProductosComprados '" + trimestre + "','" + anio + "'" + lstRubro.SelectedItem.ToString() + "";
+                   string comando3 = "select * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2015,'1')";
+                   this.ejecutarComando(comando3);
+                   
+                   break;
                 case 2:
-                    topVendedoresConMayorCantidadDeFacturas();
-             *      string comando2 = "EXECUTE DBME.topVendedoresConMayorCantidadDeFacturas '" + trimestre + "','" + anio + "'";
+                    //topVendedoresConMayorCantidadDeFacturas();
+                   //string comando4 = "EXECUTE DBME.topVendedoresConMayorCantidadDeFacturas '" + trimestre + "','" + anio + "'";
                 break;
                 case 3:
-                    topVendedoresConMayorMontoFacturado();
-             *      string comando2 = "EXECUTE DBME.topVendedoresConMayorMontoFacturado '" + trimestre + "','" + anio + "'";
+                    //topVendedoresConMayorMontoFacturado();
+                   //string comando5 = "EXECUTE DBME.topVendedoresConMayorMontoFacturado '" + trimestre + "','" + anio + "'";
                 break;
 
                 default:
-             *      imprimir un error
+             //      imprimir un error
                 break;
             }           
-             * /
-              */
+             
+             
+        }
+        public void ejecutarComando(string comandoAEjecutar)
+        {
+            DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(comandoAEjecutar));
+            dataGridView1.DataSource = dt;
+
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -125,8 +135,8 @@ namespace MercadoEnvio.Listado_Estadistico
             lstTrimestre.Enabled = true;
             btnBuscar.Enabled = true;
 
-            
-           
+
+              
         }
 
         private void button1_Click(object sender, EventArgs e)
