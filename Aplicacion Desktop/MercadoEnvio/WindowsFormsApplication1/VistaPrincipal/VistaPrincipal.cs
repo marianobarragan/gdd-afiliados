@@ -39,11 +39,12 @@ namespace MercadoEnvio.VistaPrincipal
                 //this.Hide();
             }
 
-            /*if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "ABM DE ROL")
+            if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "ABM DE USUARIOS")
             {
-                ABM_Rol.SeleccionRol seleccionRol = new ABM_Rol.SeleccionRol();
-                seleccionRol.Show();
-            }*/
+                ABM_Usuario.Menu menu = new ABM_Usuario.Menu();
+                menu.Show();
+            }
+
             if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "HISTORIAL DEL CLIENTE")
             {
                Historial_Cliente.HistorialDelCliente historialPropio = new Historial_Cliente.HistorialDelCliente(sesion.usuarioActual.usuario_id);
@@ -63,10 +64,10 @@ namespace MercadoEnvio.VistaPrincipal
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //boton Logout
-            //Login.LoginInicial loginView = new Login.LoginInicial();
-            //loginView.Show();
-            //this.Hide();  TODO
+
+            label5.Text = sesion.usuarioActual.nombreUsuario;
+            label4.Text = sesion.rolActual.nombre;
+
             this.Close();
         }
 

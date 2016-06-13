@@ -193,6 +193,7 @@
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.groupBox1);
+            this.MaximizeBox = false;
             this.Name = "ModificarVisibilidad";
             this.Text = "ModificarVisibilidad";
             this.Load += new System.EventHandler(this.ModificarVisibilidad_Load);

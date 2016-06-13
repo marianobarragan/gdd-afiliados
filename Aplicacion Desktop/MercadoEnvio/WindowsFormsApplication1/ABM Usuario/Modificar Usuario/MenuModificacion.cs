@@ -16,7 +16,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
 
         public MenuModificacion(string discriminador)
         {
-            
+            tipo = discriminador;
             InitializeComponent();
             button1.Text = discriminador + " Cliente";
             button2.Text = discriminador + " Empresa";
@@ -25,6 +25,20 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
         private void MenuModificacion_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ListadoParaCliente listado_cliente = new ListadoParaCliente(tipo);
+            listado_cliente.Show();
+            this.Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //ListadoParaEmpresa listado_empresa = new ListadoParaEmpresa(tipo);
+            //listado_empresa.Show();
+            this.Close();
         }
     }
 }

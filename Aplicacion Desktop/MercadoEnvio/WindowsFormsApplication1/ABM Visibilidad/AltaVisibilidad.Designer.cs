@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtCostoEnvioDecimal = new System.Windows.Forms.TextBox();
+            this.txtPrecioDecimal = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.txtCostoEnvio = new System.Windows.Forms.TextBox();
             this.txtPorcentaje = new System.Windows.Forms.TextBox();
@@ -38,11 +40,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.txtPrecioDecimal = new System.Windows.Forms.TextBox();
-            this.txtCostoEnvioDecimal = new System.Windows.Forms.TextBox();
             this.lblComa = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,6 +69,24 @@
             this.groupBox1.Text = "Visibilidad";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
+            // txtCostoEnvioDecimal
+            // 
+            this.txtCostoEnvioDecimal.BackColor = System.Drawing.Color.PaleGreen;
+            this.txtCostoEnvioDecimal.Location = new System.Drawing.Point(202, 101);
+            this.txtCostoEnvioDecimal.MaxLength = 2;
+            this.txtCostoEnvioDecimal.Name = "txtCostoEnvioDecimal";
+            this.txtCostoEnvioDecimal.Size = new System.Drawing.Size(31, 20);
+            this.txtCostoEnvioDecimal.TabIndex = 11;
+            // 
+            // txtPrecioDecimal
+            // 
+            this.txtPrecioDecimal.BackColor = System.Drawing.Color.PaleGreen;
+            this.txtPrecioDecimal.Location = new System.Drawing.Point(202, 48);
+            this.txtPrecioDecimal.MaxLength = 2;
+            this.txtPrecioDecimal.Name = "txtPrecioDecimal";
+            this.txtPrecioDecimal.Size = new System.Drawing.Size(31, 20);
+            this.txtPrecioDecimal.TabIndex = 9;
+            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(107, 139);
@@ -81,7 +99,6 @@
             // 
             // txtCostoEnvio
             // 
-
             this.txtCostoEnvio.BackColor = System.Drawing.Color.PaleGreen;
             this.txtCostoEnvio.Location = new System.Drawing.Point(107, 101);
             this.txtCostoEnvio.Name = "txtCostoEnvio";
@@ -90,11 +107,10 @@
             // 
             // txtPorcentaje
             // 
-
-            this.txtPorcentaje.Size = new System.Drawing.Size(83, 20);
             this.txtPorcentaje.BackColor = System.Drawing.Color.PaleGreen;
             this.txtPorcentaje.Location = new System.Drawing.Point(107, 74);
             this.txtPorcentaje.Name = "txtPorcentaje";
+            this.txtPorcentaje.Size = new System.Drawing.Size(83, 20);
             this.txtPorcentaje.TabIndex = 6;
             // 
             // txtPrecio
@@ -102,6 +118,7 @@
             this.txtPrecio.BackColor = System.Drawing.Color.PaleGreen;
             this.txtPrecio.Location = new System.Drawing.Point(107, 48);
             this.txtPrecio.Name = "txtPrecio";
+            this.txtPrecio.Size = new System.Drawing.Size(100, 20);
             this.txtPrecio.TabIndex = 5;
             // 
             // txtDescripcion
@@ -148,32 +165,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Descripcion:";
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(13, 198);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 9;
-            this.button2.Text = "Cerrar";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // txtPrecioDecimal
-            // 
-            this.txtPrecioDecimal.Location = new System.Drawing.Point(202, 48);
-            this.txtPrecioDecimal.MaxLength = 2;
-            this.txtPrecioDecimal.Name = "txtPrecioDecimal";
-            this.txtPrecioDecimal.Size = new System.Drawing.Size(31, 20);
-            this.txtPrecioDecimal.TabIndex = 9;
-            // 
-            // txtCostoEnvioDecimal
-            // 
-            this.txtCostoEnvioDecimal.Location = new System.Drawing.Point(202, 101);
-            this.txtCostoEnvioDecimal.MaxLength = 2;
-            this.txtCostoEnvioDecimal.Name = "txtCostoEnvioDecimal";
-            this.txtCostoEnvioDecimal.Size = new System.Drawing.Size(31, 20);
-            this.txtCostoEnvioDecimal.TabIndex = 11;
-            // 
             // lblComa
             // 
             this.lblComa.AutoSize = true;
@@ -193,6 +184,16 @@
             this.label6.Size = new System.Drawing.Size(18, 25);
             this.label6.TabIndex = 13;
             this.label6.Text = ",";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(13, 198);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 9;
+            this.button2.Text = "Cerrar";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // AltaVisibilidad
             // 

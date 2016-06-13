@@ -46,13 +46,13 @@ namespace MercadoEnvio.Login
 
         private void button1_Click(object sender, EventArgs e)
         {
-           //Usuario usuario = new Usuario();
+            
             if (textBox1.Text == "" || textBox2.Text == "") {
                 MessageBox.Show("Ingrese usuario y contrasña", "Login", MessageBoxButtons.OK);
                 return;
             }
 
-            try { 
+            try {
                 Usuario usuarioValidado = new Controller.Controller().loginUsuario(textBox1.Text,textBox2.Text);
                 
                 try

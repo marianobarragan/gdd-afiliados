@@ -136,7 +136,7 @@ namespace MercadoEnvio.ABM_Visibilidad
                 }
                 catch (Exception er)
                 {
-                    MessageBox.Show(er.Message, "Alta Visibilidad", MessageBoxButtons.OK);
+                    MessageBox.Show(er.Message, "Modificar Visibilidad", MessageBoxButtons.OK);
                     return;
                 }
 

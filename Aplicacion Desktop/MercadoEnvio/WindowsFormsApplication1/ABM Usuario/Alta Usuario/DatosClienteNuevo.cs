@@ -110,5 +110,135 @@ namespace MercadoEnvio.ABM_Usuario.Alta_Usuario
         {
 
         }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtDepartamento_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtNumeroPiso_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtAlturaCalle_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtDomicilioCalle_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtCodigoPostal_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtLocalidad_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtCiudad_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label13_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtNumeroTelefono_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dateNacimiento_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cmbTipoDocumento_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtDocumento_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtNombre_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtApellido_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

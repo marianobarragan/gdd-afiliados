@@ -40,7 +40,7 @@
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Location = new System.Drawing.Point(12, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(249, 115);
+            this.groupBox1.Size = new System.Drawing.Size(249, 102);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Seleccionar objeto a modificar";
@@ -53,6 +53,7 @@
             this.button2.TabIndex = 4;
             this.button2.Text = "Modificar Empresa";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
@@ -62,13 +63,14 @@
             this.button1.TabIndex = 3;
             this.button1.Text = "Modificar Cliente";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // MenuModificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.ClientSize = new System.Drawing.Size(274, 133);
+            this.ClientSize = new System.Drawing.Size(270, 121);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
             this.Name = "MenuModificacion";

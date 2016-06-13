@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cmbRubros = new System.Windows.Forms.ComboBox();
             this.txtNumeroTelefono = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.txtDepartamento = new System.Windows.Forms.TextBox();
@@ -53,7 +54,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.cmbRubros = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,6 +91,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos Empresa";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // cmbRubros
+            // 
+            this.cmbRubros.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbRubros.FormattingEnabled = true;
+            this.cmbRubros.Location = new System.Drawing.Point(126, 106);
+            this.cmbRubros.Name = "cmbRubros";
+            this.cmbRubros.Size = new System.Drawing.Size(233, 21);
+            this.cmbRubros.TabIndex = 62;
             // 
             // txtNumeroTelefono
             // 
@@ -295,15 +304,6 @@
             this.label1.TabIndex = 33;
             this.label1.Text = "Razón Social";
             // 
-            // cmbRubros
-            // 
-            this.cmbRubros.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbRubros.FormattingEnabled = true;
-            this.cmbRubros.Location = new System.Drawing.Point(126, 106);
-            this.cmbRubros.Name = "cmbRubros";
-            this.cmbRubros.Size = new System.Drawing.Size(233, 21);
-            this.cmbRubros.TabIndex = 62;
-            // 
             // DatosEmpresaNuevo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -311,6 +311,7 @@
             this.BackColor = System.Drawing.Color.LightSkyBlue;
             this.ClientSize = new System.Drawing.Size(771, 326);
             this.Controls.Add(this.groupBox1);
+            this.MaximizeBox = false;
             this.Name = "DatosEmpresaNuevo";
             this.Text = "DatosEmpresaNuevo";
             this.Load += new System.EventHandler(this.DatosEmpresaNuevo_Load);

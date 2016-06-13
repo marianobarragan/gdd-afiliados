@@ -341,12 +341,6 @@
     <EmbeddedResource Include="ABM Visibilidad\ModificarVisibilidad.resx">
       <DependentUpon>ModificarVisibilidad.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Calificar\CalificarAlVendedor.resx">
-      <DependentUpon>CalificarAlVendedor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Calificar\ListadoDePublicacionesSinCalificar.resx">
-      <DependentUpon>ListadoDePublicacionesSinCalificar.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

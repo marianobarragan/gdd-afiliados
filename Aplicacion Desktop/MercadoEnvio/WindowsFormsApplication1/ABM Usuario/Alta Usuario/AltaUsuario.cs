@@ -61,15 +61,15 @@ namespace MercadoEnvio.ABM_Usuario.Alta_Usuario
             }
  
             if (optCliente.Checked){
-                
-                DatosClienteNuevo cl = new DatosClienteNuevo(username, password, email);
+
+                DatosClienteNuevo cl = new DatosClienteNuevo(username, new Encriptador().getHash(password), email);
                 cl.Show();
                 //this.Close();
             }
 
             if (optEmpresa.Checked)
             {
-                DatosEmpresaNuevo em = new DatosEmpresaNuevo(username, password, email);
+                DatosEmpresaNuevo em = new DatosEmpresaNuevo(username, new Encriptador().getHash(password), email);
                 em.Show();
                 //this.Close();
             }

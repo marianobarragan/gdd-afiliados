@@ -101,10 +101,9 @@ namespace MercadoEnvio.ABM_Usuario.Alta_Usuario
             {
                 
                 string comando = "EXECUTE DBME.nuevaEmpresa '" + username + "','" + password + "','" + email + "','" + nombre + "','" + razon_social + "','" + CUIT + "'," + rubro  + ",'" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "','" + altura_calle + "','" + numero_piso + "','" + departamento + "','" + numero_telefono + "'";
-                MessageBox.Show(comando, "Alta", MessageBoxButtons.OK);
-                //(new ConexionSQL()).ejecutarComandoSQL(comando);
-
-                //MessageBox.Show("Empresa creada exitosamente", "A", MessageBoxButtons.OK);
+                //MessageBox.Show(comando, "Alta", MessageBoxButtons.OK);
+                (new ConexionSQL()).ejecutarComandoSQL(comando);
+                MessageBox.Show("Empresa creada exitosamente", "A", MessageBoxButtons.OK);
             }
             catch (Exception er)
             {

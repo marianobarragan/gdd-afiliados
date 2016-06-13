@@ -41,12 +41,12 @@ namespace MercadoEnvio.ABM_Rol
             string query;
             if (radioButton1.Checked)
             {
-                query = "SELECT nombre_rol FROM DBME.rol where es_rol_habilitado = 1 AND nombre_rol LIKE '%" + textBox2.Text + "%'";
+                query = "SELECT nombre_rol FROM DBME.rol where nombre_rol LIKE '%" + textBox2.Text + "%'";
 
             }
             else
             {
-                query = "SELECT nombre_rol FROM DBME.rol where es_rol_habilitado = 1 AND nombre_rol =  '" + textBox1.Text + "'";
+                query = "SELECT nombre_rol FROM DBME.rol where nombre_rol =  '" + textBox1.Text + "'";
             }
 
 
@@ -137,6 +137,11 @@ namespace MercadoEnvio.ABM_Rol
                 return;
             }
             dataGridView1.DataSource = dt;
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

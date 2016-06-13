@@ -19,7 +19,6 @@ CREATE TABLE DBME.rol (
 );
 GO
 
-
 CREATE TABLE DBME.rol_x_funcionalidad (
 	funcionalidad_id INT FOREIGN KEY REFERENCES DBME.funcionalidad(funcionalidad_id), 
 	rol_id INT FOREIGN KEY REFERENCES DBME.rol(rol_id) 
@@ -51,10 +50,6 @@ CREATE TABLE DBME.domicilio (
 );
 GO
 
-SELECT mail
-from DBME.usuario 
-
-
 CREATE TABLE DBME.usuario(
 	usuario_id INT IDENTITY(1,1) PRIMARY KEY,
 	username NVARCHAR(255) UNIQUE,
@@ -84,6 +79,7 @@ CREATE TABLE DBME.cliente(
 	numero_documento NUMERIC(18,0) UNIQUE,
 	tipo_documento NVARCHAR(3) CHECK(tipo_documento IN ('DNI','LE','LC')),
 	fecha_nacimiento DATETIME,
+	habilitado BIT,
 	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id) 
 );
 GO
@@ -102,7 +98,8 @@ CREATE TABLE DBME.empresa(
 	fecha_creacion DATETIME,
 	nombre_contacto VARCHAR(25),
 	rubro_id INT FOREIGN KEY REFERENCES DBME.rubro(rubro_id),
-	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id)
+	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id),
+	habilitado BIT
 );
 GO
 
@@ -275,36 +272,37 @@ CREATE PROCEDURE DBME.migrarClientes  -- de PUBL CLI
 AS
 BEGIN
 
---(SELECT SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', Publ_Cli_Mail)), 3, 250))
 
 	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id,fecha_creacion,telefono,es_nuevo)
-	SELECT DISTINCT Publ_Cli_Mail,Publ_Cli_Mail,Publ_Cli_Mail,1,0, d.domicilio_id ,NULL,NULL,1
+	SELECT DISTINCT Publ_Cli_Mail,Publ_Cli_Mail,CONVERT(NVARCHAR(255),Publ_Cli_Dni),1,0, d.domicilio_id ,NULL,NULL,1
 	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Cli_Cod_Postal = d.codigo_postal)
 	WHERE Publ_Cli_Mail IS NOT NULL
 	
-	INSERT INTO DBME.cliente(usuario_id,apellido,nombre,numero_documento,tipo_documento,fecha_nacimiento)
-	SELECT DISTINCT u.usuario_id, m.Publ_Cli_Apeliido, m.Publ_Cli_Nombre,m.Publ_Cli_Dni,'DNI',m.Publ_Cli_Fecha_Nac
+	INSERT INTO DBME.cliente(usuario_id,apellido,nombre,numero_documento,tipo_documento,fecha_nacimiento,habilitado)
+	SELECT DISTINCT u.usuario_id, m.Publ_Cli_Apeliido, m.Publ_Cli_Nombre,m.Publ_Cli_Dni,'DNI',m.Publ_Cli_Fecha_Nac,1
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Cli_Mail = u.mail)
+	
+	
+	UPDATE DBME.usuario SET password = SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', password)), 3, 150)
+
 		
 END;
 GO
-
---(SELECT SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', Publ_Empresa_Mail)), 3, 250))
 
 CREATE PROCEDURE DBME.migrarEmpresas
 AS
 BEGIN
 	
 	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id ,fecha_creacion,telefono,es_nuevo)
-	SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Mail,Publ_Empresa_Mail,1,0, d.domicilio_id ,NULL,NULL,1
+	SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Mail,Publ_Empresa_Cuit,1,0, d.domicilio_id ,NULL,NULL,1
 	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Empresa_Cod_Postal = d.codigo_postal)
 	WHERE Publ_Empresa_Mail IS NOT NULL
 	
-	INSERT INTO DBME.empresa(usuario_id,razon_social,cuit,fecha_creacion)
-	SELECT DISTINCT u.usuario_id,Publ_Empresa_Razon_Social,Publ_Empresa_Cuit,Publ_Empresa_Fecha_Creacion
+	INSERT INTO DBME.empresa(usuario_id,razon_social,cuit,fecha_creacion,habilitado)
+	SELECT DISTINCT u.usuario_id,Publ_Empresa_Razon_Social,Publ_Empresa_Cuit,Publ_Empresa_Fecha_Creacion,1
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Empresa_Mail = u.mail) 
 
-
+	UPDATE DBME.usuario SET password = SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', password)), 3, 150) 
 	
 END;
 GO
@@ -551,6 +549,20 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE DBME.crearAdministradores
+AS
+BEGIN
+
+	DECLARE @usuario_id AS INT
+										--w23e encriptado
+	EXECUTE DBME.crearUsuario 'admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, @usuario_id OUT
+	INSERT INTO DBME.administrador(nombre,apellido,usuario_id)
+	VALUES ('Administrador','General',@usuario_id)
+	INSERT INTO DBME.rol_x_usuario (usuario_id,rol_id)
+	VALUES (@usuario_id,1)
+END;
+GO
+
 /* END BASES DE MIGRACION */ 
 
 /* START MIGRACION*/ --      EJECUTAR LOS PROCEDURES !!!!
@@ -569,6 +581,7 @@ GO
 	EXECUTE DBME.migrarCalificaciones
 	EXECUTE DBME.migrarCompras
 	EXECUTE DBME.migrarOfertas
+	EXECUTE DBME.crearAdministradores
 
 GO
 
@@ -618,9 +631,6 @@ BEGIN
 	RETURN
 END;
 GO
-/*
-
-*/
 
 
 CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeFacturas(@mes TINYINT,@anio INTEGER)-- dentro de un mes y año particular
@@ -665,7 +675,6 @@ CREATE PROCEDURE DBME.crearDomicilio (
 AS
 BEGIN
 	
-
 	INSERT INTO DBME.domicilio(ciudad,localidad,codigo_postal,piso,departamento,domicilio_calle,numero_calle)
 	VALUES (@ciudad,@localidad,@codigo_postal,@piso,@departamento,@domicilio_calle,@numero_calle)
 
@@ -725,8 +734,8 @@ BEGIN
 
 	EXECUTE DBME.crearUsuario @username,@password,@mail,@telefono,@ciudad,@localidad,@codigo_postal,@piso,@departamento,@domicilio_calle,@numero_calle, @usuario_id OUT
 	
-	INSERT INTO DBME.cliente(apellido,nombre,numero_documento,tipo_documento,fecha_nacimiento,usuario_id)
-	VALUES (@apellido,@nombre,@numero_documento,@tipo_documento,@fecha_nacimiento,@usuario_id)
+	INSERT INTO DBME.cliente(apellido,nombre,numero_documento,tipo_documento,fecha_nacimiento,usuario_id,habilitado)
+	VALUES (@apellido,@nombre,@numero_documento,@tipo_documento,@fecha_nacimiento,@usuario_id,1)
 
 	SET @cliente_id = SCOPE_IDENTITY()
 	
@@ -761,8 +770,8 @@ BEGIN
 
 	EXECUTE DBME.crearUsuario @username,@password,@mail,@telefono,@ciudad,@localidad,@codigo_postal,@piso,@departamento,@domicilio_calle,@numero_calle, @usuario_id OUT
 	
-	INSERT INTO DBME.empresa(razon_social,cuit,fecha_creacion,nombre_contacto,rubro_id,usuario_id)
-	VALUES (@razon_social,@cuit,@fecha_creacion,@nombre_contacto,@rubro_id,@usuario_id)
+	INSERT INTO DBME.empresa(razon_social,cuit,fecha_creacion,nombre_contacto,rubro_id,usuario_id,habilitado)
+	VALUES (@razon_social,@cuit,@fecha_creacion,@nombre_contacto,@rubro_id,@usuario_id,1)
 
 	SET @cliente_id = SCOPE_IDENTITY()
 
@@ -772,19 +781,6 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DBME.crearAdministradores
-AS
-BEGIN
-
-	DECLARE @usuario_id AS INT
-										--w23e encriptado
-	EXECUTE DBME.crearUsuario 'admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, @usuario_id OUT
-	INSERT INTO DBME.administrador(nombre,apellido,usuario_id)
-	VALUES ('Administrador','General',@usuario_id)
-	INSERT INTO DBME.rol_x_usuario (usuario_id,rol_id)
-	VALUES (@usuario_id,1)
-END;
-GO
 
 
 /*
@@ -828,10 +824,8 @@ BEGIN
 	
 END;
 GO
-select rubro_id, descripcion_corta from dbme.rubro
---string comando = "EXECUTE DBME.nuevaEmpresa '" + username + "','" + password + "','" + email + "','" + nombre + "','" + razon_social + "','" + CUIT + "','" + rubro  + "','" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "','" + altura_calle + "','" + numero_piso + "','" + departamento + "','" + numero_telefono + "'";
 
-EXECUTE DBME.nuevaEmpresa 'username','password','mail','nombre','razon social','ciutttt',4,'ciudad del pecado','localidad','codigo postal','domicilio calle',455,4,'departamento',49017112
+
 CREATE PROCEDURE DBME.nuevaEmpresa (@username NVARCHAR(255), @password NVARCHAR(255), @mail NVARCHAR(255), @nombre NVARCHAR(255),@razon_social NVARCHAR(255), @cuit NVARCHAR(50), @rubro_id INT, @ciudad NVARCHAR(255), @localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@numero_calle NUMERIC(18,0),@piso NUMERIC(18,0),@departamento NVARCHAR(50), @telefono BIGINT)
 AS
 BEGIN
@@ -857,9 +851,6 @@ BEGIN
 END;
 GO
 
-
-drop procedure DBME.nuevoCliente
-select * FROM dbme.usuario u
 
 /*
 create procedure DBME.sida
@@ -906,7 +897,6 @@ GO
 
 /* START PROCEDURES COMUNICACION */
 
-EXECUTE DBME.crearAdministradores
 
 
 CREATE PROCEDURE DBME.loginUsuario (@username nvarchar(255),@contrasenia nvarchar(255))
@@ -971,9 +961,6 @@ BEGIN
 END;
 GO
 
-select Distinct publ_cli_dni from gd_esquema.Maestra
-
-
 CREATE PROCEDURE DBME.calificarAlVendedor (@compra_id INT,@cliente_id INT, @comentario NVARCHAR(255), @calificacion numeric(18,0))
 AS
 BEGIN
@@ -986,5 +973,5 @@ BEGIN
 END;
 GO
 
-
 /* END PROCEDURES COMUNICACION */
+SELECT * from dbme.cliente c JOIN dbme.usuario u ON (u.usuario_id = c.usuario_id)
