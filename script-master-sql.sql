@@ -607,51 +607,61 @@ GO
 
 /* START FUNCTIONS */
 /*
-CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeProductosNoVendidos(@mes TINYINT,@anio INTEGER,@visibilidad NUMERIC (18,0))
+CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeProductosNoVendidos(@trimestre TINYINT,@anio INTEGER,@visibilidad VARCHAR(255))
 RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), cantidad_productos_sin_vender BIGINT)
 AS 
 BEGIN 
 	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,cantidad_productos_sin_vender)
 	select ciudad, localidad, codigo_postal from dbme.domicilio						
 	--aca va la funcion posta
+	
 
 	RETURN
 END;
 GO
 
 
-CREATE FUNCTION DBME.topClientesConMayorCantidadDeProductosComprados(@mes TINYINT,@anio INTEGER,@rubro NVARCHAR(255))
+CREATE FUNCTION DBME.topClientesConMayorCantidadDeProductosComprados(@trimestre TINYINT,@anio INTEGER,@rubro NVARCHAR(255))
 RETURNS @TABLA_RESULTADO TABLE ( id_cliente INT, nombre_cliente NVARCHAR(255), apellido_cliente NVARCHAR(255), cantidad_productos_comprados BIGINT)
 AS 
 BEGIN 
 	INSERT INTO @TABLA_RESULTADO(id_cliente,nombre_cliente,apellido_cliente,cantidad_productos_comprados)
 	select ciudad, localidad, codigo_postal from dbme.domicilio
 	--aca va la funcion posta
-
+	SELECT TOP 5 c.cliente_id, c.nombre, COUNT(c2.compra_id) as compras_Realizadas from DBME.cliente c JOIN DBME.compra c2 ON (c.cliente_id = compra_id)
+	Group By c.cliente_id, c.nombre
+	
+	
 	RETURN
 END;
 GO
 
 
-CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeFacturas(@mes TINYINT,@anio INTEGER)-- dentro de un mes y año particular
+CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeFacturas(@trimestre TINYINT,@anio INTEGER)-- dentro de un mes y año particular
 RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), cantidad_facturas BIGINT)
 AS 
 BEGIN 
 	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,cantidad_facturas)
 	select ciudad, localidad, codigo_postal from dbme.domicilio						
 	--aca va la funcion posta
+	
+	SELECT TOP 5 e.empresa_id, e.razon_social, COUNT(f.factura_id) as facturas_Realizadas FROM DBME.empresa e JOIN DBME.publicacion p ON (e.empresa_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
+	GROUP BY e.empresa_id, e.razon_social
 
 	RETURN
 END;
 GO
 
-CREATE FUNCTION DBME.topVendedoresConMayorMontoFacturado(@mes TINYINT,@anio INTEGER)-- dentro de un mes y año particular
+CREATE FUNCTION DBME.topVendedoresConMayorMontoFacturado(@trimestre,@anio INTEGER)-- dentro de un mes y año particular
 RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), monto_facturado BIGINT)
 AS 
 BEGIN 
 	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,monto_facturado)
 	select ciudad, localidad, codigo_postal from dbme.domicilio						
 	--aca va la funcion posta
+
+	SELECT TOP 5 e.empresa_id, e.razon_social, f.factura_id, SUM(f.monto_total) as facturas_Realizadas FROM DBME.empresa e JOIN DBME.publicacion p ON (e.empresa_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
+	GROUP BY e.empresa_id, e.razon_social, f.factura_id
 
 	RETURN
 END;

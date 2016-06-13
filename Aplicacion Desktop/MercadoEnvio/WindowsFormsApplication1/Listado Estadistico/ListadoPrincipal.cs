@@ -42,6 +42,10 @@ namespace MercadoEnvio.Listado_Estadistico
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
+            int anio = Int32.Parse(txtAño.Text);
+            int trimestre = lstTrimestre.SelectedIndex + 1;
+            string visibilidad = lstVisibilidad.SelectedItem.ToString();
+            
             /*
             string dsd = textBox1.Text;
             string query = "SELECT * FROM DBME.domicilio ";
@@ -60,15 +64,20 @@ namespace MercadoEnvio.Listado_Estadistico
                 {
                 case 0:
                     topVendedoresConMayorCantidadDeProductosNoVendidos();
+             *      string comando2 = "EXECUTE DBME.topVendedoresConMayorCantidadDeProductosNoVendidos '" + trimestre + "','" + anio + "'" + visitbilidad + "";
+
                 break;
                 case 1:
                     topClientesConMayorCantidadDeProductosComprados();
+             *      string comando2 = "EXECUTE DBME.topClientesConMayorCantidadDeProductosComprados '" + trimestre + "','" + anio + "'" + lstRubro.SelectedItem.ToString() + "";
                 break;
                 case 2:
                     topVendedoresConMayorCantidadDeFacturas();
+             *      string comando2 = "EXECUTE DBME.topVendedoresConMayorCantidadDeFacturas '" + trimestre + "','" + anio + "'";
                 break;
                 case 3:
                     topVendedoresConMayorMontoFacturado();
+             *      string comando2 = "EXECUTE DBME.topVendedoresConMayorMontoFacturado '" + trimestre + "','" + anio + "'";
                 break;
 
                 default:
@@ -76,7 +85,7 @@ namespace MercadoEnvio.Listado_Estadistico
                 break;
             }           
              * /
-              */  
+              */
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -93,6 +102,7 @@ namespace MercadoEnvio.Listado_Estadistico
 
             //else
             
+            
 
 
 
@@ -102,10 +112,26 @@ namespace MercadoEnvio.Listado_Estadistico
 
         private void ListadoPrincipal_Load(object sender, EventArgs e)
         {
-            
-            
+            string comando = "SELECT visibilidad_descripcion FROM DBME.visibilidad";
+            DataTable dataVisibilidad = (new ConexionSQL()).cargarTablaSQL(comando);
+
+            foreach (DataRow row in dataVisibilidad.Rows)
+            {
+                lstVisibilidad.Items.Add(row[0].ToString());
+            }
+            comboBox1.SelectedIndex = 0;
+
+            lstVisibilidad.Enabled = true;
+            lstTrimestre.Enabled = true;
+            btnBuscar.Enabled = true;
+
             
            
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            dataGridView1.DataSource = null;
         }
        
          }
