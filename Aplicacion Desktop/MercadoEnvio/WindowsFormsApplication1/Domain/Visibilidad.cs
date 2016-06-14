@@ -27,5 +27,7 @@ namespace MercadoEnvio.Domain
             costo_envio =Int32.Parse(datos2[0]);
             costo_envioDecimal = Int32.Parse(datos2[1]);
         }
+
+        
     }
 }

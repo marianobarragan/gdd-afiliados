@@ -241,5 +241,10 @@ namespace MercadoEnvio.ABM_Usuario.Alta_Usuario
         {
 
         }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

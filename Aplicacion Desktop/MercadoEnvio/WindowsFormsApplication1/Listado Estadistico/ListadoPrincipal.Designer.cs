@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.cmbRubros = new System.Windows.Forms.ComboBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lstTrimestre = new System.Windows.Forms.ListBox();
@@ -50,7 +50,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.comboBox1);
+            this.groupBox1.Controls.Add(this.cmbRubros);
             this.groupBox1.Controls.Add(this.groupBox3);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.textBox1);
@@ -65,14 +65,15 @@
             this.groupBox1.Text = "Filtros";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
-            // comboBox1
+            // cmbRubros
             // 
-            this.comboBox1.Enabled = false;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(341, 24);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(195, 21);
-            this.comboBox1.TabIndex = 21;
+            this.cmbRubros.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbRubros.Enabled = false;
+            this.cmbRubros.FormattingEnabled = true;
+            this.cmbRubros.Location = new System.Drawing.Point(341, 24);
+            this.cmbRubros.Name = "cmbRubros";
+            this.cmbRubros.Size = new System.Drawing.Size(195, 21);
+            this.cmbRubros.TabIndex = 21;
             // 
             // groupBox3
             // 
@@ -230,7 +231,7 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cmbRubros;
         private System.Windows.Forms.GroupBox groupBox3;
 
     }

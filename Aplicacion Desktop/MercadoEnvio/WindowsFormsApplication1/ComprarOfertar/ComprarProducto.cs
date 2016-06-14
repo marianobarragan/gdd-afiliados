@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1.ComprarOfertar
+namespace MercadoEnvio.ComprarOfertar
 {
-    public partial class Form1 : Form
+    public partial class ComprarProducto : Form
     {
-        public Form1()
+        public ComprarProducto()
         {
             InitializeComponent();
         }

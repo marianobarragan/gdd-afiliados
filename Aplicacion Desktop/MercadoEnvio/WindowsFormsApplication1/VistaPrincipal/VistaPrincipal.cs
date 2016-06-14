@@ -67,11 +67,26 @@ namespace MercadoEnvio.VistaPrincipal
                 listadoEstadistico.Show();
             }
 
+
             if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "GENERAR PUBLICACION")
             {
                 Generar_Publicación.Menu menu = new Generar_Publicación.Menu(sesion);
                 menu.Show();
             }
+
+            if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "COMPRAR/OFERTAR")
+            {
+                if (!poseeMasDeTresCompras()) {
+                    ComprarOfertar.ListadoPublicaciones listadoPublicaciones = new ComprarOfertar.ListadoPublicaciones(sesion);
+                    listadoPublicaciones.Show();
+                }
+                return;
+            }
+        }
+
+        private bool poseeMasDeTresCompras() {
+            return false;
+
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -92,8 +107,13 @@ namespace MercadoEnvio.VistaPrincipal
             label5.Text = sesion.usuarioActual.nombreUsuario;
             label4.Text = sesion.rolActual.nombre;
 
+
             string c = "EXECUTE DBME.chequearVencimientoPublicaciones "+ Program.fechaSistema();
             new ConexionSQL().ejecutarComandoSQL(c);
+
+            //string c = "EXEC ";
+           // DataTable dt = new ConexionSQL().ejecutarComandoSQL(c);
+
             //new Controller.Controller().
         }
 

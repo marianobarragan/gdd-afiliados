@@ -8,12 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MercadoEnvio.Controller;
+using MercadoEnvio.Domain;
 
 namespace MercadoEnvio.Listado_Estadistico
 {
     public partial class ListadoPrincipal : Form
     {
         public int indice;
+        public List<Rubro> rubros;
+
         public ListadoPrincipal(int index)
         {
             InitializeComponent();
@@ -23,18 +26,49 @@ namespace MercadoEnvio.Listado_Estadistico
 
             if (indice == 1)
             {
-                comboBox1.Enabled = true;
+                cmbRubros.Enabled = true;
+                /*
                 string comando = "SELECT descripcion_corta FROM DBME.rubro";
                 DataTable dataCalificacion = (new ConexionSQL()).cargarTablaSQL(comando);
 
                 foreach (DataRow row in dataCalificacion.Rows)
                 {
-                    comboBox1.Items.Add(row[0].ToString());
+                    cmbRubros.Items.Add(row[0].ToString());
                 }
-                comboBox1.SelectedIndex = 0;
+                cmbRubros.SelectedIndex = 0;*/
             }
+            
+            cargar_rubros();
+            cmbRubros.SelectedIndex = 0;
+            //string comando3 = "SELECT * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2016,1)";
+           //this.ejecutarComando(comando3);
+            
         }
 
+
+        public void cargar_rubros()
+        {
+
+            string comando = "select rubro_id, descripcion_corta from dbme.rubro";
+            DataTable dataroles = (new ConexionSQL()).cargarTablaSQL(comando);
+            rubros = new List<Rubro>();
+
+            //obtener los roles HABILITADOS de la data
+
+            for (int i = 0; i <= (dataroles.Rows.Count - 1); i++)
+            {
+                // rubros.Add(obtenerRol(dataroles.Rows[i][0].ToString(), dataroles.Rows[i][1].ToString()));
+                rubros.Add(new Rubro(dataroles.Rows[i][0].ToString(), dataroles.Rows[i][1].ToString()));
+            }
+
+            for (int j = 0; j < rubros.Count; j++)
+            {
+                // rubros.Add(obtenerRol(dataroles.Rows[i][0].ToString(), dataroles.Rows[i][1].ToString()));
+                string desc = rubros[j].descripcion_corta;
+                cmbRubros.Items.Add(desc);
+            }
+
+        }
         private void lstTrimestre_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -42,23 +76,28 @@ namespace MercadoEnvio.Listado_Estadistico
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            //int anio = Int32.Parse(txtAño.Text);
-            //int trimestre = lstTrimestre.SelectedIndex + 1;
-            //string visibilidad = lstVisibilidad.SelectedItem.ToString();
+            uint rubro;
+
+            string comandoMIL = "SELECT * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2016,1)";
+            this.ejecutarComando(comandoMIL);
             
-            /*
-            string dsd = textBox1.Text;
-            string query = "SELECT * FROM DBME.domicilio ";
-            DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
-            if (dt.Rows.Count == 0)
+            try
             {
-                MessageBox.Show("No se han encontrado resultados", "Problema" , MessageBoxButtons.OK);
-                dataGridView1.DataSource = null;
+                //int anio = Int32.Parse(txtAño.Text);
+                //int trimestre = lstTrimestre.SelectedIndex + 1;
+                //string visibilidad = lstVisibilidad.SelectedItem.ToString();
+                rubro = rubros[cmbRubros.SelectedIndex].rubro_id;
+            }
+            catch (System.FormatException)
+            {
+                MessageBox.Show("Ingrese solamente numeros en los formularios verdes, sin puntos", "Nuevo Cliente", MessageBoxButtons.OK);
                 return;
             }
-            dataGridView1.DataSource = dt;
-            */
-            
+            catch (System.OverflowException)
+            {
+                MessageBox.Show("Ingrese numeros positivos en los formularios verdes", "Nuevo Cliente", MessageBoxButtons.OK);
+                return;
+            }      
               
               switch (indice)
                 {
@@ -71,20 +110,21 @@ namespace MercadoEnvio.Listado_Estadistico
                 break;
                 case 1:
                     //topClientesConMayorCantidadDeProductosComprados();
-                   //string comando3 = "EXECUTE DBME.topClientesConMayorCantidadDeProductosComprados '" + trimestre + "','" + anio + "'" + lstRubro.SelectedItem.ToString() + "";
-                   string comando3 = "select * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2015,'1')";
+                //string comando3 = "SELECT * from DBME.topClientesConMayorCantidadDeProductosComprados '" + trimestre + "','" + anio + "'" + rubro + "";
+               
+                string comando3 = "SELECT * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2016,1)";
                    this.ejecutarComando(comando3);
                    
                    break;
                 case 2:
                     //topVendedoresConMayorCantidadDeFacturas();
-                   //string comando4 = "EXECUTE DBME.topVendedoresConMayorCantidadDeFacturas '" + trimestre + "','" + anio + "'";
+                   //string comando4 = "SELECT * FROM DBME.topVendedoresConMayorCantidadDeFacturas '" + trimestre + "','" + anio + "'";
                    string comando4 = "SELECT * FROM DBME.topVendedoresConMayorCantidadDeFacturas (1,2015,'1')";
                    this.ejecutarComando(comando4);
                    break;
                 case 3:
                     //topVendedoresConMayorMontoFacturado();
-                   //string comando5 = "EXECUTE DBME.topVendedoresConMayorMontoFacturado '" + trimestre + "','" + anio + "'";
+                   //string comando5 = "SELECT * FROM DBME.topVendedoresConMayorMontoFacturado '" + trimestre + "','" + anio + "'";
                    string comando5 = "SELECT * FROM DBME.topVendedoresConMayorMontoFacturado (1,2015,'1')";
                    this.ejecutarComando(comando5);
                 break;
@@ -92,8 +132,8 @@ namespace MercadoEnvio.Listado_Estadistico
                 default:
              //      imprimir un error
                 break;
-            }           
-             
+            }
+              button1.Enabled = true;   
              
         }
         public void ejecutarComando(string comandoAEjecutar)
@@ -134,7 +174,7 @@ namespace MercadoEnvio.Listado_Estadistico
             {
                 lstVisibilidad.Items.Add(row[0].ToString());
             }
-            comboBox1.SelectedIndex = 0;
+            cmbRubros.SelectedIndex = 0;
 
             lstVisibilidad.Enabled = true;
             lstTrimestre.Enabled = true;
