@@ -359,6 +359,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicación\Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ComprarOfertar\ComprarProducto.resx">
       <DependentUpon>ComprarProducto.cs</DependentUpon>
     </EmbeddedResource>

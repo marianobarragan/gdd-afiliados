@@ -986,9 +986,14 @@ BEGIN
 	DELETE FROM DBME.reloj
 	INSERT INTO DBME.reloj (hora_actual) VALUES (@hora_actual)
 
-	UPDATE DBME.publicacion SET estado = 'FINALIZADA' WHERE fecha_vencimiento>@hora_actual AND estado = 'ACTIVA'
+	
+	
+	UPDATE DBME.publicacion SET estado = 'FINALIZADA' 
+	WHERE fecha_vencimiento>@hora_actual AND estado = 'ACTIVA' AND publicacion_tipo = 'Compra Inmediata'
 
-END;
+	
+
+END; 
 GO
 
 /*
