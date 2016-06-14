@@ -132,7 +132,7 @@ namespace MercadoEnvio.Generar_Publicación
             try
             {
                 rubro = rubros[cmbRubros.SelectedIndex].rubro_id;
-                visibilidad = UInt32.Parse(visibilidades[cmbEstado.SelectedIndex].id);
+                //visibilidad = UInt32.Parse(visibilidades[cmbEstado.SelectedIndex].id);
                 estado = cmbEstado.SelectedIndex;
                 fechaInicio = DateTime.Parse(dateFechaInicio.Text);
                 fechaFinalizacion = DateTime.Parse(dateFechaVencimiento.Text);
@@ -171,9 +171,9 @@ namespace MercadoEnvio.Generar_Publicación
             try
             {
                 //CREATE PROCEDURE DBME.crearCompraInmediata (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), @rubro_id INT, @visibilidad_id INT, @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit,@cantidad INT,@fecha_finalizacion DATE)
-                string comando = "EXECUTE DBME.CompraInmediata '" + descripcion + "','" + stock + "','" + fechaInicio + "','" + fechaFinalizacion + "','" + precio + "','" + rubro + "','" + visibilidad + "'," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "','" +  + "','" + codigo_postal + "','" + domicilio_calle + "'," + altura_calle + "," + numero_piso + ",'" + departamento + "'," + numero_telefono;
+                //string comando = "EXECUTE DBME.CompraInmediata '" + descripcion + "','" + stock + "','" + fechaInicio + "','" + fechaFinalizacion + "','" + precio + "','" + rubro + "','" + visibilidad + "'," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "','" +  + "','" + codigo_postal + "','" + domicilio_calle + "'," + altura_calle + "," + numero_piso + ",'" + departamento + "'," + numero_telefono;
                 //MessageBox.Show(comando, "A", MessageBoxButtons.OK);
-                (new ConexionSQL()).ejecutarComandoSQL(comando);
+                //(new ConexionSQL()).ejecutarComandoSQL(comando);
 
                 MessageBox.Show("Cliente creado exitosamente", "A", MessageBoxButtons.OK);
                 this.Close();

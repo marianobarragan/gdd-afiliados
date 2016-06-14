@@ -85,6 +85,7 @@ namespace MercadoEnvio.ComprarOfertar
                 return;
             }
             dataGridView1.DataSource = dt;
+            
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
@@ -96,5 +97,49 @@ namespace MercadoEnvio.ComprarOfertar
             chklRubros.SelectedIndex = 0;
 
         }
+        
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAccion_Click(object sender, EventArgs e)
+        {
+            string tipo = (dataGridView1[1, dataGridView1.CurrentCell.RowIndex].Value.ToString());
+              MessageBox.Show(tipo, "hol", MessageBoxButtons.OK);
+            if (tipo == "Compra Inmediata")
+             {
+                 ComprarOfertar.ComprarProducto comprarProducto = new ComprarOfertar.ComprarProducto();
+                 comprarProducto.Show();
+            }
+            else
+                //ComprarOfertar.OfertarProducto ofertarProducto = new ComprarOfertar.OfertarProducto();
+                //ofertarProducto.Show();
+
+            }
+        }
+        //private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        //{
+         //   string tipo = (dataGridView1[1, dataGridView1.CurrentCell.RowIndex].Value.ToString());
+          //  MessageBox.Show(tipo, "hol", MessageBoxButtons.OK);
+           // if (tipo == "Compra Inmediata")
+           // {
+           //     btnAccion.Enabled = true;
+           //     btnAccion.Text = tipo;
+            //}
+           // else
+           //     btnAccion.Enabled = true;
+           // btnAccion.Text = tipo;
+       // }
+    
+    
+    
+    
+    
     }
 }

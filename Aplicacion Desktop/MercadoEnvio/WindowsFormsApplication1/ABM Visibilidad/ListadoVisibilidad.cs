@@ -125,5 +125,10 @@ namespace MercadoEnvio.ABM_Visibilidad
 
             button2_Click(null, null); //actualizar la tablita
         }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
