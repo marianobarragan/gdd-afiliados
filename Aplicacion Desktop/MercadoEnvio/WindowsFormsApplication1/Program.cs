@@ -6,7 +6,7 @@ using System.Configuration;
 using System.Windows.Forms;
 
 using MercadoEnvio.Login;
-//using MercadoEnvio.ABM_Usuario;
+using MercadoEnvio.Domain;
 
 
 
@@ -24,7 +24,7 @@ namespace MercadoEnvio
             Application.SetCompatibleTextRenderingDefault(false);
 
             //Application.Run(new MercadoEnvio
-            Application.Run(new MercadoEnvio.Generar_Publicación.AltaCompraInmediata());
+            Application.Run(new MercadoEnvio.Generar_Publicación.AltaCompraInmediata(new Sesion(1,"fabian",new Rol("1","nombre rol") )));
             //Application.Run(new MercadoEnvio.Login.LoginInicial());
 
             

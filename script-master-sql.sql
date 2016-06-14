@@ -992,7 +992,7 @@ BEGIN
 	WHERE fecha_vencimiento>@hora_actual AND estado = 'ACTIVA' AND publicacion_tipo = 'Compra Inmediata'
 
 	
-
+	
 END; 
 GO
 
@@ -1117,7 +1117,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DBME.crearPublicacion (@publicacion_tipo NVARCHAR(255),@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), @rubro_id INT, @visibilidad_id INT, @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit,@cantidad INT,@fecha_finalizacion DATE, @valor_inicial DECIMAL(10,2), @valor_actual DECIMAL(10,2))
+CREATE PROCEDURE DBME.crearCompraInmediata (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), @rubro_id INT, @visibilidad_id INT, @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit,@cantidad INT,@fecha_finalizacion DATE)
 
 AS
 BEGIN
