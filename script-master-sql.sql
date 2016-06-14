@@ -557,7 +557,9 @@ BEGIN
 	FROM DBME.factura f 
 		JOIN gd_esquema.Maestra m ON (f.factura_id = m.Factura_Nro)
 		JOIN DBME.compra c ON (c.publicacion_id = m.Publicacion_Cod)
-END;
+
+
+	END;
 GO
 
 
@@ -947,8 +949,8 @@ BEGIN
 	DECLARE @usuario_id INT
 
 	SET @usuario_id = (SELECT usuario_id FROM DBME.empresa WHERE empresa_id = @empresa_id)
-	--BEGIN TRY
-		--BEGIN TRANSACTION	
+	BEGIN TRY
+		BEGIN TRANSACTION	
 		
 		UPDATE DBME.domicilio 
 		SET ciudad = @ciudad, localidad = @localidad, codigo_postal = @codigo_postal, piso = @numero_piso, departamento = @departamento,domicilio_calle = @domicilio_calle, numero_calle = @altura_calle 
@@ -962,13 +964,13 @@ BEGIN
 		SET telefono = @numero_telefono 
 		WHERE usuario_id = @usuario_id
 		
-		--COMMIT TRANSACTION
-	--END TRY
-	--BEGIN CATCH
-		--SET @mensaje_error = 'Error en actualizar los datos. Se deshace la operacion entera. Lo sentimos.'
-		--RAISERROR(@mensaje_error, 12, 1)
-		--ROLLBACK TRANSACTION 
-	--END CATCH
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		SET @mensaje_error = 'Error en actualizar los datos. Se deshace la operacion entera. Lo sentimos.'
+		RAISERROR(@mensaje_error, 12, 1)
+		ROLLBACK TRANSACTION 
+	END CATCH
 
 END;
 GO
@@ -1106,15 +1108,30 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DBME.crearPublicacion (@publicacion_tipo NVARCHAR(255),@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), )
+CREATE PROCEDURE DBME.crearPublicacion (@publicacion_tipo NVARCHAR(255),@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), @rubro_id INT, @visibilidad_id INT, @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit,@cantidad INT,@fecha_finalizacion DATE, @valor_inicial DECIMAL(10,2), @valor_actual DECIMAL(10,2))
 AS
 BEGIN
 
+	DECLARE @costo AS DECIMAL(10,2)
+	DECLARE @mensaje_error AS NVARCHAR(99)
+	
 
+	BEGIN TRY
+		BEGIN TRANSACTION	
+		
+		INSERT INTO DBME.publicacion (publicacion_tipo,descripcion,stock,fecha_creacion,fecha_vencimiento,precio,costo,rubro_id,visibilidad_id,autor_id,estado,permite_preguntas,realiza_envio,cantidad,fecha_finalizacion,valor_inicial,valor_actual)
+		VALUES (@publicacion_tipo,@descripcion,@stock,@fecha_creacion,@fecha_vencimiento,@precio,@costo,@rubro_id,@visibilidad_id,@autor_id,@estado,@permite_preguntas,@realiza_envio,@cantidad,@fecha_finalizacion,@valor_inicial,@valor_actual)
+
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+
+		SET @mensaje_error = 'Error en crear la nueva publicacion. Se deshace la operacion entera. Lo sentimos.'
+		RAISERROR(@mensaje_error, 12, 1)
+		ROLLBACK TRANSACTION 
+	
+	END CATCH
 /*  
-	
-	
-	
 	costo DECIMAL(10,2),
 	rubro_id INT FOREIGN KEY REFERENCES DBME.rubro(rubro_id),
 	visibilidad_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.visibilidad(visibilidad_id),
