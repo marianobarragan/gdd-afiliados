@@ -81,12 +81,6 @@
     <Compile Include="ABM Rol\SeleccionRol.Designer.cs">
       <DependentUpon>SeleccionRol.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Rubro\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ABM Rubro\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="ABM Usuario\Alta Usuario\AltaUsuario.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -183,11 +177,23 @@
     <Compile Include="Calificar\ListadoDePublicacionesSinCalificar.Designer.cs">
       <DependentUpon>ListadoDePublicacionesSinCalificar.cs</DependentUpon>
     </Compile>
-    <Compile Include="ComprarOfertar\Form1.cs">
+    <Compile Include="ComprarOfertar\ComprarProducto.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ComprarOfertar\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ComprarOfertar\ComprarProducto.Designer.cs">
+      <DependentUpon>ComprarProducto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComprarOfertar\ListadoPublicaciones.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComprarOfertar\ListadoPublicaciones.Designer.cs">
+      <DependentUpon>ListadoPublicaciones.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComprarOfertar\OfertarProducto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComprarOfertar\OfertarProducto.Designer.cs">
+      <DependentUpon>OfertarProducto.cs</DependentUpon>
     </Compile>
     <Compile Include="Controller\Controller.cs" />
     <Compile Include="Controller\ConexionSQL.cs" />
@@ -299,9 +305,6 @@
     <EmbeddedResource Include="ABM Rol\SeleccionRol.resx">
       <DependentUpon>SeleccionRol.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ABM Rubro\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ABM Usuario\Alta Usuario\AltaUsuario.resx">
       <DependentUpon>AltaUsuario.cs</DependentUpon>
     </EmbeddedResource>
@@ -343,6 +346,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Visibilidad\ModificarVisibilidad.resx">
       <DependentUpon>ModificarVisibilidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOfertar\ComprarProducto.resx">
+      <DependentUpon>ComprarProducto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOfertar\ListadoPublicaciones.resx">
+      <DependentUpon>ListadoPublicaciones.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOfertar\OfertarProducto.resx">
+      <DependentUpon>OfertarProducto.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -413,7 +425,9 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ABM Rubro\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

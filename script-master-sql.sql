@@ -620,36 +620,37 @@ GO
 
 /*
 CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeProductosNoVendidos(@trimestre TINYINT,@anio INTEGER,@visibilidad VARCHAR(255))
-RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), cantidad_productos_sin_vender BIGINT)
+RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, mail_vendedor NVARCHAR(255), cantidad_productos_sin_vender BIGINT)
 AS 
 BEGIN 
-	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,cantidad_productos_sin_vender)
+	INSERT INTO @TABLA_RESULTADO(id_vendedor,mail_vendedor ,cantidad_productos_sin_vender)
 	select ciudad, localidad, codigo_postal from dbme.domicilio						
 	--aca va la funcion posta
 	
-
+	SELECT TOP 5 c.cliente_id, c.nombre,c.apellido
 	RETURN
 END;
 GO
 */
 
 
-CREATE FUNCTION DBME.topClientesConMayorCantidadDeProductosComprados(@trimestre TINYINT,@anio INTEGER,@rubro NVARCHAR(255))
+CREATE FUNCTION DBME.topClientesConMayorCantidadDeProductosComprados(@trimestre TINYINT,@anio INTEGER,@rubro INT)
 RETURNS @TABLA_RESULTADO TABLE ( id_cliente INT, nombre_cliente NVARCHAR(255), apellido_cliente NVARCHAR(255), cantidad_productos_comprados BIGINT)
 AS 
-BEGIN 
-	INSERT INTO @TABLA_RESULTADO(id_cliente,nombre_cliente,apellido_cliente,cantidad_productos_comprados)
-
+BEGIN
 	--Falta Filtrado por Rubro, Fecha y Visibilidad
-	
-	SELECT TOP 5 c.cliente_id, c.nombre,c.apellido, COUNT(c2.compra_id) as compras_Realizadas from DBME.cliente c JOIN DBME.compra c2 ON (c.cliente_id = c2.autor_id)
-	Group By c.cliente_id, c.nombre, c.apellido
-	Order By COUNT(c2.compra_id)
-	
-
-	RETURN
+	If (@trimestre = 1)
+	BEGIN
+		INSERT INTO @TABLA_RESULTADO(id_cliente,nombre_cliente,apellido_cliente,cantidad_productos_comprados)
+		SELECT TOP 5 c.cliente_id, c.nombre,c.apellido, COUNT(c2.compra_id) as compras_Realizadas from DBME.cliente c JOIN DBME.compra c2 ON (c.cliente_id = c2.autor_id) JOIN DBME.publicacion p ON(c2.publicacion_id = p.publicacion_id)
+		WHERE YEAR(c2.fecha) = @anio AND MONTH(c2.fecha) Between 1 AND 3 AND p.rubro_id = @rubro
+		Group By c.cliente_id, c.nombre, c.apellido
+		Order By compras_Realizadas DESC	
+		END;
+		RETURN
 END;
 GO
+
 
 /*
 CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeFacturas(@trimestre TINYINT,@anio INTEGER)-- dentro de un mes y año particular
@@ -663,12 +664,16 @@ BEGIN
 
 	-- TOP 5 EMPRESAS
 	SELECT TOP 5 e.empresa_id, e.razon_social, e.nombre_contacto, COUNT(f.factura_id) as facturas_Realizadas FROM DBME.empresa e JOIN DBME.publicacion p ON (e.empresa_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
-	GROUP BY e.empresa_id, e.razon_social
+	GROUP BY e.empresa_id, e.razon_social, e.nombre_contacto
+	ORDER BY facturas_Realizadas DESC
 
 	-- TOP 5 CLIENTES
 	
-	SELECT TOP 5 c1.cliente_id, c1.nombre, c1.apellido, COUNT(f.factura_id) as facturas_Realizadas FROM DBME.cliente c1 JOIN DBME.publicacion p ON (c1.cliente_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
-	GROUP BY c1.cliente_id, c1.nombre
+	SELECT c1.cliente_id, c1.nombre, c1.apellido, COUNT(f.factura_id) as facturas_Realizadas FROM DBME.cliente c1 JOIN DBME.publicacion p ON (c1.usuario_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
+	GROUP BY c1.cliente_id, c1.nombre, c1.apellido
+	ORDER BY facturas_Realizadas 
+	
+
 	
 	RETURN
 END;
@@ -688,8 +693,7 @@ BEGIN
 	-- TOP 5 CLIENTES
 	SELECT TOP 5 c1.cliente_id, c1.nombre, c1.apellido, SUM(f.monto_total) as facturas_Realizadas FROM DBME.cliente c JOIN DBME.publicacion p ON (c1.cliente_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
 	GROUP BY e.empresa_id, e.razon_social, f.factura_id
-
-
+	
 	RETURN
 END;
 GO
@@ -1106,7 +1110,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DBME.crearPublicacion (@publicacion_tipo NVARCHAR(255),@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), )
+CREATE PROCEDURE DBME.crearPublicacion (@publicacion_tipo NVARCHAR(255),@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2) )
 AS
 BEGIN
 
@@ -1134,4 +1138,3 @@ GO
 INSERT INTO DBME.reloj (hora_actual) VALUES(GETDATE())
 
 -- COMO EJECUTAR FUNCIONES select * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2015,'1')
- 
