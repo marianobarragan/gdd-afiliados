@@ -27,17 +27,6 @@ CREATE TABLE DBME.rol_x_funcionalidad (
 );
 GO
 
-CREATE PROCEDURE DBME.cantidadDeCalificacionesDelUsuario (@usuario_id INT)
-AS
-BEGIN
-	SELECT cantidad_estrellas, COUNT(cantidad_estrellas) 
-	FROM DBME.calificacion
-	WHERE autor_id = @usuario_id
-	Group By cantidad_estrellas
-	Order By cantidad_estrellas
-END;
-GO
-
 CREATE TABLE DBME.domicilio (
 	domicilio_id INT IDENTITY(1,1) PRIMARY KEY,
 	ciudad NVARCHAR(255),
@@ -136,7 +125,7 @@ CREATE TABLE DBME.publicacion(
 	permite_preguntas bit,
 	realiza_envio bit,
 	cantidad INT,
-	fecha_finalizacion DATE,
+	fecha_finalizacion_subasta DATETIME,
 	valor_inicial DECIMAL(10,2),
 	valor_actual DECIMAL(10,2)
 
@@ -158,7 +147,8 @@ CREATE TABLE DBME.compra(
 	fecha DATETIME,
 	autor_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id),
 	publicacion_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.publicacion(publicacion_id),
-	esta_calificada bit
+	esta_calificada bit,
+	
 );
 GO
 
@@ -178,7 +168,8 @@ CREATE TABLE DBME.factura(
 	compra_id INT FOREIGN KEY REFERENCES DBME.compra(compra_id),
 	fecha DATETIME,
 	monto_total NUMERIC(18,2) NOT NULL,
-	forma_pago_desc NVARCHAR(255)
+	forma_pago_desc NVARCHAR(255),
+	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id)
 );
 GO
 
@@ -358,10 +349,14 @@ BEGIN
 	SET IDENTITY_INSERT DBME.factura ON;
 	SET IDENTITY_INSERT DBME.factura_detalle OFF;
 	
-	INSERT INTO DBME.factura(factura_id,fecha,monto_total,forma_pago_desc)
-	SELECT DISTINCT Factura_Nro,Factura_Fecha,Factura_Total,Forma_Pago_Desc
-	FROM gd_esquema.Maestra
-	WHERE Factura_Nro IS NOT NULL
+	INSERT INTO DBME.factura(factura_id,fecha,monto_total,forma_pago_desc,usuario_id)
+	(SELECT DISTINCT Factura_Nro,Factura_Fecha,Factura_Total,Forma_Pago_Desc,u.usuario_id
+	FROM gd_esquema.Maestra m LEFT JOIN DBME.usuario u ON (m.Publ_Cli_Mail = u.mail)
+	WHERE Factura_Nro IS NOT NULL AND Publ_Cli_Mail IS NOT NULL
+	UNION
+	SELECT DISTINCT Factura_Nro,Factura_Fecha,Factura_Total,Forma_Pago_Desc,u.usuario_id
+	FROM gd_esquema.Maestra m LEFT JOIN DBME.usuario u ON (m.Publ_Empresa_Mail= u.mail)
+	WHERE Factura_Nro IS NOT NULL AND Publ_Empresa_Mail IS NOT NULL)
 
 	INSERT INTO DBME.factura_detalle(factura_id,factura_cantidad,monto_parcial,tipo_de_item)
 	SELECT Factura_Nro,Item_Factura_Cantidad,Item_Factura_Monto,'INDEFINIDO'
@@ -377,8 +372,8 @@ AS
 BEGIN
 	SET IDENTITY_INSERT DBME.calificacion ON;
 
-	INSERT INTO DBME.calificacion(calificacion_id,cantidad_estrellas,autor_id,descripcion)
-	SELECT m.Calificacion_Codigo,m.Calificacion_Cant_Estrellas/2,u.usuario_id,'Sin descripción'
+	INSERT INTO DBME.calificacion(calificacion_id,cantidad_estrellas,autor_id,descripcion,fecha)
+	SELECT m.Calificacion_Codigo,m.Calificacion_Cant_Estrellas/2,u.usuario_id,'Sin descripción',Compra_Fecha
 	FROM gd_esquema.Maestra m LEFT JOIN DBME.usuario u ON (m.Cli_Mail=u.mail)
 	WHERE Calificacion_Codigo IS NOT NULL
 END;
@@ -399,11 +394,14 @@ CREATE PROCEDURE DBME.migrarOfertas
 AS
 BEGIN
 
-	DECLARE cursor_para_ofertas CURSOR FOR
-	SELECT Publ_Empresa_Mail,Publ_Cli_Mail,Publicacion_Cod,Oferta_Monto,Oferta_Fecha
-	FROM gd_esquema.Maestra
-	WHERE Oferta_Fecha IS NOT NULL
-
+	--DECLARE cursor_para_ofertas CURSOR FOR
+	INSERT INTO DBME.oferta (monto,fecha,autor_id,publicacion_id)
+	SELECT Oferta_Monto,Oferta_Fecha,u.usuario_id,Publicacion_Cod
+	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Cli_Mail = u.mail)
+	WHERE Oferta_Fecha IS NOT NULL 
+	
+	/*
+	order by Publicacion_Cod
 	DECLARE @Publ_Empresa_Mail AS NVARCHAR(255)
 	DECLARE @Publ_Cli_Mail AS NVARCHAR(255)
 	DECLARE @Publicacion_Cod AS NUMERIC(18,0)
@@ -411,7 +409,7 @@ BEGIN
 	DECLARE @Oferta_Fecha AS DATETIME
 	DECLARE @usuario_id AS INT
 	DECLARE @oferta_id AS INT
-
+	
 	OPEN cursor_para_ofertas 
 	FETCH cursor_para_ofertas INTO @Publ_Empresa_Mail,@Publ_Cli_Mail,@Publicacion_Cod,@Oferta_Monto,@Oferta_Fecha
 
@@ -434,20 +432,11 @@ BEGIN
 			FETCH cursor_para_ofertas INTO @Publ_Empresa_Mail,@Publ_Cli_Mail,@Publicacion_Cod,@Oferta_Monto,@Oferta_Fecha
 		END
 	CLOSE cursor_para_ofertas
-	DEALLOCATE cursor_para_ofertas
+	DEALLOCATE cursor_para_ofertas*/
 END;
 GO
 
-CREATE PROCEDURE DBME.devolverIdRubroDeDescripcion (
-	@Publicacion_Rubro_Descripcion NVARCHAR(255),
-	@rubro_id INT OUT)
-AS
-BEGIN
-	SELECT DISTINCT @rubro_id = rubro_id 
-	FROM DBME.rubro
-	WHERE descripcion_corta = @Publicacion_Rubro_Descripcion
-END;
-GO
+
 
 CREATE PROCEDURE DBME.migrarPublicaciones
 AS
@@ -455,11 +444,28 @@ BEGIN
 
 	SET IDENTITY_INSERT DBME.publicacion ON;
 
-	DECLARE cursor_para_publicaciones CURSOR FOR
-	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,
-	Publicacion_Estado,Publicacion_Tipo,Publicacion_Rubro_Descripcion,v.visibilidad_id,Publ_Cli_Mail,Publ_Empresa_Mail
-	FROM gd_esquema.Maestra m LEFT JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion)
+	--DECLARE cursor_para_publicaciones CURSOR FOR
+	INSERT INTO DBME.publicacion(publicacion_id,descripcion,cantidad,stock,fecha_creacion,fecha_vencimiento,precio,estado,publicacion_tipo,rubro_id,visibilidad_id,autor_id,permite_preguntas,realiza_envio)
+	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'FINALIZADA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0  
+	FROM gd_esquema.Maestra m JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion) JOIN DBME.rubro r ON (m.Publicacion_Rubro_Descripcion = r.descripcion_corta) JOIN DBME.usuario u ON (u.mail = m.Publ_Cli_Mail)
+	WHERE Publicacion_Tipo = 'Compra Inmediata' AND Publ_Cli_Mail IS NOT NULL
+	UNION
+	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'FINALIZADA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0  
+	FROM gd_esquema.Maestra m JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion) JOIN DBME.rubro r ON (m.Publicacion_Rubro_Descripcion = r.descripcion_corta) JOIN DBME.usuario u ON (u.mail = m.Publ_Empresa_Mail)
+	WHERE Publicacion_Tipo = 'Compra Inmediata' AND Publ_Empresa_Mail IS NOT NULL
 
+	INSERT INTO DBME.publicacion(publicacion_id,descripcion,cantidad,stock,fecha_creacion,fecha_vencimiento,precio,estado,publicacion_tipo,rubro_id,visibilidad_id,autor_id,permite_preguntas,realiza_envio,valor_inicial,valor_actual)
+	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'FINALIZADA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0,MIN(Oferta_Monto),MAX(Oferta_Monto)  
+	FROM gd_esquema.Maestra m JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion) JOIN DBME.rubro r ON (m.Publicacion_Rubro_Descripcion = r.descripcion_corta) JOIN DBME.usuario u ON (u.mail = m.Publ_Cli_Mail)
+	WHERE Publicacion_Tipo = 'Subasta' AND Publ_Cli_Mail IS NOT NULL
+	GROUP BY Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,Publicacion_Estado,Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id
+	UNION
+	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'FINALIZADA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0,MIN(Oferta_Monto),MAX(Oferta_Monto)  
+	FROM gd_esquema.Maestra m JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion) JOIN DBME.rubro r ON (m.Publicacion_Rubro_Descripcion = r.descripcion_corta) JOIN DBME.usuario u ON (u.mail = m.Publ_Empresa_Mail)
+	WHERE Publicacion_Tipo = 'Subasta' AND Publ_Empresa_Mail IS NOT NULL
+	GROUP BY Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,Publicacion_Estado,Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id
+	
+	/*
 	DECLARE @Publicacion_Cod AS NUMERIC(18,0)
 	DECLARE @Publicacion_Descripcion AS NVARCHAR(255) 
 	DECLARE @Publicacion_Tipo AS NVARCHAR(255)
@@ -513,56 +519,27 @@ BEGIN
 			@Publicacion_Estado,@Publicacion_Tipo,@Publicacion_Rubro_Descripcion,@Publicacion_Visibilidad_Cod,@Publ_Cli_Mail,@Publ_Empresa_Mail
 		END
 	CLOSE cursor_para_publicaciones
-	DEALLOCATE cursor_para_publicaciones
+	DEALLOCATE cursor_para_publicaciones*/
 END;
 GO
+
+
 
 CREATE PROCEDURE DBME.migrarCompras
 AS
 BEGIN
 
-	DECLARE cursor_para_compras CURSOR FOR
-	SELECT Compra_Fecha,Compra_Cantidad,Publicacion_Cod,u.usuario_id,Calificacion_Codigo
+	INSERT INTO DBME.compra (cantidad,fecha,autor_id,publicacion_id,esta_calificada)
+	SELECT Compra_Cantidad,Compra_Fecha,u.usuario_id,Publicacion_Cod,1
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Cli_Mail=u.mail)
 	WHERE Compra_Fecha IS NOT NULL AND Calificacion_Codigo IS NOT NULL
 
-	DECLARE @Compra_Fecha AS DATETIME
-	DECLARE @Compra_Cantidad AS NUMERIC(18,0)
-	DECLARE @Publicacion_Cod AS NUMERIC(18,0)
-	DECLARE @usuario_id AS INT
-	DECLARE @Calificacion_Codigo AS INT
+	UPDATE DBME.calificacion SET compra_id = com.compra_id
+	FROM gd_esquema.Maestra m JOIN DBME.calificacion ca ON (m.Calificacion_Codigo = ca.calificacion_id)
+							  JOIN DBME.compra com ON (m.Publicacion_Cod = com.publicacion_id)
 
-	OPEN cursor_para_compras
-	FETCH cursor_para_compras INTO @Compra_Fecha,@Compra_Cantidad,@Publicacion_Cod,@usuario_id,@Calificacion_Codigo
-	WHILE(@@FETCH_STATUS = 0)
-		BEGIN
-			INSERT INTO DBME.compra(fecha,cantidad,publicacion_id,autor_id,esta_calificada)
-			VALUES (@Compra_Fecha,@Compra_Cantidad,@Publicacion_Cod,@usuario_id,1)
-
-			UPDATE DBME.calificacion SET compra_id = SCOPE_IDENTITY() WHERE calificacion_id = @Calificacion_Codigo
-			
-			FETCH cursor_para_compras INTO @Compra_Fecha,@Compra_Cantidad,@Publicacion_Cod,@usuario_id,@Calificacion_Codigo
-		END
-	CLOSE cursor_para_compras
-	DEALLOCATE cursor_para_compras
-	
 END;
 GO
-
-CREATE PROCEDURE DBME.migrarFacturasXCompras 
-AS
-BEGIN
-	UPDATE DBME.factura 
-	SET compra_id = c.compra_id 
-	FROM DBME.factura f 
-		JOIN gd_esquema.Maestra m ON (f.factura_id = m.Factura_Nro)
-		JOIN DBME.compra c ON (c.publicacion_id = m.Publicacion_Cod)
-
-
-	END;
-GO
-
-
 
 /* END BASES DE MIGRACION */ 
 
@@ -582,9 +559,8 @@ GO
 	EXECUTE DBME.migrarCalificaciones
 	EXECUTE DBME.migrarCompras
 	EXECUTE DBME.migrarOfertas
-	EXECUTE DBME.migrarFacturasXCompras
+GO   
 
-GO
 
 /* END MIGRACION */
 
@@ -1117,7 +1093,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DBME.crearCompraInmediata (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), @rubro_id INT, @visibilidad_id INT, @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit,@cantidad INT,@fecha_finalizacion DATE)
+CREATE PROCEDURE DBME.crearCompraInmediata (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), @rubro_id INT, @visibilidad_id INT, @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit)
 
 AS
 BEGIN
@@ -1130,7 +1106,7 @@ BEGIN
 		BEGIN TRANSACTION	
 		
 		INSERT INTO DBME.publicacion (publicacion_tipo,descripcion,stock,fecha_creacion,fecha_vencimiento,precio,costo,rubro_id,visibilidad_id,autor_id,estado,permite_preguntas,realiza_envio,cantidad,fecha_finalizacion,valor_inicial,valor_actual)
-		VALUES (@publicacion_tipo,@descripcion,@stock,@fecha_creacion,@fecha_vencimiento,@precio,@costo,@rubro_id,@visibilidad_id,@autor_id,@estado,@permite_preguntas,@realiza_envio,@cantidad,@fecha_finalizacion,@valor_inicial,@valor_actual)
+		VALUES ('Compra Inmediata',@descripcion,@stock,@fecha_creacion,@fecha_vencimiento,@precio,@costo,@rubro_id,@visibilidad_id,@autor_id,@estado,@permite_preguntas,@realiza_envio,@cantidad,@fecha_finalizacion,@valor_inicial,@valor_actual)
 
 		COMMIT TRANSACTION
 	END TRY
@@ -1158,6 +1134,22 @@ END;
 GO
 
 /* END PROCEDURES COMUNICACION */
+
+/* START PROCEDURES DOMINIO */
+
+CREATE PROCEDURE DBME.cantidadDeCalificacionesDelUsuario (@usuario_id INT)
+AS
+BEGIN
+	SELECT cantidad_estrellas, COUNT(cantidad_estrellas) 
+	FROM DBME.calificacion
+	WHERE autor_id = @usuario_id
+	Group By cantidad_estrellas
+	Order By cantidad_estrellas
+END;
+GO
+
+/* END PROCEDURES DOMINIO*/
+
 INSERT INTO DBME.reloj (hora_actual) VALUES(GETDATE())
 
 -- COMO EJECUTAR FUNCIONES select * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2015,'1')
