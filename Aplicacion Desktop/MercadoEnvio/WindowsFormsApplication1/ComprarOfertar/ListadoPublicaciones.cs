@@ -114,8 +114,8 @@ namespace MercadoEnvio.ComprarOfertar
               MessageBox.Show(tipo, "hol", MessageBoxButtons.OK);
             if (tipo == "Compra Inmediata")
              {
-                 ComprarOfertar.ComprarProducto comprarProducto = new ComprarOfertar.ComprarProducto();
-                 comprarProducto.Show();
+                 //ComprarOfertar.ComprarProducto comprarProducto = new ComprarOfertar.ComprarProducto(,,,,sesionActual.usuarioActual.usuario_id); //id,string descripcion,float precio,string stock,int usuario_id
+                 //comprarProducto.Show();
             }
             else{
                 //ComprarOfertar.OfertarProducto ofertarProducto = new ComprarOfertar.OfertarProducto();

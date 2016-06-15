@@ -33,11 +33,11 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.txtId = new System.Windows.Forms.TextBox();
+            this.txtDescripcion = new System.Windows.Forms.TextBox();
+            this.txtPrecio = new System.Windows.Forms.TextBox();
+            this.txtCantidad = new System.Windows.Forms.TextBox();
+            this.txtStock = new System.Windows.Forms.TextBox();
             this.btnComprar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -86,44 +86,46 @@
             this.label5.TabIndex = 4;
             this.label5.Text = "Stock";
             // 
-            // textBox1
+            // txtId
             // 
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(133, 6);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(136, 20);
-            this.textBox1.TabIndex = 5;
+            this.txtId.Enabled = false;
+            this.txtId.Location = new System.Drawing.Point(133, 6);
+            this.txtId.Name = "txtId";
+            this.txtId.Size = new System.Drawing.Size(136, 20);
+            this.txtId.TabIndex = 5;
             // 
-            // textBox2
+            // txtDescripcion
             // 
-            this.textBox2.Enabled = false;
-            this.textBox2.Location = new System.Drawing.Point(133, 32);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(136, 20);
-            this.textBox2.TabIndex = 6;
+            this.txtDescripcion.Enabled = false;
+            this.txtDescripcion.Location = new System.Drawing.Point(133, 32);
+            this.txtDescripcion.Name = "txtDescripcion";
+            this.txtDescripcion.Size = new System.Drawing.Size(136, 20);
+            this.txtDescripcion.TabIndex = 6;
             // 
-            // textBox3
+            // txtPrecio
             // 
-            this.textBox3.Enabled = false;
-            this.textBox3.Location = new System.Drawing.Point(133, 58);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(136, 20);
-            this.textBox3.TabIndex = 7;
+            this.txtPrecio.Enabled = false;
+            this.txtPrecio.Location = new System.Drawing.Point(133, 58);
+            this.txtPrecio.Name = "txtPrecio";
+            this.txtPrecio.Size = new System.Drawing.Size(136, 20);
+            this.txtPrecio.TabIndex = 7;
             // 
-            // textBox4
+            // txtCantidad
             // 
-            this.textBox4.Location = new System.Drawing.Point(133, 84);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(136, 20);
-            this.textBox4.TabIndex = 8;
+            this.txtCantidad.BackColor = System.Drawing.Color.PaleGreen;
+            this.txtCantidad.Location = new System.Drawing.Point(133, 84);
+            this.txtCantidad.Name = "txtCantidad";
+            this.txtCantidad.Size = new System.Drawing.Size(136, 20);
+            this.txtCantidad.TabIndex = 8;
+            this.txtCantidad.Text = "0";
             // 
-            // textBox5
+            // txtStock
             // 
-            this.textBox5.Enabled = false;
-            this.textBox5.Location = new System.Drawing.Point(346, 6);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(136, 20);
-            this.textBox5.TabIndex = 9;
+            this.txtStock.Enabled = false;
+            this.txtStock.Location = new System.Drawing.Point(346, 6);
+            this.txtStock.Name = "txtStock";
+            this.txtStock.Size = new System.Drawing.Size(136, 20);
+            this.txtStock.TabIndex = 9;
             // 
             // btnComprar
             // 
@@ -133,6 +135,7 @@
             this.btnComprar.TabIndex = 10;
             this.btnComprar.Text = "Confirmar Compra";
             this.btnComprar.UseVisualStyleBackColor = true;
+            this.btnComprar.Click += new System.EventHandler(this.btnComprar_Click);
             // 
             // ComprarProducto
             // 
@@ -140,18 +143,20 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(504, 117);
             this.Controls.Add(this.btnComprar);
-            this.Controls.Add(this.textBox5);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtStock);
+            this.Controls.Add(this.txtCantidad);
+            this.Controls.Add(this.txtPrecio);
+            this.Controls.Add(this.txtDescripcion);
+            this.Controls.Add(this.txtId);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.MaximizeBox = false;
             this.Name = "ComprarProducto";
             this.Text = "ComprarProducto";
+            this.Load += new System.EventHandler(this.ComprarProducto_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -164,11 +169,11 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox txtId;
+        private System.Windows.Forms.TextBox txtDescripcion;
+        private System.Windows.Forms.TextBox txtPrecio;
+        private System.Windows.Forms.TextBox txtCantidad;
+        private System.Windows.Forms.TextBox txtStock;
         private System.Windows.Forms.Button btnComprar;
     }
 }

@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtOferta = new System.Windows.Forms.TextBox();
+            this.txtPrecio = new System.Windows.Forms.TextBox();
+            this.txtDescripcion = new System.Windows.Forms.TextBox();
+            this.txtId = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -39,36 +39,37 @@
             this.btnOfertar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // textBox4
+            // txtOferta
             // 
-            this.textBox4.Location = new System.Drawing.Point(133, 84);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(136, 20);
-            this.textBox4.TabIndex = 16;
+            this.txtOferta.BackColor = System.Drawing.Color.PaleGreen;
+            this.txtOferta.Location = new System.Drawing.Point(133, 84);
+            this.txtOferta.Name = "txtOferta";
+            this.txtOferta.Size = new System.Drawing.Size(136, 20);
+            this.txtOferta.TabIndex = 16;
             // 
-            // textBox3
+            // txtPrecio
             // 
-            this.textBox3.Enabled = false;
-            this.textBox3.Location = new System.Drawing.Point(133, 58);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(136, 20);
-            this.textBox3.TabIndex = 15;
+            this.txtPrecio.Enabled = false;
+            this.txtPrecio.Location = new System.Drawing.Point(133, 58);
+            this.txtPrecio.Name = "txtPrecio";
+            this.txtPrecio.Size = new System.Drawing.Size(136, 20);
+            this.txtPrecio.TabIndex = 15;
             // 
-            // textBox2
+            // txtDescripcion
             // 
-            this.textBox2.Enabled = false;
-            this.textBox2.Location = new System.Drawing.Point(133, 32);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(136, 20);
-            this.textBox2.TabIndex = 14;
+            this.txtDescripcion.Enabled = false;
+            this.txtDescripcion.Location = new System.Drawing.Point(133, 32);
+            this.txtDescripcion.Name = "txtDescripcion";
+            this.txtDescripcion.Size = new System.Drawing.Size(136, 20);
+            this.txtDescripcion.TabIndex = 14;
             // 
-            // textBox1
+            // txtId
             // 
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(133, 6);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(136, 20);
-            this.textBox1.TabIndex = 13;
+            this.txtId.Enabled = false;
+            this.txtId.Location = new System.Drawing.Point(133, 6);
+            this.txtId.Name = "txtId";
+            this.txtId.Size = new System.Drawing.Size(136, 20);
+            this.txtId.TabIndex = 13;
             // 
             // label4
             // 
@@ -114,23 +115,26 @@
             this.btnOfertar.TabIndex = 17;
             this.btnOfertar.Text = "Ofertar";
             this.btnOfertar.UseVisualStyleBackColor = true;
+            this.btnOfertar.Click += new System.EventHandler(this.btnOfertar_Click);
             // 
             // OfertarProducto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(423, 120);
+            this.ClientSize = new System.Drawing.Size(411, 120);
             this.Controls.Add(this.btnOfertar);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtOferta);
+            this.Controls.Add(this.txtPrecio);
+            this.Controls.Add(this.txtDescripcion);
+            this.Controls.Add(this.txtId);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.MaximizeBox = false;
             this.Name = "OfertarProducto";
             this.Text = "OfertarProducto";
+            this.Load += new System.EventHandler(this.OfertarProducto_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -138,10 +142,10 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtOferta;
+        private System.Windows.Forms.TextBox txtPrecio;
+        private System.Windows.Forms.TextBox txtDescripcion;
+        private System.Windows.Forms.TextBox txtId;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
