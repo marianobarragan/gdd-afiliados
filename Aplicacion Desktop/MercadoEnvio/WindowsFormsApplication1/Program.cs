@@ -24,8 +24,8 @@ namespace MercadoEnvio
             Application.SetCompatibleTextRenderingDefault(false);
 
             //Application.Run(new MercadoEnvio
-            Application.Run(new MercadoEnvio.Generar_Publicación.AltaCompraInmediata(new Sesion(1,"fabian",new Rol("1","nombre rol") )));
-            //Application.Run(new MercadoEnvio.Login.LoginInicial());
+            //Application.Run(new MercadoEnvio.Generar_Publicación.AltaCompraInmediata(new Sesion(1,"fabian",new Rol("1","nombre rol") )));
+            Application.Run(new MercadoEnvio.Login.LoginInicial());
 
             
         }

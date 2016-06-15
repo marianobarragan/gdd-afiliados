@@ -31,12 +31,12 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.chklRubros = new System.Windows.Forms.CheckedListBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtDescripción = new System.Windows.Forms.TextBox();
-            this.btnAccion = new System.Windows.Forms.Button();
-            this.btnLimpiar = new System.Windows.Forms.Button();
             this.btnBuscar = new System.Windows.Forms.Button();
+            this.btnLimpiar = new System.Windows.Forms.Button();
+            this.btnAccion = new System.Windows.Forms.Button();
+            this.txtDescripción = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.chklRubros = new System.Windows.Forms.CheckedListBox();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -62,6 +62,7 @@
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(714, 246);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // groupBox1
             // 
@@ -78,42 +79,19 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Busqueda";
             // 
-            // chklRubros
+            // btnBuscar
             // 
-            this.chklRubros.FormattingEnabled = true;
-            this.chklRubros.Location = new System.Drawing.Point(7, 20);
-            this.chklRubros.Name = "chklRubros";
-            this.chklRubros.ScrollAlwaysVisible = true;
-            this.chklRubros.Size = new System.Drawing.Size(167, 109);
-            this.chklRubros.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(192, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(117, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Descripción (texto libre)";
-            // 
-            // txtDescripción
-            // 
-            this.txtDescripción.Location = new System.Drawing.Point(339, 20);
-            this.txtDescripción.Name = "txtDescripción";
-            this.txtDescripción.Size = new System.Drawing.Size(100, 20);
-            this.txtDescripción.TabIndex = 2;
-            // 
-            // btnAccion
-            // 
-            this.btnAccion.Location = new System.Drawing.Point(580, 20);
-            this.btnAccion.Name = "btnAccion";
-            this.btnAccion.Size = new System.Drawing.Size(119, 33);
-            this.btnAccion.TabIndex = 3;
-            this.btnAccion.UseVisualStyleBackColor = true;
+            this.btnBuscar.Location = new System.Drawing.Point(354, 71);
+            this.btnBuscar.Name = "btnBuscar";
+            this.btnBuscar.Size = new System.Drawing.Size(75, 23);
+            this.btnBuscar.TabIndex = 5;
+            this.btnBuscar.Text = "Buscar";
+            this.btnBuscar.UseVisualStyleBackColor = true;
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
             // 
             // btnLimpiar
             // 
-            this.btnLimpiar.Location = new System.Drawing.Point(580, 105);
+            this.btnLimpiar.Location = new System.Drawing.Point(354, 100);
             this.btnLimpiar.Name = "btnLimpiar";
             this.btnLimpiar.Size = new System.Drawing.Size(75, 23);
             this.btnLimpiar.TabIndex = 4;
@@ -121,15 +99,41 @@
             this.btnLimpiar.UseVisualStyleBackColor = true;
             this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
-            // btnBuscar
+            // btnAccion
             // 
-            this.btnBuscar.Location = new System.Drawing.Point(580, 76);
-            this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.Size = new System.Drawing.Size(75, 23);
-            this.btnBuscar.TabIndex = 5;
-            this.btnBuscar.Text = "Buscar";
-            this.btnBuscar.UseVisualStyleBackColor = true;
-            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
+            this.btnAccion.Location = new System.Drawing.Point(212, 71);
+            this.btnAccion.Name = "btnAccion";
+            this.btnAccion.Size = new System.Drawing.Size(119, 33);
+            this.btnAccion.TabIndex = 3;
+            this.btnAccion.Text = "Siguiente";
+            this.btnAccion.UseVisualStyleBackColor = true;
+            this.btnAccion.Click += new System.EventHandler(this.btnAccion_Click);
+            // 
+            // txtDescripción
+            // 
+            this.txtDescripción.Location = new System.Drawing.Point(354, 20);
+            this.txtDescripción.Name = "txtDescripción";
+            this.txtDescripción.Size = new System.Drawing.Size(100, 20);
+            this.txtDescripción.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(209, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(117, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Descripción (texto libre)";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // chklRubros
+            // 
+            this.chklRubros.FormattingEnabled = true;
+            this.chklRubros.Location = new System.Drawing.Point(7, 20);
+            this.chklRubros.Name = "chklRubros";
+            this.chklRubros.ScrollAlwaysVisible = true;
+            this.chklRubros.Size = new System.Drawing.Size(196, 109);
+            this.chklRubros.TabIndex = 0;
             // 
             // ListadoPublicaciones
             // 

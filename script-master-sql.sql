@@ -582,6 +582,7 @@ GO
 
 /* END TRIGGERS */
 
+
 /* START FUNCTIONS */
 
 CREATE FUNCTION DBME.getHoraDelSistema()
@@ -602,16 +603,16 @@ RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, mail_vendedor NVARCHAR(255), c
 AS 
 BEGIN 
 	INSERT INTO @TABLA_RESULTADO(id_vendedor,mail_vendedor ,cantidad_productos_sin_vender)
-	select ciudad, localidad, codigo_postal from dbme.domicilio						
-	--aca va la funcion posta
 	
-	SELECT TOP 5 c.cliente_id, c.nombre,c.apellido
+	SELECT u.usuario_id, u.mail, SUM(p.stock) as Cantidad_Productos_No_Vendidos 
+	FROM DBME.usuario u JOIN DBME.publicacion p ON(u.usuario_id = p.autor_id)
+	GROUP BY u.usuario_id, u.mail
+	ORDER BY Cantidad_Productos_No_Vendidos DESC
+
 	RETURN
 END;
 GO
 */
-
-
 CREATE FUNCTION DBME.topClientesConMayorCantidadDeProductosComprados(@trimestre TINYINT,@anio INTEGER,@rubro INT)
 RETURNS @TABLA_RESULTADO TABLE ( id_cliente INT, nombre_cliente NVARCHAR(255), apellido_cliente NVARCHAR(255), cantidad_productos_comprados BIGINT)
 AS 
@@ -620,12 +621,38 @@ BEGIN
 	If (@trimestre = 1)
 	BEGIN
 		INSERT INTO @TABLA_RESULTADO(id_cliente,nombre_cliente,apellido_cliente,cantidad_productos_comprados)
-		SELECT TOP 5 c.cliente_id, c.nombre,c.apellido, COUNT(c2.compra_id) as compras_Realizadas from DBME.cliente c JOIN DBME.compra c2 ON (c.cliente_id = c2.autor_id) JOIN DBME.publicacion p ON(c2.publicacion_id = p.publicacion_id)
-		WHERE YEAR(c2.fecha) = @anio AND MONTH(c2.fecha) Between 1 AND 3 AND p.rubro_id = @rubro
-		Group By c.cliente_id, c.nombre, c.apellido
-		Order By compras_Realizadas DESC	
-		END;
-		RETURN
+		SELECT TOP 5 c.cliente_id, c.nombre,c.apellido,  SUM(c2.cantidad) as compras_Realizadas 
+		FROM DBME.cliente c JOIN DBME.compra c2 ON (c.usuario_id = c2.autor_id) JOIN DBME.publicacion p ON(c2.publicacion_id = p.publicacion_id)
+			WHERE YEAR(c2.fecha) = @anio AND MONTH(c2.fecha) Between 1 AND 3 AND p.rubro_id = @rubro
+			Group By c.cliente_id, c.nombre, c.apellido
+			Order By compras_Realizadas DESC	
+	END;
+	If (@trimestre = 2)
+	BEGIN
+		INSERT INTO @TABLA_RESULTADO(id_cliente,nombre_cliente,apellido_cliente,cantidad_productos_comprados)
+		SELECT TOP 5 c.cliente_id, c.nombre,c.apellido,  SUM(c2.cantidad) as compras_Realizadas 
+		FROM DBME.cliente c JOIN DBME.compra c2 ON (c.usuario_id = c2.autor_id) JOIN DBME.publicacion p ON(c2.publicacion_id = p.publicacion_id)
+			WHERE YEAR(c2.fecha) = @anio AND MONTH(c2.fecha) Between 4 AND 6 AND p.rubro_id = @rubro
+			Group By c.cliente_id, c.nombre, c.apellido
+			Order By compras_Realizadas DESC	
+	END;
+	If (@trimestre = 3)
+	BEGIN
+		INSERT INTO @TABLA_RESULTADO(id_cliente,nombre_cliente,apellido_cliente,cantidad_productos_comprados)
+		SELECT TOP 5 c.cliente_id, c.nombre,c.apellido,  SUM(c2.cantidad) as compras_Realizadas 
+		FROM DBME.cliente c JOIN DBME.compra c2 ON (c.usuario_id = c2.autor_id) JOIN DBME.publicacion p ON(c2.publicacion_id = p.publicacion_id)
+			WHERE YEAR(c2.fecha) = @anio AND MONTH(c2.fecha) Between 7 AND 9 AND p.rubro_id = @rubro
+			Group By c.cliente_id, c.nombre, c.apellido
+			Order By compras_Realizadas DESC	
+	END
+	ELSE 
+		INSERT INTO @TABLA_RESULTADO(id_cliente,nombre_cliente,apellido_cliente,cantidad_productos_comprados)
+		SELECT TOP 5 c.cliente_id, c.nombre,c.apellido,  SUM(c2.cantidad) as compras_Realizadas 
+		FROM DBME.cliente c JOIN DBME.compra c2 ON (c.usuario_id = c2.autor_id) JOIN DBME.publicacion p ON(c2.publicacion_id = p.publicacion_id)
+			WHERE YEAR(c2.fecha) = @anio AND MONTH(c2.fecha) Between 10 AND 12 AND p.rubro_id = @rubro
+			Group By c.cliente_id, c.nombre, c.apellido
+			Order By compras_Realizadas DESC	
+	RETURN
 END;
 GO
 
@@ -677,7 +704,6 @@ END;
 GO
 */
 /* END FUNCTIONS */
-
 
 
 /* START PROCEDURES CREACIONALES */

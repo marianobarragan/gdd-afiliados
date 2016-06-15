@@ -178,6 +178,7 @@ namespace MercadoEnvio.Generar_Publicación
                 //(new ConexionSQL()).ejecutarComandoSQL(comando);
 
                 MessageBox.Show("Compra creada exitosamente", "A", MessageBoxButtons.OK);
+
                 this.Close();
             }
             catch (Exception er)
