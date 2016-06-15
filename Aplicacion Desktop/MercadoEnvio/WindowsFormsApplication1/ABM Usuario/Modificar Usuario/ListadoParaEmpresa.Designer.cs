@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkMail = new System.Windows.Forms.CheckBox();
+            this.chkCUIT = new System.Windows.Forms.CheckBox();
+            this.chkRazonSocial = new System.Windows.Forms.CheckBox();
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.txtRazonSocial = new System.Windows.Forms.TextBox();
@@ -38,9 +41,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.chkRazonSocial = new System.Windows.Forms.CheckBox();
-            this.chkCUIT = new System.Windows.Forms.CheckBox();
-            this.chkMail = new System.Windows.Forms.CheckBox();
             this.btnAccion = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -66,9 +66,39 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtrar Busqueda";
             // 
+            // chkMail
+            // 
+            this.chkMail.AutoSize = true;
+            this.chkMail.Location = new System.Drawing.Point(335, 81);
+            this.chkMail.Name = "chkMail";
+            this.chkMail.Size = new System.Drawing.Size(15, 14);
+            this.chkMail.TabIndex = 10;
+            this.chkMail.UseVisualStyleBackColor = true;
+            this.chkMail.CheckedChanged += new System.EventHandler(this.chkMail_CheckedChanged);
+            // 
+            // chkCUIT
+            // 
+            this.chkCUIT.AutoSize = true;
+            this.chkCUIT.Location = new System.Drawing.Point(335, 50);
+            this.chkCUIT.Name = "chkCUIT";
+            this.chkCUIT.Size = new System.Drawing.Size(15, 14);
+            this.chkCUIT.TabIndex = 9;
+            this.chkCUIT.UseVisualStyleBackColor = true;
+            this.chkCUIT.CheckedChanged += new System.EventHandler(this.chkCUIT_CheckedChanged);
+            // 
+            // chkRazonSocial
+            // 
+            this.chkRazonSocial.AutoSize = true;
+            this.chkRazonSocial.Location = new System.Drawing.Point(335, 22);
+            this.chkRazonSocial.Name = "chkRazonSocial";
+            this.chkRazonSocial.Size = new System.Drawing.Size(15, 14);
+            this.chkRazonSocial.TabIndex = 8;
+            this.chkRazonSocial.UseVisualStyleBackColor = true;
+            this.chkRazonSocial.CheckedChanged += new System.EventHandler(this.chkRazonSocial_CheckedChanged);
+            // 
             // btnLimpiar
             // 
-            this.btnLimpiar.Location = new System.Drawing.Point(358, 75);
+            this.btnLimpiar.Location = new System.Drawing.Point(358, 48);
             this.btnLimpiar.Name = "btnLimpiar";
             this.btnLimpiar.Size = new System.Drawing.Size(130, 23);
             this.btnLimpiar.TabIndex = 7;
@@ -78,7 +108,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(358, 43);
+            this.button1.Location = new System.Drawing.Point(358, 16);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(130, 23);
             this.button1.TabIndex = 6;
@@ -144,36 +174,6 @@
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(487, 325);
             this.dataGridView1.TabIndex = 8;
-            // 
-            // chkRazonSocial
-            // 
-            this.chkRazonSocial.AutoSize = true;
-            this.chkRazonSocial.Location = new System.Drawing.Point(335, 22);
-            this.chkRazonSocial.Name = "chkRazonSocial";
-            this.chkRazonSocial.Size = new System.Drawing.Size(15, 14);
-            this.chkRazonSocial.TabIndex = 8;
-            this.chkRazonSocial.UseVisualStyleBackColor = true;
-            this.chkRazonSocial.CheckedChanged += new System.EventHandler(this.chkRazonSocial_CheckedChanged);
-            // 
-            // chkCUIT
-            // 
-            this.chkCUIT.AutoSize = true;
-            this.chkCUIT.Location = new System.Drawing.Point(335, 50);
-            this.chkCUIT.Name = "chkCUIT";
-            this.chkCUIT.Size = new System.Drawing.Size(15, 14);
-            this.chkCUIT.TabIndex = 9;
-            this.chkCUIT.UseVisualStyleBackColor = true;
-            this.chkCUIT.CheckedChanged += new System.EventHandler(this.chkCUIT_CheckedChanged);
-            // 
-            // chkMail
-            // 
-            this.chkMail.AutoSize = true;
-            this.chkMail.Location = new System.Drawing.Point(335, 81);
-            this.chkMail.Name = "chkMail";
-            this.chkMail.Size = new System.Drawing.Size(15, 14);
-            this.chkMail.TabIndex = 10;
-            this.chkMail.UseVisualStyleBackColor = true;
-            this.chkMail.CheckedChanged += new System.EventHandler(this.chkMail_CheckedChanged);
             // 
             // btnAccion
             // 

@@ -17,6 +17,9 @@ namespace MercadoEnvio.ComprarOfertar
         public Sesion sesionActual;
         public List<Rubro> rubros;
         public string queryRubros;
+        public DataTable dt;
+        public int pagina_actual;
+        public int paginas_totales;
 
         public ListadoPublicaciones(Sesion sesion)
         {
@@ -77,15 +80,33 @@ namespace MercadoEnvio.ComprarOfertar
 
             
 
-            DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
+            dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
             if (dt.Rows.Count == 0)
             {
                 MessageBox.Show("No se han encontrado resultados", "Problema", MessageBoxButtons.OK);
                 dataGridView1.DataSource = null;
                 return;
             }
-            dataGridView1.DataSource = dt;
+
+            paginas_totales = dt.Rows.Count / 50;
+            mostrar_pagina(1);
+
             
+        }
+
+        private void mostrar_pagina(int numero_pagina)
+        {
+            DataTable pagina = new DataTable();
+            pagina = dt.Clone();
+
+            int inicio = (numero_pagina - 1) * 50;
+
+            for (int i = inicio; i < (inicio + 50); i++)
+            {
+                pagina.ImportRow(dt.Rows[i]);
+            }
+
+            dataGridView1.DataSource = pagina;
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
@@ -120,6 +141,46 @@ namespace MercadoEnvio.ComprarOfertar
             else{
                 //ComprarOfertar.OfertarProducto ofertarProducto = new ComprarOfertar.OfertarProducto();
                 //ofertarProducto.Show();
+
+            }
+        }
+
+  
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (pagina_actual == 1) {
+                return;
+            }
+            pagina_actual -= 1;
+            try
+            {
+                mostrar_pagina(pagina_actual);
+            }
+            catch { 
+            
+            }
+
+        }
+
+        private void btnSiguiente_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSiguiente_Click_1(object sender, EventArgs e)
+        {
+            if (pagina_actual >= paginas_totales)
+            {
+                return;
+            }
+            pagina_actual += 1;
+            try
+            {
+                mostrar_pagina(pagina_actual);
+            }
+            catch
+            {
 
             }
         }

@@ -31,16 +31,14 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnSiguiente = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.btnAccion = new System.Windows.Forms.Button();
             this.btnAnterior = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.btnLimpiar = new System.Windows.Forms.Button();
-            this.btnAccion = new System.Windows.Forms.Button();
             this.txtDescripción = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.chklRubros = new System.Windows.Forms.CheckedListBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -50,6 +48,7 @@
             // 
             this.groupBox2.Controls.Add(this.btnSiguiente);
             this.groupBox2.Controls.Add(this.dataGridView1);
+            this.groupBox2.Controls.Add(this.btnAccion);
             this.groupBox2.Controls.Add(this.btnAnterior);
             this.groupBox2.Location = new System.Drawing.Point(13, 162);
             this.groupBox2.Name = "groupBox2";
@@ -60,10 +59,15 @@
             // 
             // btnSiguiente
             // 
-            this.btnSiguiente.Location = new System.Drawing.Point(0, 0);
+            this.btnSiguiente.BackColor = System.Drawing.Color.Crimson;
+            this.btnSiguiente.Font = new System.Drawing.Font("Wingdings", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.btnSiguiente.Location = new System.Drawing.Point(477, 342);
             this.btnSiguiente.Name = "btnSiguiente";
-            this.btnSiguiente.Size = new System.Drawing.Size(75, 23);
-            this.btnSiguiente.TabIndex = 0;
+            this.btnSiguiente.Size = new System.Drawing.Size(119, 45);
+            this.btnSiguiente.TabIndex = 12;
+            this.btnSiguiente.Text = "è";
+            this.btnSiguiente.UseVisualStyleBackColor = false;
+            this.btnSiguiente.Click += new System.EventHandler(this.btnSiguiente_Click_1);
             // 
             // dataGridView1
             // 
@@ -77,20 +81,32 @@
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
+            // btnAccion
+            // 
+            this.btnAccion.Location = new System.Drawing.Point(602, 342);
+            this.btnAccion.Name = "btnAccion";
+            this.btnAccion.Size = new System.Drawing.Size(119, 33);
+            this.btnAccion.TabIndex = 3;
+            this.btnAccion.Text = "Siguiente";
+            this.btnAccion.UseVisualStyleBackColor = true;
+            this.btnAccion.Click += new System.EventHandler(this.btnAccion_Click);
+            // 
             // btnAnterior
             // 
-            this.btnAnterior.Location = new System.Drawing.Point(0, 0);
+            this.btnAnterior.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.btnAnterior.Font = new System.Drawing.Font("Wingdings", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.btnAnterior.Location = new System.Drawing.Point(352, 342);
             this.btnAnterior.Name = "btnAnterior";
-            this.btnAnterior.Size = new System.Drawing.Size(75, 23);
-            this.btnAnterior.TabIndex = 1;
+            this.btnAnterior.Size = new System.Drawing.Size(119, 45);
+            this.btnAnterior.TabIndex = 11;
+            this.btnAnterior.Text = "ç";
+            this.btnAnterior.UseVisualStyleBackColor = false;
+            this.btnAnterior.Click += new System.EventHandler(this.button1_Click);
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button3);
-            this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.btnBuscar);
             this.groupBox1.Controls.Add(this.btnLimpiar);
-            this.groupBox1.Controls.Add(this.btnAccion);
             this.groupBox1.Controls.Add(this.txtDescripción);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.chklRubros);
@@ -103,9 +119,9 @@
             // 
             // btnBuscar
             // 
-            this.btnBuscar.Location = new System.Drawing.Point(368, 80);
+            this.btnBuscar.Location = new System.Drawing.Point(616, 20);
             this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.Size = new System.Drawing.Size(75, 23);
+            this.btnBuscar.Size = new System.Drawing.Size(83, 23);
             this.btnBuscar.TabIndex = 5;
             this.btnBuscar.Text = "Buscar";
             this.btnBuscar.UseVisualStyleBackColor = true;
@@ -113,29 +129,19 @@
             // 
             // btnLimpiar
             // 
-            this.btnLimpiar.Location = new System.Drawing.Point(276, 80);
+            this.btnLimpiar.Location = new System.Drawing.Point(616, 49);
             this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(75, 23);
+            this.btnLimpiar.Size = new System.Drawing.Size(83, 23);
             this.btnLimpiar.TabIndex = 4;
             this.btnLimpiar.Text = "Limpiar";
             this.btnLimpiar.UseVisualStyleBackColor = true;
             this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
-            // btnAccion
-            // 
-            this.btnAccion.Location = new System.Drawing.Point(590, 20);
-            this.btnAccion.Name = "btnAccion";
-            this.btnAccion.Size = new System.Drawing.Size(119, 33);
-            this.btnAccion.TabIndex = 3;
-            this.btnAccion.Text = "Siguiente";
-            this.btnAccion.UseVisualStyleBackColor = true;
-            this.btnAccion.Click += new System.EventHandler(this.btnAccion_Click);
-            // 
             // txtDescripción
             // 
             this.txtDescripción.Location = new System.Drawing.Point(354, 20);
             this.txtDescripción.Name = "txtDescripción";
-            this.txtDescripción.Size = new System.Drawing.Size(100, 20);
+            this.txtDescripción.Size = new System.Drawing.Size(117, 20);
             this.txtDescripción.TabIndex = 2;
             // 
             // label1
@@ -156,28 +162,6 @@
             this.chklRubros.ScrollAlwaysVisible = true;
             this.chklRubros.Size = new System.Drawing.Size(196, 109);
             this.chklRubros.TabIndex = 0;
-            // 
-            // button3
-            // 
-            this.button3.BackColor = System.Drawing.Color.Crimson;
-            this.button3.Font = new System.Drawing.Font("Wingdings", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.button3.Location = new System.Drawing.Point(590, 84);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(119, 45);
-            this.button3.TabIndex = 12;
-            this.button3.Text = "è";
-            this.button3.UseVisualStyleBackColor = false;
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.button1.Font = new System.Drawing.Font("Wingdings", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.button1.Location = new System.Drawing.Point(465, 84);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(119, 45);
-            this.button1.TabIndex = 11;
-            this.button1.Text = "ç";
-            this.button1.UseVisualStyleBackColor = false;
             // 
             // ListadoPublicaciones
             // 
@@ -213,7 +197,5 @@
         private System.Windows.Forms.Button btnBuscar;
         private System.Windows.Forms.Button btnSiguiente;
         private System.Windows.Forms.Button btnAnterior;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button1;
     }
 }
