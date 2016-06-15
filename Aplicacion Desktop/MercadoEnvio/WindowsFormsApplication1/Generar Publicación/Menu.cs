@@ -41,6 +41,8 @@ namespace MercadoEnvio.Generar_Publicación
                     return;
                     //compra inmediata
                 case 1:
+                    AltaSubasta subasta = new AltaSubasta(sesion);
+                    subasta.Show();
                     return;
                     //subasta
                 case 2:

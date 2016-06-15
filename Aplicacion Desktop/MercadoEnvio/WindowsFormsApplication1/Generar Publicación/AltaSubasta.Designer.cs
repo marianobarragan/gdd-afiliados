@@ -1,6 +1,6 @@
 ﻿namespace MercadoEnvio.Generar_Publicación
 {
-    partial class AltaCompraInmediata
+    partial class AltaSubasta
     {
         /// <summary>
         /// Required designer variable.
@@ -29,11 +29,20 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.dateFechaInicio = new System.Windows.Forms.DateTimePicker();
+            this.label14 = new System.Windows.Forms.Label();
             this.cmbEstado = new System.Windows.Forms.ComboBox();
             this.chkPermitePreguntas = new System.Windows.Forms.CheckBox();
             this.dateFechaVencimiento = new System.Windows.Forms.DateTimePicker();
             this.cmbRubros = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lblPorcentaje = new System.Windows.Forms.Label();
+            this.lblPrecio = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2l = new System.Windows.Forms.Label();
+            this.lpo = new System.Windows.Forms.Label();
+            this.lblcosto_envio = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.txtCostoTotal = new System.Windows.Forms.TextBox();
             this.chkRealizaEnvio = new System.Windows.Forms.CheckBox();
@@ -52,15 +61,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtDescripción = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.lblcosto_envio = new System.Windows.Forms.Label();
-            this.lpo = new System.Windows.Forms.Label();
-            this.label2l = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.lblPrecio = new System.Windows.Forms.Label();
-            this.lblPorcentaje = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.dateFechaInicio = new System.Windows.Forms.DateTimePicker();
-            this.label10 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -89,10 +89,34 @@
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(674, 369);
-            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Crear Compra Inmediata";
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            this.groupBox1.Text = "Crear Subasta";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(133, 199);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(174, 13);
+            this.label10.TabIndex = 40;
+            this.label10.Text = "Ingrese el precio con coma decimal";
+            // 
+            // dateFechaInicio
+            // 
+            this.dateFechaInicio.Location = new System.Drawing.Point(133, 258);
+            this.dateFechaInicio.Name = "dateFechaInicio";
+            this.dateFechaInicio.Size = new System.Drawing.Size(226, 20);
+            this.dateFechaInicio.TabIndex = 39;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(20, 258);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(80, 13);
+            this.label14.TabIndex = 38;
+            this.label14.Text = "Fecha de Inicio";
             // 
             // cmbEstado
             // 
@@ -102,7 +126,7 @@
             "BORRADOR",
             "ACTIVA",
             "PAUSADA"});
-            this.cmbEstado.Location = new System.Drawing.Point(135, 313);
+            this.cmbEstado.Location = new System.Drawing.Point(135, 323);
             this.cmbEstado.Name = "cmbEstado";
             this.cmbEstado.Size = new System.Drawing.Size(146, 21);
             this.cmbEstado.TabIndex = 37;
@@ -118,7 +142,7 @@
             // 
             // dateFechaVencimiento
             // 
-            this.dateFechaVencimiento.Location = new System.Drawing.Point(133, 277);
+            this.dateFechaVencimiento.Location = new System.Drawing.Point(133, 287);
             this.dateFechaVencimiento.Name = "dateFechaVencimiento";
             this.dateFechaVencimiento.Size = new System.Drawing.Size(226, 20);
             this.dateFechaVencimiento.TabIndex = 35;
@@ -127,7 +151,7 @@
             // 
             this.cmbRubros.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbRubros.FormattingEnabled = true;
-            this.cmbRubros.Location = new System.Drawing.Point(135, 208);
+            this.cmbRubros.Location = new System.Drawing.Point(135, 218);
             this.cmbRubros.Name = "cmbRubros";
             this.cmbRubros.Size = new System.Drawing.Size(225, 21);
             this.cmbRubros.TabIndex = 33;
@@ -153,6 +177,59 @@
             this.groupBox2.TabIndex = 31;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Costo Publicacion";
+            // 
+            // lblPorcentaje
+            // 
+            this.lblPorcentaje.AutoSize = true;
+            this.lblPorcentaje.Location = new System.Drawing.Point(102, 99);
+            this.lblPorcentaje.Name = "lblPorcentaje";
+            this.lblPorcentaje.Size = new System.Drawing.Size(41, 13);
+            this.lblPorcentaje.TabIndex = 33;
+            this.lblPorcentaje.Text = "label14";
+            // 
+            // lblPrecio
+            // 
+            this.lblPrecio.AutoSize = true;
+            this.lblPrecio.Location = new System.Drawing.Point(102, 69);
+            this.lblPrecio.Name = "lblPrecio";
+            this.lblPrecio.Size = new System.Drawing.Size(41, 13);
+            this.lblPrecio.TabIndex = 32;
+            this.lblPrecio.Text = "label14";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(102, 69);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(0, 13);
+            this.label3.TabIndex = 31;
+            // 
+            // label2l
+            // 
+            this.label2l.AutoSize = true;
+            this.label2l.Location = new System.Drawing.Point(16, 69);
+            this.label2l.Name = "label2l";
+            this.label2l.Size = new System.Drawing.Size(37, 13);
+            this.label2l.TabIndex = 30;
+            this.label2l.Text = "Precio";
+            // 
+            // lpo
+            // 
+            this.lpo.AutoSize = true;
+            this.lpo.Location = new System.Drawing.Point(16, 99);
+            this.lpo.Name = "lpo";
+            this.lpo.Size = new System.Drawing.Size(58, 13);
+            this.lpo.TabIndex = 29;
+            this.lpo.Text = "Porcentaje";
+            // 
+            // lblcosto_envio
+            // 
+            this.lblcosto_envio.AutoSize = true;
+            this.lblcosto_envio.Location = new System.Drawing.Point(99, 156);
+            this.lblcosto_envio.Name = "lblcosto_envio";
+            this.lblcosto_envio.Size = new System.Drawing.Size(35, 13);
+            this.lblcosto_envio.TabIndex = 28;
+            this.lblcosto_envio.Text = "label3";
             // 
             // label1
             // 
@@ -181,7 +258,6 @@
             this.chkRealizaEnvio.Size = new System.Drawing.Size(15, 14);
             this.chkRealizaEnvio.TabIndex = 25;
             this.chkRealizaEnvio.UseVisualStyleBackColor = true;
-            this.chkRealizaEnvio.CheckedChanged += new System.EventHandler(this.chkRealizaEnvio_CheckedChanged);
             // 
             // cmbVisibilidad
             // 
@@ -191,7 +267,6 @@
             this.cmbVisibilidad.Name = "cmbVisibilidad";
             this.cmbVisibilidad.Size = new System.Drawing.Size(121, 21);
             this.cmbVisibilidad.TabIndex = 24;
-            this.cmbVisibilidad.SelectedIndexChanged += new System.EventHandler(this.cmbVisibilidad_SelectedIndexChanged);
             // 
             // label7
             // 
@@ -223,7 +298,7 @@
             // txtPrecio
             // 
             this.txtPrecio.BackColor = System.Drawing.Color.PaleGreen;
-            this.txtPrecio.Location = new System.Drawing.Point(134, 170);
+            this.txtPrecio.Location = new System.Drawing.Point(134, 180);
             this.txtPrecio.MaxLength = 254;
             this.txtPrecio.Name = "txtPrecio";
             this.txtPrecio.Size = new System.Drawing.Size(122, 20);
@@ -232,7 +307,7 @@
             // txtStock
             // 
             this.txtStock.BackColor = System.Drawing.Color.PaleGreen;
-            this.txtStock.Location = new System.Drawing.Point(134, 140);
+            this.txtStock.Location = new System.Drawing.Point(134, 150);
             this.txtStock.MaxLength = 254;
             this.txtStock.Name = "txtStock";
             this.txtStock.Size = new System.Drawing.Size(122, 20);
@@ -260,7 +335,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(21, 313);
+            this.label11.Location = new System.Drawing.Point(21, 323);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(40, 13);
             this.label11.TabIndex = 21;
@@ -269,7 +344,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(21, 217);
+            this.label8.Location = new System.Drawing.Point(21, 227);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(36, 13);
             this.label8.TabIndex = 18;
@@ -278,16 +353,16 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(20, 178);
+            this.label6.Location = new System.Drawing.Point(20, 188);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(37, 13);
+            this.label6.Size = new System.Drawing.Size(64, 13);
             this.label6.TabIndex = 16;
-            this.label6.Text = "Precio";
+            this.label6.Text = "Valor Inicial:";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(21, 277);
+            this.label5.Location = new System.Drawing.Point(21, 287);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(98, 13);
             this.label5.TabIndex = 15;
@@ -296,7 +371,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 143);
+            this.label2.Location = new System.Drawing.Point(20, 153);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 13;
@@ -304,12 +379,12 @@
             // 
             // txtDescripción
             // 
-            this.txtDescripción.Location = new System.Drawing.Point(93, 31);
+            this.txtDescripción.Location = new System.Drawing.Point(134, 31);
             this.txtDescripción.MaxLength = 254;
             this.txtDescripción.Multiline = true;
             this.txtDescripción.Name = "txtDescripción";
             this.txtDescripción.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDescripción.Size = new System.Drawing.Size(267, 88);
+            this.txtDescripción.Size = new System.Drawing.Size(226, 111);
             this.txtDescripción.TabIndex = 12;
             // 
             // label4
@@ -321,95 +396,17 @@
             this.label4.TabIndex = 11;
             this.label4.Text = "Descripción";
             // 
-            // lblcosto_envio
-            // 
-            this.lblcosto_envio.AutoSize = true;
-            this.lblcosto_envio.Location = new System.Drawing.Point(99, 156);
-            this.lblcosto_envio.Name = "lblcosto_envio";
-            this.lblcosto_envio.Size = new System.Drawing.Size(35, 13);
-            this.lblcosto_envio.TabIndex = 28;
-            this.lblcosto_envio.Text = "label3";
-            // 
-            // lpo
-            // 
-            this.lpo.AutoSize = true;
-            this.lpo.Location = new System.Drawing.Point(16, 99);
-            this.lpo.Name = "lpo";
-            this.lpo.Size = new System.Drawing.Size(58, 13);
-            this.lpo.TabIndex = 29;
-            this.lpo.Text = "Porcentaje";
-            // 
-            // label2l
-            // 
-            this.label2l.AutoSize = true;
-            this.label2l.Location = new System.Drawing.Point(16, 69);
-            this.label2l.Name = "label2l";
-            this.label2l.Size = new System.Drawing.Size(37, 13);
-            this.label2l.TabIndex = 30;
-            this.label2l.Text = "Precio";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(102, 69);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(0, 13);
-            this.label3.TabIndex = 31;
-            // 
-            // lblPrecio
-            // 
-            this.lblPrecio.AutoSize = true;
-            this.lblPrecio.Location = new System.Drawing.Point(102, 69);
-            this.lblPrecio.Name = "lblPrecio";
-            this.lblPrecio.Size = new System.Drawing.Size(41, 13);
-            this.lblPrecio.TabIndex = 32;
-            this.lblPrecio.Text = "label14";
-            // 
-            // lblPorcentaje
-            // 
-            this.lblPorcentaje.AutoSize = true;
-            this.lblPorcentaje.Location = new System.Drawing.Point(102, 99);
-            this.lblPorcentaje.Name = "lblPorcentaje";
-            this.lblPorcentaje.Size = new System.Drawing.Size(41, 13);
-            this.lblPorcentaje.TabIndex = 33;
-            this.lblPorcentaje.Text = "label14";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(20, 248);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(80, 13);
-            this.label14.TabIndex = 38;
-            this.label14.Text = "Fecha de Inicio";
-            // 
-            // dateFechaInicio
-            // 
-            this.dateFechaInicio.Location = new System.Drawing.Point(133, 248);
-            this.dateFechaInicio.Name = "dateFechaInicio";
-            this.dateFechaInicio.Size = new System.Drawing.Size(226, 20);
-            this.dateFechaInicio.TabIndex = 39;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(133, 189);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(174, 13);
-            this.label10.TabIndex = 40;
-            this.label10.Text = "Ingrese el precio con coma decimal";
-            // 
-            // AltaCompraInmediata
+            // AltaSubasta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.ClientSize = new System.Drawing.Size(696, 393);
+            this.ClientSize = new System.Drawing.Size(699, 392);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
-            this.Name = "AltaCompraInmediata";
-            this.Text = "AltaCompraInmediata";
-            this.Load += new System.EventHandler(this.AltaCompraInmediata_Load);
+            this.Name = "AltaSubasta";
+            this.Text = "AltaSubasta";
+            this.Load += new System.EventHandler(this.AltaSubasta_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -421,37 +418,37 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtDescripción;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Button cmdGenerarCompra;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.DateTimePicker dateFechaInicio;
+        private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ComboBox cmbEstado;
         private System.Windows.Forms.CheckBox chkPermitePreguntas;
         private System.Windows.Forms.DateTimePicker dateFechaVencimiento;
         private System.Windows.Forms.ComboBox cmbRubros;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label lblPorcentaje;
+        private System.Windows.Forms.Label lblPrecio;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2l;
+        private System.Windows.Forms.Label lpo;
+        private System.Windows.Forms.Label lblcosto_envio;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtCostoTotal;
         private System.Windows.Forms.CheckBox chkRealizaEnvio;
         private System.Windows.Forms.ComboBox cmbVisibilidad;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox txtPrecio;
         private System.Windows.Forms.TextBox txtStock;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label lblcosto_envio;
-        private System.Windows.Forms.Label label2l;
-        private System.Windows.Forms.Label lpo;
-        private System.Windows.Forms.Label lblPrecio;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label lblPorcentaje;
-        private System.Windows.Forms.DateTimePicker dateFechaInicio;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button cmdGenerarCompra;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtDescripción;
+        private System.Windows.Forms.Label label4;
     }
 }

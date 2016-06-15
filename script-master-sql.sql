@@ -200,7 +200,6 @@ BEGIN
 	
 	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE ROL');
 	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE USUARIOS');
-	--INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE RUBRO');
 	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('ABM DE VISIBILIDAD DE PUBLICACION');
 	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('GENERAR PUBLICACION');
 	INSERT INTO DBME.funcionalidad (descripcion) VALUES ('COMPRAR/OFERTAR');
@@ -230,12 +229,17 @@ BEGIN
 	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id)
 	SELECT 1,funcionalidad_id
 	FROM DBME.funcionalidad
-	UNION
-	SELECT 2,funcionalidad_id
-	FROM DBME.funcionalidad
-	UNION
-	SELECT 3,funcionalidad_id
-	FROM DBME.funcionalidad
+	
+	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id) VALUES (2,4)
+	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id) VALUES (2,5)
+	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id) VALUES (2,6)
+	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id) VALUES (2,7)
+	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id) VALUES (2,8)
+	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id) VALUES (2,9)
+	
+	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id) VALUES (3,4)
+	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id) VALUES (3,8)
+	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id) VALUES (3,9)
 
 END;
 GO
@@ -265,7 +269,7 @@ BEGIN
 
 
 	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id,fecha_creacion,telefono,es_nuevo)
-	SELECT DISTINCT Publ_Cli_Mail,Publ_Cli_Mail,CONVERT(NVARCHAR(255),Publ_Cli_Dni),1,0, d.domicilio_id ,NULL,NULL,1
+	SELECT DISTINCT Publ_Cli_Mail,Publ_Cli_Mail,HASHBYTES('SHA2_256',Publ_Cli_Mail),1,0, d.domicilio_id ,NULL,NULL,1
 	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Cli_Cod_Postal = d.codigo_postal)
 	WHERE Publ_Cli_Mail IS NOT NULL
 	
@@ -274,7 +278,7 @@ BEGIN
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Cli_Mail = u.mail)
 	
 	
-	UPDATE DBME.usuario SET password = SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', password)), 3, 150)
+	--UPDATE DBME.usuario SET password = SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', password)), 3, 250)
 
 		
 END;
@@ -285,7 +289,7 @@ AS
 BEGIN
 	
 	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id ,fecha_creacion,telefono,es_nuevo)
-	SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Mail,Publ_Empresa_Cuit,1,0, d.domicilio_id ,NULL,NULL,1
+	SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Mail,HASHBYTES('SHA2_256',Publ_Empresa_Mail),1,0, d.domicilio_id ,NULL,NULL,1
 	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Empresa_Cod_Postal = d.codigo_postal)
 	WHERE Publ_Empresa_Mail IS NOT NULL
 	
@@ -293,7 +297,7 @@ BEGIN
 	SELECT DISTINCT u.usuario_id,Publ_Empresa_Razon_Social,Publ_Empresa_Cuit,Publ_Empresa_Fecha_Creacion,1
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Empresa_Mail = u.mail) 
 
-	UPDATE DBME.usuario SET password = SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', password)), 3, 150) 
+	--UPDATE DBME.usuario SET password = SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', password)), 3, 250) 
 	
 END;
 GO
@@ -749,7 +753,7 @@ BEGIN
 	EXECUTE DBME.crearDomicilio @ciudad,@localidad,@codigo_postal,@piso,@departamento,@domicilio_calle,@numero_calle,@domicilio_id OUT
 
 	INSERT INTO DBME.usuario(username,password,habilitado,cantidad_intentos_fallidos,mail,domicilio_id,fecha_creacion,telefono,es_nuevo)
-	VALUES (@username,@password,1,0,@mail,@domicilio_id,GETDATE(),@telefono,1)
+	VALUES (@username,HASHBYTES('SHA2_256',@password),1,0,@mail,@domicilio_id,GETDATE(),@telefono,1)
 
 	SET @usuario_id = SCOPE_IDENTITY()
 END;
@@ -833,7 +837,7 @@ BEGIN
 
 	DECLARE @usuario_id AS INT
 										--w23e encriptado
-	EXECUTE DBME.crearUsuario 'admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, @usuario_id OUT
+	EXECUTE DBME.crearUsuario 'admin','w23e',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, @usuario_id OUT
 	INSERT INTO DBME.administrador(nombre,apellido,usuario_id)
 	VALUES ('Administrador','General',@usuario_id)
 	INSERT INTO DBME.rol_x_usuario (usuario_id,rol_id)
@@ -1052,13 +1056,22 @@ BEGIN
 	DECLARE @u_password NVARCHAR(255)
 	DECLARE @u_habilitado bit
 	DECLARE @cantidad_intentos_fallidos tinyint
-	DECLARE @mensaje_error varchar(100)
+	DECLARE @mensaje_error varchar(300)
 
-	SELECT @u_id = DBME.usuario.usuario_id, @u_password = usuario.password, @u_habilitado = habilitado, @cantidad_intentos_fallidos = DBME.usuario.cantidad_intentos_fallidos
-	FROM DBME.usuario
-	WHERE DBME.usuario.username = @username 
+	SET @contrasenia = HASHBYTES('SHA2_256',@contrasenia)
 
 	
+	SELECT @u_id = usuario_id, @u_password = password, @u_habilitado = habilitado, @cantidad_intentos_fallidos = cantidad_intentos_fallidos
+	FROM DBME.usuario
+	WHERE DBME.usuario.username = @username 
+	
+	/*
+	SELECT @u_id = DBME.usuario.usuario_id, @u_password = usuario.password, @u_habilitado = habilitado, @cantidad_intentos_fallidos = DBME.usuario.cantidad_intentos_fallidos
+	FROM DBME.usuario
+	WHERE DBME.usuario.username = @username
+	*/
+
+
 	IF (@U_id IS NULL)
 	BEGIN
 		-- no se encontro usuario
@@ -1089,7 +1102,7 @@ BEGIN
 		END
 		ELSE
 		BEGIN 
-			SET @mensaje_error = 'Contrasenia incorrecta'
+			SET @mensaje_error = 'Contrasenia incorrecta' +'u_password es ' + @u_password + ' la contrasenia es: '+ @contrasenia
 			RAISERROR(@mensaje_error, 12, 1)
 		
 		END
@@ -1120,14 +1133,13 @@ END;
 GO
 
 CREATE PROCEDURE DBME.crearCompraInmediata (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), @rubro_id INT, @visibilidad_id INT, @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit)
-
 AS
 BEGIN
 
 	DECLARE @costo AS DECIMAL(10,2)
 	DECLARE @mensaje_error AS NVARCHAR(99)
 	
-
+	/*
 	BEGIN TRY
 		BEGIN TRANSACTION	
 		
@@ -1143,6 +1155,7 @@ BEGIN
 		ROLLBACK TRANSACTION 
 	
 	END CATCH
+	*/
 /*  
 	costo DECIMAL(10,2),
 	rubro_id INT FOREIGN KEY REFERENCES DBME.rubro(rubro_id),
@@ -1176,6 +1189,6 @@ GO
 
 /* END PROCEDURES DOMINIO*/
 
-INSERT INTO DBME.reloj (hora_actual) VALUES(GETDATE())
+--INSERT INTO DBME.reloj (hora_actual) VALUES(GETDATE())
 
 -- COMO EJECUTAR FUNCIONES select * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2015,'1')

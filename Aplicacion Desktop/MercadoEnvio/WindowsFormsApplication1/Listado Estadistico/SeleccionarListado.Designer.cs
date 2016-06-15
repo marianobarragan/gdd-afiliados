@@ -42,6 +42,7 @@
             this.btnVolver.TabIndex = 5;
             this.btnVolver.Text = "Volver";
             this.btnVolver.UseVisualStyleBackColor = true;
+            this.btnVolver.Click += new System.EventHandler(this.btnVolver_Click);
             // 
             // btnIrVista
             // 

@@ -58,7 +58,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(366, 304);
+            this.groupBox1.Size = new System.Drawing.Size(359, 304);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Calificar";
@@ -171,8 +171,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(501, 319);
+            this.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.ClientSize = new System.Drawing.Size(381, 327);
             this.Controls.Add(this.groupBox1);
+            this.MaximizeBox = false;
             this.Name = "CalificarAlVendedor";
             this.Text = "CalificarAlVendedor";
             this.Load += new System.EventHandler(this.CalificarAlVendedor_Load);

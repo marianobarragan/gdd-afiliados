@@ -206,11 +206,17 @@
     <Compile Include="Domain\Usuario.cs" />
     <Compile Include="Domain\Visibilidad.cs" />
     <Compile Include="Domain\Visibilidad2.cs" />
-    <Compile Include="Facturas\Form1.cs">
+    <Compile Include="Facturas\DetalleFactura.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Facturas\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Facturas\DetalleFactura.Designer.cs">
+      <DependentUpon>DetalleFactura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Facturas\ListadoFacturas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Facturas\ListadoFacturas.Designer.cs">
+      <DependentUpon>ListadoFacturas.cs</DependentUpon>
     </Compile>
     <Compile Include="GD1C2016DataSet.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -222,6 +228,12 @@
     </Compile>
     <Compile Include="Generar Publicación\AltaCompraInmediata.Designer.cs">
       <DependentUpon>AltaCompraInmediata.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Generar Publicación\AltaSubasta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generar Publicación\AltaSubasta.Designer.cs">
+      <DependentUpon>AltaSubasta.cs</DependentUpon>
     </Compile>
     <Compile Include="Generar Publicación\Menu.cs">
       <SubType>Form</SubType>
@@ -354,8 +366,23 @@
     <EmbeddedResource Include="ABM Visibilidad\ModificarVisibilidad.resx">
       <DependentUpon>ModificarVisibilidad.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Calificar\CalificarAlVendedor.resx">
+      <DependentUpon>CalificarAlVendedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Calificar\ListadoDePublicacionesSinCalificar.resx">
+      <DependentUpon>ListadoDePublicacionesSinCalificar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Facturas\DetalleFactura.resx">
+      <DependentUpon>DetalleFactura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Facturas\ListadoFacturas.resx">
+      <DependentUpon>ListadoFacturas.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicación\AltaCompraInmediata.resx">
       <DependentUpon>AltaCompraInmediata.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generar Publicación\AltaSubasta.resx">
+      <DependentUpon>AltaSubasta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicación\Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>

@@ -8,13 +8,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1.Facturas
+namespace MercadoEnvio.Facturas
 {
-    public partial class Form1 : Form
+    public partial class DetalleFactura : Form
     {
-        public Form1()
+
+        public int factura_id;
+        public DetalleFactura(int id2)
         {
+            factura_id = id2;
             InitializeComponent();
+        }
+
+        private void DetalleFactura_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

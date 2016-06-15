@@ -16,7 +16,7 @@ namespace MercadoEnvio.Controller
     {
         public Usuario loginUsuario(String usuario, String contraseña){
             
-            string comando = "execute dbme.loginUsuario '" + usuario + "', '" + new Encriptador().getHash(contraseña) + "'";
+            string comando = "execute dbme.loginUsuario '" + usuario + "', '" + contraseña + "'";
             DataTable data = (new ConexionSQL()).cargarTablaSQL(comando);
 
             // acafalta obtener el objeto usuario a partir de la data

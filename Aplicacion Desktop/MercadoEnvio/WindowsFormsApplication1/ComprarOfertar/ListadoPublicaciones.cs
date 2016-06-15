@@ -117,7 +117,7 @@ namespace MercadoEnvio.ComprarOfertar
                  ComprarOfertar.ComprarProducto comprarProducto = new ComprarOfertar.ComprarProducto();
                  comprarProducto.Show();
             }
-            else
+            else{
                 //ComprarOfertar.OfertarProducto ofertarProducto = new ComprarOfertar.OfertarProducto();
                 //ofertarProducto.Show();
 

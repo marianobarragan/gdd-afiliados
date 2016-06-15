@@ -61,12 +61,6 @@ namespace MercadoEnvio.VistaPrincipal
                 * */
            
             }
-            if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "LISTADO ESTADISTICO")
-            {
-                Listado_Estadistico.SeleccionarListado listadoEstadistico = new Listado_Estadistico.SeleccionarListado();
-                listadoEstadistico.Show();
-            }
-
 
             if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "GENERAR PUBLICACION")
             {
@@ -82,6 +76,31 @@ namespace MercadoEnvio.VistaPrincipal
                 }
                 return;
             }
+
+            if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "HISTORIAL DEL CLIENTE")
+            {
+                Historial_Cliente.HistorialDelCliente historial = new Historial_Cliente.HistorialDelCliente(sesion.usuarioActual.usuario_id);
+                historial.Show();
+            }
+
+            if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "CALIFICAR AL VENDEDOR")
+            {
+                Calificar.ListadoDePublicacionesSinCalificar lst = new Calificar.ListadoDePublicacionesSinCalificar(sesion.usuarioActual.usuario_id);
+                lst.Show();
+            }
+
+            if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "CONSULTA DE FACTURAS REALIZADAS AL VENDEDOR")
+            {
+                Facturas.ListadoFacturas facturas = new Facturas.ListadoFacturas(sesion.usuarioActual.usuario_id);
+                facturas.Show();
+            }
+
+            if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "LISTADO ESTADISTICO")
+            {
+                Listado_Estadistico.SeleccionarListado listadoEstadistico = new Listado_Estadistico.SeleccionarListado();
+                listadoEstadistico.Show();
+            }
+            
         }
 
         private bool poseeMasDeTresCompras() {

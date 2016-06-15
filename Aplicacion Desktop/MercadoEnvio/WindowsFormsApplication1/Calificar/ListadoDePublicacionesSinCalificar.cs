@@ -13,6 +13,7 @@ namespace MercadoEnvio.Calificar
     public partial class ListadoDePublicacionesSinCalificar : Form
     {
         public int idCliente;
+
         public ListadoDePublicacionesSinCalificar(int usuario_id)
         {
             InitializeComponent();

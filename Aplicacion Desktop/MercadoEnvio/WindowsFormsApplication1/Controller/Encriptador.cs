@@ -9,6 +9,7 @@ namespace MercadoEnvio.Controller
 {
     class Encriptador
     {
+        /*
         public String getHash(String input)
         {
             
@@ -18,7 +19,7 @@ namespace MercadoEnvio.Controller
             return BitConverter.ToString(inputHashBytes).Replace("-", String.Empty).ToLower();
             
         }
-
+        */
         public bool cadenaSoloContieneNumeros(String str)
         {
 

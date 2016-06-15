@@ -38,8 +38,9 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.LightSkyBlue;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(23, 140);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 140);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(731, 206);
             this.dataGridView1.TabIndex = 0;
@@ -48,12 +49,13 @@
             // 
             this.groupBox1.Controls.Add(this.listBox1);
             this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Location = new System.Drawing.Point(23, 12);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(731, 122);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Historial De Cliente";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // listBox1
             // 
@@ -73,7 +75,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(478, 37);
+            this.button1.Location = new System.Drawing.Point(516, 33);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(209, 48);
             this.button1.TabIndex = 2;
@@ -85,9 +87,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(766, 358);
+            this.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.ClientSize = new System.Drawing.Size(758, 362);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dataGridView1);
+            this.MaximizeBox = false;
             this.Name = "HistorialDelCliente";
             this.Text = "HistorialDelCliente";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
