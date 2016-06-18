@@ -30,7 +30,7 @@ namespace MercadoEnvio.Facturas
         {
             int id2 = Int32.Parse(dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString());
 
-            Facturas.DetalleFactura detalle = new DetalleFactura(id2);
+            Facturas.DetalleFacturaCliente detalle = new DetalleFacturaCliente(id2);
             detalle.Show();
 
         }
