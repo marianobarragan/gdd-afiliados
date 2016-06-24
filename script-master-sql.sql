@@ -53,7 +53,7 @@ CREATE TABLE DBME.usuario(
 );
 GO
 
-CREATE TABLE DBME.rol_x_usuario (
+CREATE TABLE DBME.rol_x_usuario ( 
 	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id), 
 	rol_id INT FOREIGN KEY REFERENCES DBME.rol(rol_id) 
     ON DELETE CASCADE
@@ -165,7 +165,7 @@ GO
 
 CREATE TABLE DBME.factura(
 	factura_id NUMERIC(18,0) IDENTITY(1,1) PRIMARY KEY,
-	compra_id INT FOREIGN KEY REFERENCES DBME.compra(compra_id),
+	publicacion_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.publicacion(publicacion_id),
 	fecha DATETIME,
 	monto_total NUMERIC(18,2) NOT NULL,
 	forma_pago_desc NVARCHAR(255),
@@ -269,7 +269,7 @@ BEGIN
 
 
 	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id,fecha_creacion,telefono,es_nuevo)
-	SELECT DISTINCT Publ_Cli_Mail,Publ_Cli_Mail,HASHBYTES('SHA2_256',Publ_Cli_Mail),1,0, d.domicilio_id ,NULL,NULL,1
+	SELECT DISTINCT Publ_Cli_Mail,Publ_Cli_Mail,HASHBYTES('SHA2_256',Publ_Cli_Mail),1,0, d.domicilio_id ,NULL,NULL,0
 	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Cli_Cod_Postal = d.codigo_postal)
 	WHERE Publ_Cli_Mail IS NOT NULL
 	
@@ -289,7 +289,7 @@ AS
 BEGIN
 	
 	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id ,fecha_creacion,telefono,es_nuevo)
-	SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Mail,HASHBYTES('SHA2_256',Publ_Empresa_Mail),1,0, d.domicilio_id ,NULL,NULL,1
+	SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Mail,HASHBYTES('SHA2_256',Publ_Empresa_Mail),1,0, d.domicilio_id ,NULL,NULL,0
 	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Empresa_Cod_Postal = d.codigo_postal)
 	WHERE Publ_Empresa_Mail IS NOT NULL
 	
@@ -353,12 +353,12 @@ BEGIN
 	SET IDENTITY_INSERT DBME.factura ON;
 	SET IDENTITY_INSERT DBME.factura_detalle OFF;
 	
-	INSERT INTO DBME.factura(factura_id,fecha,monto_total,forma_pago_desc,usuario_id)
-	(SELECT DISTINCT Factura_Nro,Factura_Fecha,Factura_Total,Forma_Pago_Desc,u.usuario_id
+	INSERT INTO DBME.factura(factura_id,fecha,monto_total,forma_pago_desc,usuario_id,publicacion_id)
+	(SELECT DISTINCT Factura_Nro,Factura_Fecha,Factura_Total,Forma_Pago_Desc,u.usuario_id,Publicacion_Cod
 	FROM gd_esquema.Maestra m LEFT JOIN DBME.usuario u ON (m.Publ_Cli_Mail = u.mail)
 	WHERE Factura_Nro IS NOT NULL AND Publ_Cli_Mail IS NOT NULL
 	UNION
-	SELECT DISTINCT Factura_Nro,Factura_Fecha,Factura_Total,Forma_Pago_Desc,u.usuario_id
+	SELECT DISTINCT Factura_Nro,Factura_Fecha,Factura_Total,Forma_Pago_Desc,u.usuario_id,Publicacion_Cod
 	FROM gd_esquema.Maestra m LEFT JOIN DBME.usuario u ON (m.Publ_Empresa_Mail= u.mail)
 	WHERE Factura_Nro IS NOT NULL AND Publ_Empresa_Mail IS NOT NULL)
 
@@ -469,6 +469,11 @@ BEGIN
 	WHERE Publicacion_Tipo = 'Subasta' AND Publ_Empresa_Mail IS NOT NULL
 	GROUP BY Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,Publicacion_Estado,Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id
 	
+	UPDATE DBME.publicacion 
+	SET fecha_finalizacion_subasta = g.Compra_Fecha
+	FROM gd_esquema.Maestra g 
+	WHERE g.Publicacion_Cod = publicacion_id AND g.publicacion_tipo = 'Subasta'
+		
 	/*
 	DECLARE @Publicacion_Cod AS NUMERIC(18,0)
 	DECLARE @Publicacion_Descripcion AS NVARCHAR(255) 
@@ -758,7 +763,7 @@ BEGIN
 	SET @usuario_id = SCOPE_IDENTITY()
 END;
 GO
-
+ 
 CREATE PROCEDURE DBME.crearCliente(
 	@apellido NVARCHAR(255),
 	@nombre NVARCHAR(255),
@@ -1132,20 +1137,25 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DBME.crearCompraInmediata (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), @rubro_id INT, @visibilidad_id INT, @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit)
+CREATE PROCEDURE DBME.crearCompraInmediata (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion VARCHAR(50),@fecha_vencimiento VARCHAR(50),@precio NUMERIC(18,2), @rubro_id INT, @visibilidad_id INT, @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit)
 AS
 BEGIN
 
-	DECLARE @costo AS DECIMAL(10,2)
 	DECLARE @mensaje_error AS NVARCHAR(99)
-	
-	/*
+		
 	BEGIN TRY
 		BEGIN TRANSACTION	
-		
-		INSERT INTO DBME.publicacion (publicacion_tipo,descripcion,stock,fecha_creacion,fecha_vencimiento,precio,costo,rubro_id,visibilidad_id,autor_id,estado,permite_preguntas,realiza_envio,cantidad,fecha_finalizacion,valor_inicial,valor_actual)
-		VALUES ('Compra Inmediata',@descripcion,@stock,@fecha_creacion,@fecha_vencimiento,@precio,@costo,@rubro_id,@visibilidad_id,@autor_id,@estado,@permite_preguntas,@realiza_envio,@cantidad,@fecha_finalizacion,@valor_inicial,@valor_actual)
+		DECLARE @costo as numeric(18,2)
+		DECLARE @fecha_creacion_convertida AS DATETIME
+		DECLARE @fecha_vencimiento_convertida AS DATETIME
 
+		SET @costo = (select visibilidad_precio from dbme.visibilidad where visibilidad_id = @visibilidad_id)
+		SET @fecha_creacion_convertida = convert(datetime,@fecha_creacion, 121)
+		SET @fecha_vencimiento_convertida = convert(datetime,@fecha_vencimiento, 121)
+
+		INSERT INTO DBME.publicacion (publicacion_tipo,descripcion,stock,fecha_creacion,fecha_vencimiento,precio,costo,rubro_id,visibilidad_id,autor_id,estado,permite_preguntas,realiza_envio,cantidad)
+		VALUES ('Compra Inmediata',@descripcion,@stock,@fecha_creacion_convertida,@fecha_vencimiento_convertida,@precio,@costo,@rubro_id,@visibilidad_id,@autor_id,@estado,@permite_preguntas,@realiza_envio,@stock)
+				
 		COMMIT TRANSACTION
 	END TRY
 	BEGIN CATCH
@@ -1155,19 +1165,28 @@ BEGIN
 		ROLLBACK TRANSACTION 
 	
 	END CATCH
-	*/
-/*  
-	costo DECIMAL(10,2),
-	rubro_id INT FOREIGN KEY REFERENCES DBME.rubro(rubro_id),
-	visibilidad_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.visibilidad(visibilidad_id),
-	autor_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id),
-	estado NVARCHAR(255) CHECK (estado IN ('BORRADOR','ACTIVA','PAUSADA','FINALIZADA')) DEFAULT 'BORRADOR',
-	permite_preguntas bit,
-	realiza_envio bit,
-	cantidad INT,
-	fecha_finalizacion DATE,
-	valor_inicial DECIMAL(10,2),
-	valor_actual DECIMAL(10,2)*/
+	
+END;
+GO
+
+CREATE PROCEDURE DBME.crearFactura (@publicacion_id NUMERIC(18,2) , @usuario_id INT)
+AS
+BEGIN
+	DECLARE @mensaje_error AS NVARCHAR(99)
+		
+	BEGIN TRY
+		BEGIN TRANSACTION
+
+		INSERT INTO DBME.factura(forma_pago_desc,monto_total,fecha)
+
+		COMMIT TRANSACTION 
+	END TRY
+
+	BEGIN CATCH
+		SET @mensaje_error = 'Error en crear la nueva publicacion. Se deshace la operacion entera. Lo sentimos.'
+		RAISERROR(@mensaje_error, 12, 1)
+		ROLLBACK TRANSACTION 
+	END CATCH
 
 END;
 GO

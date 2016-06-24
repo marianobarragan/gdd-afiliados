@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Configuration;
 
 using MercadoEnvio.Controller;
 using MercadoEnvio.Domain;
@@ -170,14 +171,15 @@ namespace MercadoEnvio.Generar_Publicación
 
             try
             {
-                string preciostring = precio.ToString().Replace(",", ".");
-      
-                //CREATE PROCEDURE DBME.crearCompraInmediata (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), @rubro_id INT, @visibilidad_id INT, @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit)
-                string comando = "EXECUTE DBME.CompraInmediata '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + preciostring + "," + rubro + "," + visibilidad + "," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "'," + permitePreguntas + "," + realiza_envio ;
-                MessageBox.Show(comando, "A", MessageBoxButtons.OK);
-                //(new ConexionSQL()).ejecutarComandoSQL(comando);
+                string preciostring = txtPrecio.Text.Replace(",", ".");
+
+                string comando = "EXECUTE DBME.crearCompraInmediata '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + preciostring + "," + rubro + "," + visibilidad + "," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "'," + permitePreguntas + "," + realiza_envio;
+                
+                (new ConexionSQL()).ejecutarComandoSQL(comando);
 
                 MessageBox.Show("Compra creada exitosamente", "A", MessageBoxButtons.OK);
+
+                MessageBox.Show(ConfigurationManager.AppSettings[FechaDelSistema], "A", MessageBoxButtons.OK);
 
                 this.Close();
             }
