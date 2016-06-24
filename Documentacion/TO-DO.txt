@@ -1,8 +1,4 @@
-hacer q el sql consulte la fecha del sistema
-
 hacer q las altas sean atomicas
-
-asignar bien las funcionalidades de cada rol
 
 Hacer un trigger para cuando se borre una visibilidad, las publicaciones la tengan Gratis por default
 

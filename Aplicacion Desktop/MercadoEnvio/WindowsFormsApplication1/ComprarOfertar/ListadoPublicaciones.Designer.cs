@@ -50,9 +50,9 @@
             this.groupBox2.Controls.Add(this.dataGridView1);
             this.groupBox2.Controls.Add(this.btnAccion);
             this.groupBox2.Controls.Add(this.btnAnterior);
-            this.groupBox2.Location = new System.Drawing.Point(13, 162);
+            this.groupBox2.Location = new System.Drawing.Point(13, 144);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(727, 393);
+            this.groupBox2.Size = new System.Drawing.Size(925, 401);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Resultados";
@@ -77,13 +77,13 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(714, 317);
+            this.dataGridView1.Size = new System.Drawing.Size(912, 317);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // btnAccion
             // 
-            this.btnAccion.Location = new System.Drawing.Point(602, 342);
+            this.btnAccion.Location = new System.Drawing.Point(779, 342);
             this.btnAccion.Name = "btnAccion";
             this.btnAccion.Size = new System.Drawing.Size(119, 33);
             this.btnAccion.TabIndex = 3;
@@ -112,14 +112,14 @@
             this.groupBox1.Controls.Add(this.chklRubros);
             this.groupBox1.Location = new System.Drawing.Point(13, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(727, 143);
+            this.groupBox1.Size = new System.Drawing.Size(925, 125);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Busqueda";
             // 
             // btnBuscar
             // 
-            this.btnBuscar.Location = new System.Drawing.Point(616, 20);
+            this.btnBuscar.Location = new System.Drawing.Point(836, 20);
             this.btnBuscar.Name = "btnBuscar";
             this.btnBuscar.Size = new System.Drawing.Size(83, 23);
             this.btnBuscar.TabIndex = 5;
@@ -129,7 +129,7 @@
             // 
             // btnLimpiar
             // 
-            this.btnLimpiar.Location = new System.Drawing.Point(616, 49);
+            this.btnLimpiar.Location = new System.Drawing.Point(747, 20);
             this.btnLimpiar.Name = "btnLimpiar";
             this.btnLimpiar.Size = new System.Drawing.Size(83, 23);
             this.btnLimpiar.TabIndex = 4;
@@ -160,7 +160,7 @@
             this.chklRubros.Location = new System.Drawing.Point(7, 20);
             this.chklRubros.Name = "chklRubros";
             this.chklRubros.ScrollAlwaysVisible = true;
-            this.chklRubros.Size = new System.Drawing.Size(196, 109);
+            this.chklRubros.Size = new System.Drawing.Size(196, 94);
             this.chklRubros.TabIndex = 0;
             // 
             // ListadoPublicaciones
@@ -168,7 +168,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.ClientSize = new System.Drawing.Size(752, 567);
+            this.ClientSize = new System.Drawing.Size(950, 562);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.MaximizeBox = false;

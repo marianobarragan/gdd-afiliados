@@ -76,7 +76,7 @@ namespace MercadoEnvio.ComprarOfertar
         {
             string query;
             armarQueryRubros();
-            query = "SELECT p.publicacion_id, p.publicacion_tipo, p.descripcion, p.stock, p.precio, p.autor_id, p.permite_preguntas, p.realiza_envio, r.descripcion_corta FROM DBME.publicacion p JOIN DBME.rubro r ON (r.rubro_id = p.rubro_id ) where p.descripcion LIKE '%" + txtDescripción.Text + "%'" + queryRubros;
+            query = "SELECT p.publicacion_id, p.publicacion_tipo, p.descripcion, p.stock, p.precio, p.autor_id, p.permite_preguntas, p.realiza_envio, r.descripcion_corta, v.visibilidad_descripcion FROM DBME.publicacion p JOIN DBME.rubro r ON (r.rubro_id = p.rubro_id ) JOIN DBME.visibilidad v ON (p.visibilidad_id = v.visibilidad_id) where p.estado = 'ACTIVA' AND p.descripcion LIKE '%" + txtDescripción.Text + "%'" + queryRubros + "ORDER BY v.visibilidad_precio DESC";
 
             
 
@@ -131,12 +131,22 @@ namespace MercadoEnvio.ComprarOfertar
 
         private void btnAccion_Click(object sender, EventArgs e)
         {
+            int publicacion_id = Int32.Parse(dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString());
             string tipo = (dataGridView1[1, dataGridView1.CurrentCell.RowIndex].Value.ToString());
-              MessageBox.Show(tipo, "hol", MessageBoxButtons.OK);
+            string descripcion = (dataGridView1[2, dataGridView1.CurrentCell.RowIndex].Value.ToString());
+            int stock = Int32.Parse(dataGridView1[3, dataGridView1.CurrentCell.RowIndex].Value.ToString());
+            float precio = float.Parse(dataGridView1[4, dataGridView1.CurrentCell.RowIndex].Value.ToString());
+            
+            
+            //MessageBox.Show(tipo, "hol", MessageBoxButtons.OK);
             if (tipo == "Compra Inmediata")
              {
+                 /* p.publicacion_id, p.publicacion_tipo, p.descripcion, p.stock, p.precio, p.autor_id, p.permite_preguntas, p.realiza_envio, r.descripcion_corta, v.visibilidad_descripcion */
+
+                 /* string id,string descripcion,float precio,string stock,int usuario_id */
+                 ComprarOfertar.ComprarProducto comprarProducto = new ComprarProducto( publicacion_id, descripcion, precio, stock, sesionActual.usuarioActual.usuario_id);
                  //ComprarOfertar.ComprarProducto comprarProducto = new ComprarOfertar.ComprarProducto(,,,,sesionActual.usuarioActual.usuario_id); //id,string descripcion,float precio,string stock,int usuario_id
-                 //comprarProducto.Show();
+                comprarProducto.Show();
             }
             else{
                 //ComprarOfertar.OfertarProducto ofertarProducto = new ComprarOfertar.OfertarProducto();

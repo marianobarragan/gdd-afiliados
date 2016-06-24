@@ -123,9 +123,9 @@ namespace MercadoEnvio.VistaPrincipal
                 lstFunciones.Items.Add(sesion.listaFuncionalidades[i].descripcion);
             }
             lstFunciones.SelectedIndex = 0;
-            label5.Text = sesion.usuarioActual.nombreUsuario;
             label4.Text = sesion.rolActual.nombre;
-
+            label5.Text = sesion.usuarioActual.nombreUsuario;
+            label6.Text = Program.fechaSistema();
 
             string c = "EXECUTE DBME.chequearVencimientoPublicaciones "+ Program.fechaSistema();
             new ConexionSQL().ejecutarComandoSQL(c);

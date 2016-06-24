@@ -594,6 +594,22 @@ GO
 
 /* START FUNCTIONS */
 
+CREATE PROCEDURE DBME.setHoraDelSistema (@nueva_hora DATETIME)
+AS
+BEGIN
+	
+	BEGIN TRY
+		DELETE FROM DBME.reloj
+	
+		INSERT INTO DBME.reloj (hora_actual)
+		VALUES (@nueva_hora)
+	END TRY
+	BEGIN CATCH
+		RAISERROR('Error actualizando la fecha del sistema', 12, 1)
+	END CATCH
+END;
+GO
+
 CREATE FUNCTION DBME.getHoraDelSistema()
 RETURNS DATETIME
 AS
@@ -1168,7 +1184,7 @@ BEGIN
 	
 END;
 GO
-
+/*
 CREATE PROCEDURE DBME.crearFactura (@publicacion_id NUMERIC(18,2) , @usuario_id INT)
 AS
 BEGIN
@@ -1190,7 +1206,7 @@ BEGIN
 
 END;
 GO
-
+*/
 /* END PROCEDURES COMUNICACION */
 
 /* START PROCEDURES DOMINIO */

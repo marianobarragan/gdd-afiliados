@@ -15,13 +15,13 @@ namespace MercadoEnvio.ComprarOfertar
         int id_publ;
         int usuario;
 
-        public OfertarProducto(string id,string descripcion,float precio,int usuario_id)
+        public OfertarProducto(int id, string descripcion, float precio, int stock, int usuario_id)
         {
             InitializeComponent();
-            txtId.Text = id;
+            txtId.Text = id.ToString();
             txtDescripcion.Text = descripcion;
             txtPrecio.Text = precio.ToString();
-            id_publ = Int32.Parse(id);
+            id_publ = id;
             usuario = usuario_id;
         }
 

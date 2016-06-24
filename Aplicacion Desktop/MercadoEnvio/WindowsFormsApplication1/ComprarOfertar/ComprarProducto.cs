@@ -19,11 +19,11 @@ namespace MercadoEnvio.ComprarOfertar
         int stock_Disponible;
         int usuario;
 
-        public ComprarProducto(string id,string descripcion,float precio,string stock,int usuario_id)
+        public ComprarProducto(int id,string descripcion,float precio,int stock,int usuario_id)
         {
             InitializeComponent();
-            id_publ = Int32.Parse(id);
-            txtId.Text = id;
+            id_publ = id;
+            txtId.Text = id_publ.ToString();
 
             descripcion_Producto = descripcion;
             txtDescripcion.Text = descripcion;
@@ -31,8 +31,8 @@ namespace MercadoEnvio.ComprarOfertar
             precio_Producto = (precio);
             txtPrecio.Text = precio.ToString();
 
-            stock_Disponible = Int32.Parse(stock);
-            txtStock.Text = stock;
+            stock_Disponible = stock;
+            txtStock.Text = stock_Disponible.ToString();
 
             usuario = usuario_id;
 

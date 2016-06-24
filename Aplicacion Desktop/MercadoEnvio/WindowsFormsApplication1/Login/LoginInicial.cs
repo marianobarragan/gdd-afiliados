@@ -25,7 +25,17 @@ namespace MercadoEnvio.Login
 
         private void LoginInicial_Load(object sender, EventArgs e)
         {
-
+            
+            Controller.Controller controller = new Controller.Controller();
+            try
+            {
+                controller.setHoraDelSistema();
+            }
+            catch(Exception er) {
+                MessageBox.Show(er.Message, "Error", MessageBoxButtons.OK);
+            }
+             
+            
         }
         
        

@@ -179,7 +179,7 @@ namespace MercadoEnvio.Generar_Publicación
 
                 MessageBox.Show("Compra creada exitosamente", "A", MessageBoxButtons.OK);
 
-                MessageBox.Show(ConfigurationManager.AppSettings[FechaDelSistema], "A", MessageBoxButtons.OK);
+                //MessageBox.Show(ConfigurationManager.AppSettings[FechaDelSistema], "A", MessageBoxButtons.OK);
 
                 this.Close();
             }

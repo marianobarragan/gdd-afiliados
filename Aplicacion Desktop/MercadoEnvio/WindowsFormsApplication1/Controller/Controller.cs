@@ -68,5 +68,10 @@ namespace MercadoEnvio.Controller
 
             return funcionalidades;
         }
+
+        public void setHoraDelSistema() {
+            string query2 = "EXECUTE DBME.setHoraDelSistema '" + DateTime.Parse(Program.fechaSistema()) + "'";
+            (new ConexionSQL()).ejecutarComandoSQL(query2);
+        }
     }
 }
