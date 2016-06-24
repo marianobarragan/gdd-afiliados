@@ -607,6 +607,7 @@ BEGIN
 	BEGIN CATCH
 		RAISERROR('Error actualizando la fecha del sistema', 12, 1)
 	END CATCH
+
 END;
 GO
 
@@ -1010,14 +1011,55 @@ CREATE PROCEDURE DBME.chequearVencimientoPublicaciones (@hora_actual DATETIME)
 AS
 BEGIN
 
-	DELETE FROM DBME.reloj
-	INSERT INTO DBME.reloj (hora_actual) VALUES (@hora_actual)
+	BEGIN TRY
 
-	
-	
-	UPDATE DBME.publicacion SET estado = 'FINALIZADA' 
-	WHERE fecha_vencimiento>@hora_actual AND estado = 'ACTIVA' AND publicacion_tipo = 'Compra Inmediata'
+		-- verificar las publicaciones activas
+		-- marcarlas como finalizadas
+		-- ver si alguien gano las subastas 
+		-- generar las facturas correspondientes
+		
+		DECLARE @publicacion_id NUMERIC(18,0)
+		DECLARE @publicacion_tipo NVARCHAR(255)
 
+		DECLARE publicaciones_activas CURSOR FOR
+		SELECT p.publicacion_id,p.publicacion_tipo
+		FROM DBME.publicacion p
+		WHERE p.estado = 'ACTIVA'
+		
+		OPEN publicaciones_activas 
+
+		FETCH NEXT publicaciones_activas INTO
+		@publicacion_id, @publicacion_tipo
+
+		WHILE(@@FETCH_STATUS = 0)
+		BEGIN
+			
+			IF (@publicacion_tipo = 'Compra Inmediata')
+			BEGIN
+				UPDATE DBME.publicacion SET estado = 'FINALIZADA' 
+				WHERE fecha_vencimiento>@hora_actual AND publicacion_id = @publicacion_tipo
+			END
+			IF (@publicacion_tipo = 'Subasta')
+			BEGIN
+				UPDATE DBME.publicacion SET estado = 'FINALIZADA' 
+				WHERE fecha_vencimiento>@hora_actual AND publicacion_id = @publicacion_tipo
+
+
+
+				--VER SI ALGUIEN GANO LA SUBASTA Y GENERAR LA factura CORRESPONDIENTE
+			END
+
+			FETCH NEXT FROM publicaciones_activas
+		END
+	
+		CLOSE publicaciones_activas
+		DEALLOCATE publicaciones_activas
+
+	END TRY
+	BEGIN CATCH
+		RAISERROR('Error chequeando el vencimiento de Publicaciones', 12, 1)
+	END CATCH
+	
 	
 	
 END; 

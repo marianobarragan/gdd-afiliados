@@ -128,12 +128,13 @@ namespace MercadoEnvio.VistaPrincipal
             label6.Text = Program.fechaSistema();
 
             string c = "EXECUTE DBME.chequearVencimientoPublicaciones "+ Program.fechaSistema();
-            new ConexionSQL().ejecutarComandoSQL(c);
-
-            //string c = "EXEC ";
-           // DataTable dt = new ConexionSQL().ejecutarComandoSQL(c);
-
-            //new Controller.Controller().
+            try{    
+                new ConexionSQL().ejecutarComandoSQL(c);
+            }
+            catch(Exception er) {
+                MessageBox.Show(er.Message, "Error", MessageBoxButtons.OK);
+            }
+            
         }
 
         private void lstFunciones_SelectedIndexChanged(object sender, EventArgs e)
