@@ -127,12 +127,12 @@ namespace MercadoEnvio.VistaPrincipal
             label5.Text = sesion.usuarioActual.nombreUsuario;
             label6.Text = Program.fechaSistema();
 
-            string c = "EXECUTE DBME.chequearVencimientoPublicaciones "+ Program.fechaSistema();
+            string c = "EXECUTE DBME.chequearVencimientoPublicaciones '" + DateTime.Parse(Program.fechaSistema()) + "'";
             try{    
                 new ConexionSQL().ejecutarComandoSQL(c);
             }
             catch(Exception er) {
-                MessageBox.Show(er.Message, "Error", MessageBoxButtons.OK);
+                MessageBox.Show(er.Message, "Error en el chequeo de vencimiento de publicaciones", MessageBoxButtons.OK);
             }
             
         }

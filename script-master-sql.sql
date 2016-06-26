@@ -367,7 +367,6 @@ BEGIN
 	FROM gd_esquema.Maestra 
 	WHERE Factura_Nro IS NOT NULL
 
-
 END;
 GO
 
@@ -561,10 +560,10 @@ GO
 	EXECUTE DBME.migrarRubro
 	EXECUTE DBME.migrarClientes
 	EXECUTE DBME.migrarEmpresas
-	EXECUTE DBME.migrarFacturas
 	EXECUTE DBME.enlazarRol_X_Usuario
 	EXECUTE DBME.migrarVisibilidad
 	EXECUTE DBME.migrarPublicaciones
+	EXECUTE DBME.migrarFacturas
 	EXECUTE DBME.migrarCalificaciones
 	EXECUTE DBME.migrarCompras
 	EXECUTE DBME.migrarOfertas
@@ -1020,15 +1019,16 @@ BEGIN
 		
 		DECLARE @publicacion_id NUMERIC(18,0)
 		DECLARE @publicacion_tipo NVARCHAR(255)
+		DECLARE @oferta_id_ganador INT
 
 		DECLARE publicaciones_activas CURSOR FOR
 		SELECT p.publicacion_id,p.publicacion_tipo
 		FROM DBME.publicacion p
-		WHERE p.estado = 'ACTIVA'
+		WHERE fecha_vencimiento>@hora_actual AND p.estado = 'ACTIVA'
 		
 		OPEN publicaciones_activas 
 
-		FETCH NEXT publicaciones_activas INTO
+		FETCH NEXT FROM publicaciones_activas INTO
 		@publicacion_id, @publicacion_tipo
 
 		WHILE(@@FETCH_STATUS = 0)
@@ -1037,16 +1037,25 @@ BEGIN
 			IF (@publicacion_tipo = 'Compra Inmediata')
 			BEGIN
 				UPDATE DBME.publicacion SET estado = 'FINALIZADA' 
-				WHERE fecha_vencimiento>@hora_actual AND publicacion_id = @publicacion_tipo
+				WHERE publicacion_id = @publicacion_tipo
 			END
 			IF (@publicacion_tipo = 'Subasta')
 			BEGIN
+				
+				SET @oferta_id_ganador = (SELECT TOP 1 oferta_id 
+				FROM dbme.oferta
+				WHERE publicacion_id = @publicacion_id
+				ORDER BY monto)
+				
+				IF (@oferta_id_ganador IS NOT NULL)
+				BEGIN
+					select * from dbme.visibilidad -- estos es chamuyo
+					--generar factura al ganador
+				END
+				
 				UPDATE DBME.publicacion SET estado = 'FINALIZADA' 
-				WHERE fecha_vencimiento>@hora_actual AND publicacion_id = @publicacion_tipo
+				WHERE publicacion_id = @publicacion_id
 
-
-
-				--VER SI ALGUIEN GANO LA SUBASTA Y GENERAR LA factura CORRESPONDIENTE
 			END
 
 			FETCH NEXT FROM publicaciones_activas
@@ -1059,9 +1068,7 @@ BEGIN
 	BEGIN CATCH
 		RAISERROR('Error chequeando el vencimiento de Publicaciones', 12, 1)
 	END CATCH
-	
-	
-	
+		
 END; 
 GO
 
@@ -1213,7 +1220,7 @@ BEGIN
 
 		INSERT INTO DBME.publicacion (publicacion_tipo,descripcion,stock,fecha_creacion,fecha_vencimiento,precio,costo,rubro_id,visibilidad_id,autor_id,estado,permite_preguntas,realiza_envio,cantidad)
 		VALUES ('Compra Inmediata',@descripcion,@stock,@fecha_creacion_convertida,@fecha_vencimiento_convertida,@precio,@costo,@rubro_id,@visibilidad_id,@autor_id,@estado,@permite_preguntas,@realiza_envio,@stock)
-				
+--ECUTE DBME.crearCompraInmediata '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + preciostring + "," + rubro + "," + visibilidad + "," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "'," + permitePreguntas + "," + realiza_envio;				
 		COMMIT TRANSACTION
 	END TRY
 	BEGIN CATCH

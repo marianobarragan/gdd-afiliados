@@ -32,7 +32,7 @@ namespace MercadoEnvio.Login
                 controller.setHoraDelSistema();
             }
             catch(Exception er) {
-                MessageBox.Show(er.Message, "Error", MessageBoxButtons.OK);
+                MessageBox.Show(er.Message, "Error en reloj", MessageBoxButtons.OK);
             }
              
             
