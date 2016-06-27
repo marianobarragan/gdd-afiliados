@@ -106,7 +106,8 @@ namespace MercadoEnvio.Generar_Publicación
 
         private void AltaCompraInmediata_Load(object sender, EventArgs e)
         {
-            
+            dateFechaInicio.Value = DateTime.Parse(Program.fechaSistema()+1);
+            dateFechaVencimiento.Value = DateTime.Parse(Program.fechaSistema()+1);
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -118,11 +119,12 @@ namespace MercadoEnvio.Generar_Publicación
         {
             string descripcion = txtDescripción.Text;
             uint stock;
-            double precio;
+            uint precio;
+            uint precio_decimal;
             uint rubro;
-            uint visibilidad;
+            int visibilidad_id;
             bool permitePreguntas = chkPermitePreguntas.Checked;
-            int estado;
+            string estado;
 
 
             DateTime fechaInicio;
@@ -133,12 +135,13 @@ namespace MercadoEnvio.Generar_Publicación
             try
             {
                 rubro = rubros[cmbRubros.SelectedIndex].rubro_id;
-                visibilidad = UInt32.Parse(visibilidades[cmbEstado.SelectedIndex].id.ToString());
-                estado = cmbEstado.SelectedIndex;
+                visibilidad_id = cmbVisibilidad.SelectedIndex +1;
+                estado = cmbEstado.GetItemText(cmbEstado.SelectedItem);
                 fechaInicio = DateTime.Parse(dateFechaInicio.Text);
                 fechaVencimiento = DateTime.Parse(dateFechaVencimiento.Text);
                 stock = UInt32.Parse(txtStock.Text);
-                precio = Double.Parse(txtPrecio.Text);
+                precio = UInt32.Parse(txtPrecio.Text);
+                precio_decimal = UInt32.Parse(txtPrecioDecimal.Text);
                 costo_total = Double.Parse(txtCostoTotal.Text);
             }
             catch (System.FormatException)
@@ -152,6 +155,12 @@ namespace MercadoEnvio.Generar_Publicación
                 return;
             }
             
+            if (precio_decimal < 0 || precio_decimal > 100)
+            {
+                MessageBox.Show("La parte decimal del precio supera los limites", "Problema", MessageBoxButtons.OK);
+                return;
+            }
+
             //validar fechas
             int ant1 = DateTime.Compare(fechaInicio, DateTime.Parse(Program.fechaSistema()));
 
@@ -171,17 +180,17 @@ namespace MercadoEnvio.Generar_Publicación
 
             try
             {
-                string preciostring = txtPrecio.Text.Replace(",", ".");
-
-                string comando = "EXECUTE DBME.crearCompraInmediata '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + preciostring + "," + rubro + "," + visibilidad + "," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "'," + permitePreguntas + "," + realiza_envio;
                 
+                
+                //                EXECUTE DBME.crearCompraInmediata 'descrpcion22',4,'2018-01-31 20:07:00.000','2019-01-31 20:07:00.000',4,2,2,3,'ACTIVA',1,1
+                //string comando = "EXECUTE DBME.crearCompraInmediata '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + null + "," + rubro + "," + visibilidad_id + "," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "'," + permitePreguntas + "," + realiza_envio;
+                string comando = "EXECUTE DBME.crearCompraInmediata '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + precio + "." + precio_decimal + "," + rubro + "," + visibilidad_id + "," + sesion_actual.usuarioActual.usuario_id + "," + estado + "," + permitePreguntas + "," + realiza_envio + "," + costo_total;
+                //MessageBox.Show(precio_total.ToString(), "A", MessageBoxButtons.OK);
                 (new ConexionSQL()).ejecutarComandoSQL(comando);
 
                 MessageBox.Show("Compra creada exitosamente", "A", MessageBoxButtons.OK);
 
-                //MessageBox.Show(ConfigurationManager.AppSettings[FechaDelSistema], "A", MessageBoxButtons.OK);
-
-                this.Close();
+                //this.Close();
             }
             catch (Exception er)
             {

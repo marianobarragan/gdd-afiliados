@@ -222,6 +222,28 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE DBME.enlazarRolXFuncionalidad (@nombre_rol NVARCHAR(255),@nombre_funcionalidad NVARCHAR(255) )
+AS
+BEGIN
+	
+	DECLARE @rol_id AS INT
+	DECLARE @funcionalidad_id AS INT
+
+	SELECT @rol_id = rol_id
+	FROM DBME.rol 
+	WHERE @nombre_rol = nombre_rol
+
+	SELECT @funcionalidad_id = funcionalidad_id
+	FROM DBME.funcionalidad 
+	WHERE @nombre_funcionalidad = descripcion
+
+	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id)
+	VALUES (@rol_id,@funcionalidad_id)
+
+END;
+GO
+
+
 CREATE PROCEDURE DBME.enlazarRol_X_Funcionalidad  -- agregar funcionalidades para cada rol
 AS
 BEGIN
@@ -530,8 +552,6 @@ BEGIN
 	DEALLOCATE cursor_para_publicaciones*/
 END;
 GO
-
-
 
 CREATE PROCEDURE DBME.migrarCompras
 AS
@@ -1006,112 +1026,48 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DBME.chequearVencimientoPublicaciones (@hora_actual DATETIME)
+CREATE PROCEDURE DBME.crearCompraInmediata (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), @rubro_id INT, @visibilidad_id NUMERIC(18,0), @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit, @costo NUMERIC(18,2))
 AS
 BEGIN
 
-	BEGIN TRY
-
-		-- verificar las publicaciones activas
-		-- marcarlas como finalizadas
-		-- ver si alguien gano las subastas 
-		-- generar las facturas correspondientes
-		
-		DECLARE @publicacion_id NUMERIC(18,0)
-		DECLARE @publicacion_tipo NVARCHAR(255)
-		DECLARE @oferta_id_ganador INT
-
-		DECLARE publicaciones_activas CURSOR FOR
-		SELECT p.publicacion_id,p.publicacion_tipo
-		FROM DBME.publicacion p
-		WHERE fecha_vencimiento>@hora_actual AND p.estado = 'ACTIVA'
-		
-		OPEN publicaciones_activas 
-
-		FETCH NEXT FROM publicaciones_activas INTO
-		@publicacion_id, @publicacion_tipo
-
-		WHILE(@@FETCH_STATUS = 0)
-		BEGIN
-			
-			IF (@publicacion_tipo = 'Compra Inmediata')
-			BEGIN
-				UPDATE DBME.publicacion SET estado = 'FINALIZADA' 
-				WHERE publicacion_id = @publicacion_tipo
-			END
-			IF (@publicacion_tipo = 'Subasta')
-			BEGIN
-				
-				SET @oferta_id_ganador = (SELECT TOP 1 oferta_id 
-				FROM dbme.oferta
-				WHERE publicacion_id = @publicacion_id
-				ORDER BY monto)
-				
-				IF (@oferta_id_ganador IS NOT NULL)
-				BEGIN
-					select * from dbme.visibilidad -- estos es chamuyo
-					--generar factura al ganador
-				END
-				
-				UPDATE DBME.publicacion SET estado = 'FINALIZADA' 
-				WHERE publicacion_id = @publicacion_id
-
-			END
-
-			FETCH NEXT FROM publicaciones_activas
-		END
+	DECLARE @mensaje_error AS NVARCHAR(99)
+	DECLARE @publicacion_id AS NUMERIC(18,0)
 	
-		CLOSE publicaciones_activas
-		DEALLOCATE publicaciones_activas
-
-	END TRY
-	BEGIN CATCH
-		RAISERROR('Error chequeando el vencimiento de Publicaciones', 12, 1)
-	END CATCH
-		
-END; 
-GO
-
-/*
-create procedure DBME.sida
-AS
-BEGIN
+	DECLARE @visibilidad_descripcion AS NVARCHAR(255) 
+	SET @visibilidad_descripcion = (SELECT visibilidad_descripcion FROM dbme.visibilidad WHERE visibilidad_id = @visibilidad_id)
 	
-	DECLARE @mensaje_error varchar(100)
-	DECLAre @sida VARCHAR (5)
-	SET @sida = 'ho'
-	BEGIN TRY
-		INSERT INTO DBME.domicilio (numero_calle) VALUES (@sida)
-	END TRY
-	BEGIN CATCH
-		SET @mensaje_error = 'El usuario ingresado no existe'
+
+
+	IF (@visibilidad_descripcion = 'Gratis' AND (SELECT es_nuevo FROM DBME.usuario WHERE usuario_id = @autor_id) = 0 )
+	BEGIN
+		SET @mensaje_error = 'No puede utilizar la visibilidad gratis porque ud ya no es un usuario nuevo.'
 		RAISERROR(@mensaje_error, 12, 1)
-	END CATCH 
-END;
-GO*/
+		RETURN
+	END
 
+	 
+	BEGIN TRY
+		BEGIN TRANSACTION	
 
+		INSERT INTO DBME.publicacion (publicacion_tipo,descripcion,stock,fecha_creacion,fecha_vencimiento,precio,costo,rubro_id,visibilidad_id,autor_id,estado,permite_preguntas,realiza_envio,cantidad)
+		VALUES ('Compra Inmediata',@descripcion,@stock,@fecha_creacion,@fecha_vencimiento,@precio,@costo,@rubro_id,@visibilidad_id,@autor_id,@estado,@permite_preguntas,@realiza_envio,@stock)
 
-CREATE PROCEDURE DBME.enlazarRolXFuncionalidad (@nombre_rol NVARCHAR(255),@nombre_funcionalidad NVARCHAR(255) )
-AS
-BEGIN
-	
-	DECLARE @rol_id AS INT
-	DECLARE @funcionalidad_id AS INT
+		SET @publicacion_id = SCOPE_IDENTITY()
 
-	SELECT @rol_id = rol_id
-	FROM DBME.rol 
-	WHERE @nombre_rol = nombre_rol
+		EXECUTE DBME.crearFactura @publicacion_id, @autor_id
 
-	SELECT @funcionalidad_id = funcionalidad_id
-	FROM DBME.funcionalidad 
-	WHERE @nombre_funcionalidad = descripcion
-
-	INSERT INTO DBME.rol_x_funcionalidad(rol_id,funcionalidad_id)
-	VALUES (@rol_id,@funcionalidad_id)
-
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		SET @mensaje_error = 'Error en crear la nueva publicacion. Se deshace la operacion entera. Lo sentimos.'
+		RAISERROR(@mensaje_error, 12, 1)
+		ROLLBACK TRANSACTION 
+	END CATCH
 END;
 GO
+
+
+
 
 /* END PROCEDURES CREACIONALES */
 
@@ -1202,38 +1158,94 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DBME.crearCompraInmediata (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion VARCHAR(50),@fecha_vencimiento VARCHAR(50),@precio NUMERIC(18,2), @rubro_id INT, @visibilidad_id INT, @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit)
+--EXECUTE DBME.crearCompraInmediata 'descrpcion22',4,'2018-01-31 20:07:00.000','2019-01-31 20:07:00.000',4,2,2,3,'ACTIVA',1,1
+
+CREATE PROCEDURE DBME.chequearVencimientoPublicaciones (@hora_actual DATETIME)
 AS
 BEGIN
 
-	DECLARE @mensaje_error AS NVARCHAR(99)
-		
 	BEGIN TRY
-		BEGIN TRANSACTION	
-		DECLARE @costo as numeric(18,2)
-		DECLARE @fecha_creacion_convertida AS DATETIME
-		DECLARE @fecha_vencimiento_convertida AS DATETIME
 
-		SET @costo = (select visibilidad_precio from dbme.visibilidad where visibilidad_id = @visibilidad_id)
-		SET @fecha_creacion_convertida = convert(datetime,@fecha_creacion, 121)
-		SET @fecha_vencimiento_convertida = convert(datetime,@fecha_vencimiento, 121)
+		-- verificar las publicaciones activas
+		-- marcarlas como finalizadas
+		-- ver si alguien gano las subastas 
+		-- generar las facturas correspondientes
+		
+		DECLARE @publicacion_id NUMERIC(18,0)
+		DECLARE @publicacion_tipo NVARCHAR(255)
+		DECLARE @oferta_id_ganador INT
 
-		INSERT INTO DBME.publicacion (publicacion_tipo,descripcion,stock,fecha_creacion,fecha_vencimiento,precio,costo,rubro_id,visibilidad_id,autor_id,estado,permite_preguntas,realiza_envio,cantidad)
-		VALUES ('Compra Inmediata',@descripcion,@stock,@fecha_creacion_convertida,@fecha_vencimiento_convertida,@precio,@costo,@rubro_id,@visibilidad_id,@autor_id,@estado,@permite_preguntas,@realiza_envio,@stock)
---ECUTE DBME.crearCompraInmediata '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + preciostring + "," + rubro + "," + visibilidad + "," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "'," + permitePreguntas + "," + realiza_envio;				
-		COMMIT TRANSACTION
+		DECLARE publicaciones_activas CURSOR FOR
+		SELECT p.publicacion_id,p.publicacion_tipo
+		FROM DBME.publicacion p
+		WHERE fecha_vencimiento>@hora_actual AND p.estado = 'ACTIVA'
+		
+		OPEN publicaciones_activas 
+
+		FETCH NEXT FROM publicaciones_activas INTO
+		@publicacion_id, @publicacion_tipo
+
+		WHILE(@@FETCH_STATUS = 0)
+		BEGIN
+			
+			IF (@publicacion_tipo = 'Compra Inmediata')
+			BEGIN
+				UPDATE DBME.publicacion SET estado = 'FINALIZADA' 
+				WHERE publicacion_id = @publicacion_tipo
+			END
+			IF (@publicacion_tipo = 'Subasta')
+			BEGIN
+				
+				SET @oferta_id_ganador = (SELECT TOP 1 oferta_id 
+				FROM dbme.oferta
+				WHERE publicacion_id = @publicacion_id
+				ORDER BY monto)
+				
+				IF (@oferta_id_ganador IS NOT NULL)
+				BEGIN
+					select * from dbme.visibilidad -- estos es chamuyo
+					--generar factura al ganador
+				END
+				
+				UPDATE DBME.publicacion SET estado = 'FINALIZADA' 
+				WHERE publicacion_id = @publicacion_id
+
+			END
+
+			FETCH NEXT FROM publicaciones_activas
+		END
+	
+		CLOSE publicaciones_activas
+		DEALLOCATE publicaciones_activas
+
 	END TRY
 	BEGIN CATCH
-
-		SET @mensaje_error = 'Error en crear la nueva publicacion. Se deshace la operacion entera. Lo sentimos.'
-		RAISERROR(@mensaje_error, 12, 1)
-		ROLLBACK TRANSACTION 
-	
+		RAISERROR('Error chequeando el vencimiento de Publicaciones', 12, 1)
 	END CATCH
-	
-END;
+		
+END; 
 GO
+
 /*
+create procedure DBME.sida
+AS
+BEGIN
+	
+	DECLARE @mensaje_error varchar(100)
+	DECLAre @sida VARCHAR (5)
+	SET @sida = 'ho'
+	BEGIN TRY
+		INSERT INTO DBME.domicilio (numero_calle) VALUES (@sida)
+	END TRY
+	BEGIN CATCH
+		SET @mensaje_error = 'El usuario ingresado no existe'
+		RAISERROR(@mensaje_error, 12, 1)
+	END CATCH 
+END;
+GO*/
+
+
+
 CREATE PROCEDURE DBME.crearFactura (@publicacion_id NUMERIC(18,2) , @usuario_id INT)
 AS
 BEGIN
@@ -1242,7 +1254,9 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 
-		INSERT INTO DBME.factura(forma_pago_desc,monto_total,fecha)
+		--INSERT INTO DBME.factura(forma_pago_desc,monto_total,fecha)
+		select * from dbme.visibilidad
+
 
 		COMMIT TRANSACTION 
 	END TRY
@@ -1255,7 +1269,7 @@ BEGIN
 
 END;
 GO
-*/
+
 /* END PROCEDURES COMUNICACION */
 
 /* START PROCEDURES DOMINIO */
