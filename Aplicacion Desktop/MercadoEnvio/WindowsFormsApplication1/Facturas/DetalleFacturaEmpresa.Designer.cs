@@ -43,11 +43,13 @@
             this.lblNumeroFactura = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.lbl2 = new System.Windows.Forms.Label();
             this.lblUsername = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lbl1 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lbl3 = new System.Windows.Forms.Label();
+            this.lbl4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -118,7 +120,7 @@
             // 
             // btnVolver
             // 
-            this.btnVolver.Location = new System.Drawing.Point(334, 519);
+            this.btnVolver.Location = new System.Drawing.Point(334, 565);
             this.btnVolver.Name = "btnVolver";
             this.btnVolver.Size = new System.Drawing.Size(155, 35);
             this.btnVolver.TabIndex = 14;
@@ -199,14 +201,14 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "FACTURA";
             // 
-            // label6
+            // lbl2
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(16, 51);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(43, 17);
-            this.label6.TabIndex = 2;
-            this.label6.Text = "CUIT:";
+            this.lbl2.AutoSize = true;
+            this.lbl2.Location = new System.Drawing.Point(16, 51);
+            this.lbl2.Name = "lbl2";
+            this.lbl2.Size = new System.Drawing.Size(43, 17);
+            this.lbl2.TabIndex = 2;
+            this.lbl2.Text = "CUIT:";
             // 
             // lblUsername
             // 
@@ -217,20 +219,20 @@
             this.lblUsername.TabIndex = 1;
             this.lblUsername.Text = "label5";
             // 
-            // label4
+            // lbl1
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(16, 23);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(77, 17);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Username:";
+            this.lbl1.AutoSize = true;
+            this.lbl1.Location = new System.Drawing.Point(16, 23);
+            this.lbl1.Name = "lbl1";
+            this.lbl1.Size = new System.Drawing.Size(77, 17);
+            this.lbl1.TabIndex = 0;
+            this.lbl1.Text = "Username:";
             // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.dataGridView1);
             this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox4.Location = new System.Drawing.Point(9, 248);
+            this.groupBox4.Location = new System.Drawing.Point(9, 294);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(490, 265);
             this.groupBox4.TabIndex = 13;
@@ -240,34 +242,54 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.lbl4);
+            this.groupBox2.Controls.Add(this.lbl3);
             this.groupBox2.Controls.Add(this.lblApellido);
             this.groupBox2.Controls.Add(this.lblNombre);
-            this.groupBox2.Controls.Add(this.label6);
+            this.groupBox2.Controls.Add(this.lbl2);
             this.groupBox2.Controls.Add(this.lblUsername);
-            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.Controls.Add(this.lbl1);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(9, 129);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(484, 113);
+            this.groupBox2.Size = new System.Drawing.Size(484, 147);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Datos Vendedor";
             // 
+            // lbl3
+            // 
+            this.lbl3.AutoSize = true;
+            this.lbl3.Location = new System.Drawing.Point(16, 82);
+            this.lbl3.Name = "lbl3";
+            this.lbl3.Size = new System.Drawing.Size(122, 17);
+            this.lbl3.TabIndex = 10;
+            this.lbl3.Text = "Nombre Contacto:";
+            this.lbl3.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // lbl4
+            // 
+            this.lbl4.AutoSize = true;
+            this.lbl4.Location = new System.Drawing.Point(19, 114);
+            this.lbl4.Name = "lbl4";
+            this.lbl4.Size = new System.Drawing.Size(46, 17);
+            this.lbl4.TabIndex = 11;
+            this.lbl4.Text = "label5";
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(16, 82);
+            this.label3.Location = new System.Drawing.Point(71, 114);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(122, 17);
-            this.label3.TabIndex = 10;
-            this.label3.Text = "Nombre Contacto:";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
+            this.label3.Size = new System.Drawing.Size(46, 17);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "label3";
             // 
             // DetalleFacturaEmpresa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(506, 562);
+            this.ClientSize = new System.Drawing.Size(506, 621);
             this.Controls.Add(this.btnVolver);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
@@ -303,11 +325,13 @@
         private System.Windows.Forms.Label lblNumeroFactura;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lbl2;
         private System.Windows.Forms.Label lblUsername;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lbl1;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label lbl3;
+        private System.Windows.Forms.Label lbl4;
         private System.Windows.Forms.Label label3;
 
     }

@@ -11,6 +11,7 @@ using System.Configuration;
 
 using MercadoEnvio.Controller;
 using MercadoEnvio.Domain;
+using MercadoEnvio.Facturas;
 
 namespace MercadoEnvio.Generar_Publicación
 {
@@ -146,12 +147,12 @@ namespace MercadoEnvio.Generar_Publicación
             }
             catch (System.FormatException)
             {
-                MessageBox.Show("Ingrese solamente numeros en los formularios verdes, sin puntos", "Nueva Empresa", MessageBoxButtons.OK);
+                MessageBox.Show("Ingrese solamente numeros en los formularios verdes, sin puntos", "Nueva Compra", MessageBoxButtons.OK);
                 return;
             }
             catch (System.OverflowException)
             {
-                MessageBox.Show("Ingrese numeros positivos en los formularios verdes", "Nueva Empresa", MessageBoxButtons.OK);
+                MessageBox.Show("Ingrese numeros positivos en los formularios verdes", "Nueva Compra", MessageBoxButtons.OK);
                 return;
             }
             
@@ -161,7 +162,12 @@ namespace MercadoEnvio.Generar_Publicación
                 return;
             }
 
-            //validar fechas
+            if (cmbVisibilidad.GetItemText(cmbVisibilidad.SelectedItem) == "Gratis" && chkRealizaEnvio.Checked == true)
+            {
+                MessageBox.Show("Esta visibilidad no permite realizar envios", "Don't let your dreams be dreams", MessageBoxButtons.OK);
+                return;
+            }
+           //validar fechas
             int ant1 = DateTime.Compare(fechaInicio, DateTime.Parse(Program.fechaSistema()));
 
             if (ant1 == -1)
@@ -181,15 +187,15 @@ namespace MercadoEnvio.Generar_Publicación
             try
             {
                 
-                
-                //                EXECUTE DBME.crearCompraInmediata 'descrpcion22',4,'2018-01-31 20:07:00.000','2019-01-31 20:07:00.000',4,2,2,3,'ACTIVA',1,1
-                //string comando = "EXECUTE DBME.crearCompraInmediata '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + null + "," + rubro + "," + visibilidad_id + "," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "'," + permitePreguntas + "," + realiza_envio;
                 string comando = "EXECUTE DBME.crearCompraInmediata '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + precio + "." + precio_decimal + "," + rubro + "," + visibilidad_id + "," + sesion_actual.usuarioActual.usuario_id + "," + estado + "," + permitePreguntas + "," + realiza_envio + "," + costo_total;
                 //MessageBox.Show(precio_total.ToString(), "A", MessageBoxButtons.OK);
                 (new ConexionSQL()).ejecutarComandoSQL(comando);
 
-                MessageBox.Show("Compra creada exitosamente", "A", MessageBoxButtons.OK);
+                DetalleFacturaEmpresa det = new DetalleFacturaEmpresa();
+                det.Show();
 
+                MessageBox.Show("Compra creada exitosamente", "Alta Compra Inmediata", MessageBoxButtons.OK);
+                
                 //this.Close();
             }
             catch (Exception er)

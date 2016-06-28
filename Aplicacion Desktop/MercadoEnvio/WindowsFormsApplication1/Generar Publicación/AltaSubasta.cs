@@ -102,18 +102,20 @@ namespace MercadoEnvio.Generar_Publicación
 
         private void AltaSubasta_Load(object sender, EventArgs e)
         {
-
+            dateFechaInicio.Value = DateTime.Parse(Program.fechaSistema() + 1);
+            dateFechaVencimiento.Value = DateTime.Parse(Program.fechaSistema() + 1);
         }
 
         private void cmdGenerarCompra_Click(object sender, EventArgs e)
         {
             string descripcion = txtDescripción.Text;
             uint stock;
-            double precio;
+            uint precio;
+            uint precio_decimal;
             uint rubro;
-            uint visibilidad;
+            int visibilidad_id;
             bool permitePreguntas = chkPermitePreguntas.Checked;
-            int estado;
+            string estado;
 
 
             DateTime fechaInicio;
@@ -124,25 +126,37 @@ namespace MercadoEnvio.Generar_Publicación
             try
             {
                 rubro = rubros[cmbRubros.SelectedIndex].rubro_id;
-                visibilidad = UInt32.Parse(visibilidades[cmbEstado.SelectedIndex].id.ToString());
-                estado = cmbEstado.SelectedIndex;
+                visibilidad_id = cmbVisibilidad.SelectedIndex + 1;
+                estado = cmbEstado.GetItemText(cmbEstado.SelectedItem);
                 fechaInicio = DateTime.Parse(dateFechaInicio.Text);
                 fechaVencimiento = DateTime.Parse(dateFechaVencimiento.Text);
                 stock = UInt32.Parse(txtStock.Text);
-                precio = Double.Parse(txtPrecio.Text);
+                precio = UInt32.Parse(txtValorInicial.Text);
+                precio_decimal = UInt32.Parse(txtValorInicialDecimal.Text);
                 costo_total = Double.Parse(txtCostoTotal.Text);
             }
             catch (System.FormatException)
             {
-                MessageBox.Show("Ingrese solamente numeros en los formularios verdes, sin puntos", "Nueva Empresa", MessageBoxButtons.OK);
+                MessageBox.Show("Ingrese solamente numeros en los formularios verdes, sin puntos", "Nueva Subasta", MessageBoxButtons.OK);
                 return;
             }
             catch (System.OverflowException)
             {
-                MessageBox.Show("Ingrese numeros positivos en los formularios verdes", "Nueva Empresa", MessageBoxButtons.OK);
+                MessageBox.Show("Ingrese numeros positivos en los formularios verdes", "Nueva Subasta", MessageBoxButtons.OK);
                 return;
             }
 
+            if (precio_decimal < 0 || precio_decimal > 100)
+            {
+                MessageBox.Show("La parte decimal del precio supera los limites", "Problema", MessageBoxButtons.OK);
+                return;
+            }
+
+            if (cmbVisibilidad.GetItemText(cmbVisibilidad.SelectedItem) == "Gratis" && chkRealizaEnvio.Checked == true)
+            {
+                MessageBox.Show("Esta visibilidad no permite realizar envios", "Nueva Subasta", MessageBoxButtons.OK);
+                return;
+            }
             //validar fechas
             int ant1 = DateTime.Compare(fechaInicio, DateTime.Parse(Program.fechaSistema()));
 
@@ -162,22 +176,36 @@ namespace MercadoEnvio.Generar_Publicación
 
             try
             {
-                string preciostring = precio.ToString().Replace(",", ".");
 
-                //CREATE PROCEDURE DBME.crearCompraInmediata (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), @rubro_id INT, @visibilidad_id INT, @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit)
-                string comando = "EXECUTE DBME.Subasta '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + preciostring + "," + rubro + "," + visibilidad + "," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "'," + permitePreguntas + "," + realiza_envio;
-                MessageBox.Show(comando, "A", MessageBoxButtons.OK);
-                //(new ConexionSQL()).ejecutarComandoSQL(comando);
+                //CREATE PROCEDURE DBME.crearSubasta (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME, @costo NUMERIC(18,2), @rubro_id INT, @visibilidad_id NUMERIC(18,0), @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit, @valor_inicial DECIMAL(10,2))
+                string comando = "EXECUTE DBME.crearSubasta '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + costo_total + "," + rubro + "," + visibilidad_id + "," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "'," + permitePreguntas + "," + realiza_envio + "," + precio + "." + precio_decimal;
+                MessageBox.Show(comando, "subasta", MessageBoxButtons.OK);
+                (new ConexionSQL()).ejecutarComandoSQL(comando);
 
                 MessageBox.Show("Subasta creada exitosamente", "Nueva subasta", MessageBoxButtons.OK);
 
-                this.Close();
+                //this.Close();
             }
             catch (Exception er)
             {
                 MessageBox.Show(er.Message, "Error", MessageBoxButtons.OK);
                 return;
             }
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chkRealizaEnvio_CheckedChanged(object sender, EventArgs e)
+        {
+            actualizar_costo_total();
+        }
+
+        private void cmbVisibilidad_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            actualizar_costo_total();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace MercadoEnvio.Login
 
         private void LoginInicial_Load(object sender, EventArgs e)
         {
-            textBox1.Text = Program.fechaSistema();
+            //textBox1.Text = Program.fechaSistema();
             Controller.Controller controller = new Controller.Controller();
             try
             {

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label10 = new System.Windows.Forms.Label();
             this.dateFechaInicio = new System.Windows.Forms.DateTimePicker();
             this.label14 = new System.Windows.Forms.Label();
             this.cmbEstado = new System.Windows.Forms.ComboBox();
@@ -50,7 +49,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.txtPrecio = new System.Windows.Forms.TextBox();
+            this.txtValorInicial = new System.Windows.Forms.TextBox();
             this.txtStock = new System.Windows.Forms.TextBox();
             this.cmdGenerarCompra = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
@@ -61,13 +60,14 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtDescripción = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.txtValorInicialDecimal = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.txtValorInicialDecimal);
             this.groupBox1.Controls.Add(this.dateFechaInicio);
             this.groupBox1.Controls.Add(this.label14);
             this.groupBox1.Controls.Add(this.cmbEstado);
@@ -75,7 +75,7 @@
             this.groupBox1.Controls.Add(this.dateFechaVencimiento);
             this.groupBox1.Controls.Add(this.cmbRubros);
             this.groupBox1.Controls.Add(this.groupBox2);
-            this.groupBox1.Controls.Add(this.txtPrecio);
+            this.groupBox1.Controls.Add(this.txtValorInicial);
             this.groupBox1.Controls.Add(this.txtStock);
             this.groupBox1.Controls.Add(this.cmdGenerarCompra);
             this.groupBox1.Controls.Add(this.label12);
@@ -92,15 +92,7 @@
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Crear Subasta";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(133, 199);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(174, 13);
-            this.label10.TabIndex = 40;
-            this.label10.Text = "Ingrese el precio con coma decimal";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // dateFechaInicio
             // 
@@ -258,6 +250,7 @@
             this.chkRealizaEnvio.Size = new System.Drawing.Size(15, 14);
             this.chkRealizaEnvio.TabIndex = 25;
             this.chkRealizaEnvio.UseVisualStyleBackColor = true;
+            this.chkRealizaEnvio.CheckedChanged += new System.EventHandler(this.chkRealizaEnvio_CheckedChanged);
             // 
             // cmbVisibilidad
             // 
@@ -267,6 +260,7 @@
             this.cmbVisibilidad.Name = "cmbVisibilidad";
             this.cmbVisibilidad.Size = new System.Drawing.Size(121, 21);
             this.cmbVisibilidad.TabIndex = 24;
+            this.cmbVisibilidad.SelectedIndexChanged += new System.EventHandler(this.cmbVisibilidad_SelectedIndexChanged);
             // 
             // label7
             // 
@@ -295,14 +289,14 @@
             this.label13.TabIndex = 23;
             this.label13.Text = "Realiza Envio?";
             // 
-            // txtPrecio
+            // txtValorInicial
             // 
-            this.txtPrecio.BackColor = System.Drawing.Color.PaleGreen;
-            this.txtPrecio.Location = new System.Drawing.Point(134, 180);
-            this.txtPrecio.MaxLength = 254;
-            this.txtPrecio.Name = "txtPrecio";
-            this.txtPrecio.Size = new System.Drawing.Size(122, 20);
-            this.txtPrecio.TabIndex = 30;
+            this.txtValorInicial.BackColor = System.Drawing.Color.PaleGreen;
+            this.txtValorInicial.Location = new System.Drawing.Point(135, 181);
+            this.txtValorInicial.MaxLength = 254;
+            this.txtValorInicial.Name = "txtValorInicial";
+            this.txtValorInicial.Size = new System.Drawing.Size(56, 20);
+            this.txtValorInicial.TabIndex = 30;
             // 
             // txtStock
             // 
@@ -319,7 +313,7 @@
             this.cmdGenerarCompra.Name = "cmdGenerarCompra";
             this.cmdGenerarCompra.Size = new System.Drawing.Size(151, 47);
             this.cmdGenerarCompra.TabIndex = 28;
-            this.cmdGenerarCompra.Text = "Generar Compra Inmediata";
+            this.cmdGenerarCompra.Text = "Generar Subasta";
             this.cmdGenerarCompra.UseVisualStyleBackColor = true;
             this.cmdGenerarCompra.Click += new System.EventHandler(this.cmdGenerarCompra_Click);
             // 
@@ -396,6 +390,14 @@
             this.label4.TabIndex = 11;
             this.label4.Text = "Descripción";
             // 
+            // txtValorInicialDecimal
+            // 
+            this.txtValorInicialDecimal.BackColor = System.Drawing.Color.PaleGreen;
+            this.txtValorInicialDecimal.Location = new System.Drawing.Point(199, 181);
+            this.txtValorInicialDecimal.Name = "txtValorInicialDecimal";
+            this.txtValorInicialDecimal.Size = new System.Drawing.Size(57, 20);
+            this.txtValorInicialDecimal.TabIndex = 41;
+            // 
             // AltaSubasta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -418,7 +420,6 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.DateTimePicker dateFechaInicio;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ComboBox cmbEstado;
@@ -439,7 +440,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox txtPrecio;
+        private System.Windows.Forms.TextBox txtValorInicial;
         private System.Windows.Forms.TextBox txtStock;
         private System.Windows.Forms.Button cmdGenerarCompra;
         private System.Windows.Forms.Label label12;
@@ -450,5 +451,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtDescripción;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtValorInicialDecimal;
     }
 }

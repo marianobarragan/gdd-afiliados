@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label10 = new System.Windows.Forms.Label();
+            this.txtPrecioDecimal = new System.Windows.Forms.TextBox();
             this.dateFechaInicio = new System.Windows.Forms.DateTimePicker();
             this.label14 = new System.Windows.Forms.Label();
             this.cmbEstado = new System.Windows.Forms.ComboBox();
@@ -61,7 +61,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtDescripción = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.txtPrecioDecimal = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -69,7 +68,6 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.txtPrecioDecimal);
-            this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.dateFechaInicio);
             this.groupBox1.Controls.Add(this.label14);
             this.groupBox1.Controls.Add(this.cmbEstado);
@@ -96,14 +94,13 @@
             this.groupBox1.Text = "Crear Compra Inmediata";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
-            // label10
+            // txtPrecioDecimal
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(133, 189);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(174, 13);
-            this.label10.TabIndex = 40;
-            this.label10.Text = "Ingrese el precio con coma decimal";
+            this.txtPrecioDecimal.BackColor = System.Drawing.Color.PaleGreen;
+            this.txtPrecioDecimal.Location = new System.Drawing.Point(214, 170);
+            this.txtPrecioDecimal.Name = "txtPrecioDecimal";
+            this.txtPrecioDecimal.Size = new System.Drawing.Size(72, 20);
+            this.txtPrecioDecimal.TabIndex = 41;
             // 
             // dateFechaInicio
             // 
@@ -384,12 +381,12 @@
             // 
             // txtDescripción
             // 
-            this.txtDescripción.Location = new System.Drawing.Point(93, 31);
+            this.txtDescripción.Location = new System.Drawing.Point(133, 31);
             this.txtDescripción.MaxLength = 254;
             this.txtDescripción.Multiline = true;
             this.txtDescripción.Name = "txtDescripción";
             this.txtDescripción.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDescripción.Size = new System.Drawing.Size(267, 88);
+            this.txtDescripción.Size = new System.Drawing.Size(227, 88);
             this.txtDescripción.TabIndex = 12;
             // 
             // label4
@@ -400,14 +397,6 @@
             this.label4.Size = new System.Drawing.Size(63, 13);
             this.label4.TabIndex = 11;
             this.label4.Text = "Descripción";
-            // 
-            // txtPrecioDecimal
-            // 
-            this.txtPrecioDecimal.BackColor = System.Drawing.Color.PaleGreen;
-            this.txtPrecioDecimal.Location = new System.Drawing.Point(214, 170);
-            this.txtPrecioDecimal.Name = "txtPrecioDecimal";
-            this.txtPrecioDecimal.Size = new System.Drawing.Size(72, 20);
-            this.txtPrecioDecimal.TabIndex = 41;
             // 
             // AltaCompraInmediata
             // 
@@ -462,7 +451,6 @@
         private System.Windows.Forms.Label lblPorcentaje;
         private System.Windows.Forms.DateTimePicker dateFechaInicio;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox txtPrecioDecimal;
     }
 }

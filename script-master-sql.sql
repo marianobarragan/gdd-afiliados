@@ -176,7 +176,7 @@ GO
 CREATE TABLE DBME.factura_detalle(
 	factura_detalle_id INT IDENTITY(1,1) PRIMARY KEY,
 	factura_cantidad NUMERIC(18,0),
-	tipo_de_item VARCHAR(64) CHECK(tipo_de_item IN ('PRODUCTO','ENVIO','VISIBILIDAD','INDEFINIDO')), /* costo de producto, o costo de envio, o costo de publicacion  */
+	tipo_de_item VARCHAR(64), 
 	factura_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.factura(factura_id),
 	monto_parcial NUMERIC(18,2)
 );
@@ -1036,26 +1036,27 @@ BEGIN
 	DECLARE @visibilidad_descripcion AS NVARCHAR(255) 
 	SET @visibilidad_descripcion = (SELECT visibilidad_descripcion FROM dbme.visibilidad WHERE visibilidad_id = @visibilidad_id)
 	
+	DECLARE @factura_id AS INT
 
-
-	IF (@visibilidad_descripcion = 'Gratis' AND (SELECT es_nuevo FROM DBME.usuario WHERE usuario_id = @autor_id) = 0 )
-	BEGIN
-		SET @mensaje_error = 'No puede utilizar la visibilidad gratis porque ud ya no es un usuario nuevo.'
-		RAISERROR(@mensaje_error, 12, 1)
-		RETURN
-	END
-
-	 
 	BEGIN TRY
 		BEGIN TRANSACTION	
+
+		IF ((SELECT es_nuevo FROM DBME.usuario WHERE usuario_id = @autor_id) = 1 )
+		BEGIN
+			SET @costo = 0
+			UPDATE DBME.usuario SET es_nuevo = 0 WHERE usuario_id = @autor_id
+		END
 
 		INSERT INTO DBME.publicacion (publicacion_tipo,descripcion,stock,fecha_creacion,fecha_vencimiento,precio,costo,rubro_id,visibilidad_id,autor_id,estado,permite_preguntas,realiza_envio,cantidad)
 		VALUES ('Compra Inmediata',@descripcion,@stock,@fecha_creacion,@fecha_vencimiento,@precio,@costo,@rubro_id,@visibilidad_id,@autor_id,@estado,@permite_preguntas,@realiza_envio,@stock)
 
 		SET @publicacion_id = SCOPE_IDENTITY()
+		DECLARE @descripcion_facha AS VARCHAR(64)
+		SET @descripcion_facha = CONVERT(VARCHAR(64),@visibilidad_descripcion) + 'Costo visibilidad'
 
-		EXECUTE DBME.crearFactura @publicacion_id, @autor_id
-
+		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
+		EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
+		
 		COMMIT TRANSACTION
 	END TRY
 	BEGIN CATCH
@@ -1065,6 +1066,48 @@ BEGIN
 	END CATCH
 END;
 GO
+
+CREATE PROCEDURE DBME.crearSubasta (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME, @costo NUMERIC(18,2), @rubro_id INT, @visibilidad_id NUMERIC(18,0), @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit, @valor_inicial DECIMAL(10,2))
+AS
+BEGIN
+
+	DECLARE @mensaje_error AS NVARCHAR(99)
+	DECLARE @publicacion_id AS NUMERIC(18,0)
+	
+	DECLARE @visibilidad_descripcion AS NVARCHAR(255) 
+	SET @visibilidad_descripcion = (SELECT visibilidad_descripcion FROM dbme.visibilidad WHERE visibilidad_id = @visibilidad_id)
+	
+	DECLARE @factura_id AS INT
+
+	BEGIN TRY
+		BEGIN TRANSACTION	
+
+		IF ((SELECT es_nuevo FROM DBME.usuario WHERE usuario_id = @autor_id) = 1 )
+		BEGIN
+			SET @costo = 0
+			UPDATE DBME.usuario SET es_nuevo = 0 WHERE usuario_id = @autor_id
+		END
+
+		INSERT INTO DBME.publicacion (publicacion_tipo, descripcion, stock, fecha_creacion, fecha_vencimiento, costo, rubro_id, visibilidad_id, autor_id, estado ,permite_preguntas, realiza_envio, valor_inicial)
+		VALUES ('Subasta', @descripcion, @stock, @fecha_creacion,@fecha_vencimiento, @costo, @rubro_id, @visibilidad_id , @autor_id, @estado ,@permite_preguntas, @realiza_envio , @valor_inicial)
+
+		SET @publicacion_id = SCOPE_IDENTITY()
+		DECLARE @descripcion_facha AS VARCHAR(64)
+		SET @descripcion_facha = CONVERT(VARCHAR(64),@visibilidad_descripcion) + 'Costo visibilidad'
+
+		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
+		EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
+		
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		SET @mensaje_error = 'Error en crear la nueva publicacion. Se deshace la operacion entera. Lo sentimos.'
+		RAISERROR(@mensaje_error, 12, 1)
+		ROLLBACK TRANSACTION 
+	END CATCH
+END;
+GO
+
 
 
 
@@ -1158,7 +1201,6 @@ BEGIN
 END;
 GO
 
---EXECUTE DBME.crearCompraInmediata 'descrpcion22',4,'2018-01-31 20:07:00.000','2019-01-31 20:07:00.000',4,2,2,3,'ACTIVA',1,1
 
 CREATE PROCEDURE DBME.chequearVencimientoPublicaciones (@hora_actual DATETIME)
 AS
@@ -1246,7 +1288,7 @@ GO*/
 
 
 
-CREATE PROCEDURE DBME.crearFactura (@publicacion_id NUMERIC(18,2) , @usuario_id INT)
+CREATE PROCEDURE DBME.crearFactura (@publicacion_id NUMERIC(18,2) , @usuario_id INT, @precio NUMERIC(18,2),@factura_id INT OUT)
 AS
 BEGIN
 	DECLARE @mensaje_error AS NVARCHAR(99)
@@ -1254,21 +1296,45 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 
-		--INSERT INTO DBME.factura(forma_pago_desc,monto_total,fecha)
-		select * from dbme.visibilidad
-
+		INSERT INTO DBME.factura(publicacion_id,usuario_id,monto_total,fecha,forma_pago_desc)
+		VALUES (@publicacion_id,@usuario_id,@precio,dbme.getHoraDelSistema(),'Efectivo')
 
 		COMMIT TRANSACTION 
+		SET @factura_id = SCOPE_IDENTITY()
 	END TRY
 
 	BEGIN CATCH
-		SET @mensaje_error = 'Error en crear la nueva publicacion. Se deshace la operacion entera. Lo sentimos.'
+		SET @mensaje_error = 'Error en crear la nueva factura. Se deshace la operacion entera. Lo sentimos.'
 		RAISERROR(@mensaje_error, 12, 1)
 		ROLLBACK TRANSACTION 
 	END CATCH
 
 END;
 GO
+
+CREATE PROCEDURE DBME.crearDetalleFactura (@cantidad NUMERIC(18,0), @tipo_de_item VARCHAR(64), @factura_id INT,@monto_parcial NUMERIC(18,2))
+AS
+BEGIN
+	DECLARE @mensaje_error AS NVARCHAR(99)
+		
+	BEGIN TRY
+		BEGIN TRANSACTION
+
+		INSERT INTO DBME.factura_detalle(factura_cantidad,tipo_de_item,factura_id,monto_parcial)
+		VALUES (@cantidad,@tipo_de_item,@factura_id,@monto_parcial)
+
+		COMMIT TRANSACTION 
+	END TRY
+
+	BEGIN CATCH
+		SET @mensaje_error = 'Error en crear el detalle de factura. Se deshace la operacion entera. Lo sentimos.'
+		RAISERROR(@mensaje_error, 12, 1)
+		ROLLBACK TRANSACTION 
+	END CATCH
+
+END;
+GO
+
 
 /* END PROCEDURES COMUNICACION */
 
@@ -1286,7 +1352,5 @@ END;
 GO
 
 /* END PROCEDURES DOMINIO*/
-
---INSERT INTO DBME.reloj (hora_actual) VALUES(GETDATE())
 
 -- COMO EJECUTAR FUNCIONES select * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2015,'1')
