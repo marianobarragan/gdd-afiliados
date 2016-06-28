@@ -1039,6 +1039,17 @@ BEGIN
 		--EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
 		
 		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		SET @mensaje_error = 'Error en crear la nueva publicacion. Se deshace la operacion entera. Lo sentimos.'
+		RAISERROR(@mensaje_error, 12, 1)
+		ROLLBACK TRANSACTION 
+	END CATCH
+END;
+GO
+
+
+
 CREATE PROCEDURE DBME.loginUsuario (@username nvarchar(255),@contrasenia nvarchar(255))
 AS
 BEGIN
