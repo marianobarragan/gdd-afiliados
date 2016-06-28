@@ -195,8 +195,7 @@ namespace MercadoEnvio.Generar_Publicación
                 det.Show();
 
                 MessageBox.Show("Publicacion creada exitosamente", "Alta Compra Inmediata", MessageBoxButtons.OK);
-                
-                //this.Close();
+                this.Close();
             }
             catch (Exception er)
             {

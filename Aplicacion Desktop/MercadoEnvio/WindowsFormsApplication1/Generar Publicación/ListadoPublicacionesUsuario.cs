@@ -106,7 +106,9 @@ namespace MercadoEnvio.Generar_Publicación
             }
             else
             {
-
+                ModificarSubasta mod = new ModificarSubasta(publicacion_id, sesion_actual);
+                mod.Show();
+                this.Close();
                 //ComprarOfertar.OfertarProducto ofertarProducto = new ComprarOfertar.OfertarProducto(publicacion_id, descripcion, precio, stock, sesionActual.usuarioActual.usuario_id);
                 //ofertarProducto.Show();
 

@@ -13,25 +13,21 @@ using MercadoEnvio.Controller;
 
 namespace MercadoEnvio.Generar_Publicación
 {
-    public partial class AltaSubasta : Form
+    public partial class ModificarSubasta : Form
     {
         public List<Rubro> rubros;
         public List<Visibilidad2> visibilidades;
         public Sesion sesion_actual;
+        public int id_publicacion;
 
-        public AltaSubasta(Sesion sesion)
+        public ModificarSubasta(int id, Sesion sesion)
         {
-            this.sesion_actual = sesion;
             InitializeComponent();
-
+            id_publicacion = id;
+            sesion_actual = sesion;
 
             cargar_rubros();
-            cmbRubros.SelectedIndex = 0;
-
             cargar_visibilidad();
-
-            cmbEstado.SelectedIndex = 0;
-
             actualizar_costo_total();
         }
 
@@ -100,10 +96,23 @@ namespace MercadoEnvio.Generar_Publicación
             txtCostoTotal.Text = costo_total.ToString();
         }
 
-        private void AltaSubasta_Load(object sender, EventArgs e)
+
+        private void ModificarSubasta_Load(object sender, EventArgs e)
         {
-            dateFechaInicio.Value = DateTime.Parse(Program.fechaSistema() + 1);
-            dateFechaVencimiento.Value = DateTime.Parse(Program.fechaSistema() + 1);
+            string comando = "SELECT p.descripcion, p.stock , p.fecha_creacion, p.fecha_vencimiento, p.valor_inicial, p.rubro_id, p.visibilidad_id, p.estado, p.permite_preguntas, realiza_envio, p.costo FROM DBME.publicacion p WHERE p.publicacion_id = " + id_publicacion;
+            DataTable dt = (new ConexionSQL()).cargarTablaSQL(comando);
+
+            txtDescripción.Text = dt.Rows[0][0].ToString();
+            txtStock.Text = dt.Rows[0][1].ToString();
+            dateFechaInicio.Text = dt.Rows[0][2].ToString();
+            dateFechaVencimiento.Text = dt.Rows[0][3].ToString();
+            txtValorInicial.Text = dt.Rows[0][4].ToString();
+            cmbRubros.SelectedIndex = Int32.Parse(dt.Rows[0][5].ToString());
+            cmbVisibilidad.SelectedIndex = Int32.Parse(dt.Rows[0][6].ToString()) - 1;
+            cmbEstado.SelectedIndex = cmbEstado.FindString(dt.Rows[0][7].ToString());
+            chkPermitePreguntas.Checked = Boolean.Parse(dt.Rows[0][8].ToString());
+            chkRealizaEnvio.Checked = Boolean.Parse(dt.Rows[0][9].ToString());
+            txtCostoTotal.Text = dt.Rows[0][10].ToString();
         }
 
         private void cmdGenerarCompra_Click(object sender, EventArgs e)
@@ -137,12 +146,12 @@ namespace MercadoEnvio.Generar_Publicación
             }
             catch (System.FormatException)
             {
-                MessageBox.Show("Ingrese solamente numeros en los formularios verdes, sin puntos", "Nueva Subasta", MessageBoxButtons.OK);
+                MessageBox.Show("Ingrese solamente numeros en los formularios verdes, sin puntos", "Nueva Compra", MessageBoxButtons.OK);
                 return;
             }
             catch (System.OverflowException)
             {
-                MessageBox.Show("Ingrese numeros positivos en los formularios verdes", "Nueva Subasta", MessageBoxButtons.OK);
+                MessageBox.Show("Ingrese numeros positivos en los formularios verdes", "Nueva Compra", MessageBoxButtons.OK);
                 return;
             }
 
@@ -154,7 +163,7 @@ namespace MercadoEnvio.Generar_Publicación
 
             if (cmbVisibilidad.GetItemText(cmbVisibilidad.SelectedItem) == "Gratis" && chkRealizaEnvio.Checked == true)
             {
-                MessageBox.Show("Esta visibilidad no permite realizar envios", "Nueva Subasta", MessageBoxButtons.OK);
+                MessageBox.Show("Esta visibilidad no permite realizar envios", "Don't let your dreams be dreams", MessageBoxButtons.OK);
                 return;
             }
             //validar fechas
@@ -177,13 +186,12 @@ namespace MercadoEnvio.Generar_Publicación
             try
             {
 
-                //CREATE PROCEDURE DBME.crearSubasta (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME, @costo NUMERIC(18,2), @rubro_id INT, @visibilidad_id NUMERIC(18,0), @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit, @valor_inicial DECIMAL(10,2))
-                string comando = "EXECUTE DBME.crearSubasta '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + costo_total + "," + rubro + "," + visibilidad_id + "," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "'," + permitePreguntas + "," + realiza_envio + "," + precio + "." + precio_decimal;
-                //MessageBox.Show(comando, "subasta", MessageBoxButtons.OK);
+                //string comando = "EXECUTE DBME.crearCompraInmediata '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + precio + "." + precio_decimal + "," + rubro + "," + visibilidad_id + "," + sesion_actual.usuarioActual.usuario_id + "," + estado + "," + permitePreguntas + "," + realiza_envio + "," + costo_total;
+                //comando = "UPDATE DBME.visibilidad SET visibilidad_descripcion = '" + txtDescripcion.Text + "',visibilidad_precio = " + txtPrecio.Text + "." + txtPrecioDecimal.Text + ",visibilidad_porcentaje = " + porcentajeString + ",visibilidad_costo_envio = " + txtCostoEnvio.Text + "." + txtCostoEnvioDecimal.Text + " WHERE visibilidad_id = " + id;
+                string comando = "UPDATE DBME.publicacion SET descripcion = '" + descripcion + "',stock = " + stock + ",fecha_creacion = '" + fechaInicio + "',fecha_vencimiento ='" + fechaVencimiento + "',valor_inicial=" + precio + "." + precio_decimal + ",rubro_id=" + rubro + ",visibilidad_id=" + visibilidad_id + ",estado = '" + estado + "', permite_preguntas = '" + permitePreguntas + "', realiza_envio ='" + realiza_envio + "', costo =" + costo_total + "WHERE publicacion_id= " + id_publicacion;
                 (new ConexionSQL()).ejecutarComandoSQL(comando);
 
-                MessageBox.Show("Subasta creada exitosamente", "Nueva subasta", MessageBoxButtons.OK);
-
+                MessageBox.Show("Publicacion actualizada exitosamente", "Compra Inmediata", MessageBoxButtons.OK);
                 this.Close();
             }
             catch (Exception er)
@@ -191,11 +199,6 @@ namespace MercadoEnvio.Generar_Publicación
                 MessageBox.Show(er.Message, "Error", MessageBoxButtons.OK);
                 return;
             }
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
         }
 
         private void chkRealizaEnvio_CheckedChanged(object sender, EventArgs e)
