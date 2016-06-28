@@ -63,7 +63,7 @@ namespace MercadoEnvio.ComprarOfertar
             {
                 queryRubros = queryRubros + "'"+ rubro_string +"',";
             }
-            queryRubros = queryRubros + "'lalala')";
+            queryRubros = queryRubros + "'asasas')";
             //MessageBox.Show(queryRubros, "T", MessageBoxButtons.OK);
         }
 
@@ -96,10 +96,28 @@ namespace MercadoEnvio.ComprarOfertar
 
         private void mostrar_pagina(int numero_pagina)
         {
+            if (dt.Rows.Count == 0)
+            {
+                MessageBox.Show("No se han encontrado resultados", "Problema", MessageBoxButtons.OK);
+                dataGridView1.DataSource = null;
+                return;
+            }
+
             DataTable pagina = new DataTable();
             pagina = dt.Clone();
 
             int inicio = (numero_pagina - 1) * 50;
+
+            if (dt.Rows.Count < 50)         // caso excepcional, solo si hay menos de 50 resultados
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    pagina.ImportRow(dt.Rows[i]);
+                }
+
+                dataGridView1.DataSource = pagina;
+                return;
+            }
 
             for (int i = inicio; i < (inicio + 50); i++)
             {
@@ -149,8 +167,9 @@ namespace MercadoEnvio.ComprarOfertar
                 comprarProducto.Show();
             }
             else{
-                //ComprarOfertar.OfertarProducto ofertarProducto = new ComprarOfertar.OfertarProducto();
-                //ofertarProducto.Show();
+
+                ComprarOfertar.OfertarProducto ofertarProducto = new ComprarOfertar.OfertarProducto(publicacion_id, descripcion, precio, stock, sesionActual.usuarioActual.usuario_id);
+                ofertarProducto.Show();
 
             }
         }

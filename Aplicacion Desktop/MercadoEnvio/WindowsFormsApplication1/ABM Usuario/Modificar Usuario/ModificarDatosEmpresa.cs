@@ -109,7 +109,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
                 return;
             }
 
-            try // insertar nueva empresa
+            try // actualizar empresa
             {
 
                 string comando = "EXECUTE DBME.updateEmpresa " + empresa_id + ",'" + nombre + "','" + razon_social + "','" + CUIT + "'," + rubro + ",'" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "','" + altura_calle + "','" + numero_piso + "','" + departamento + "','" + numero_telefono + "'";

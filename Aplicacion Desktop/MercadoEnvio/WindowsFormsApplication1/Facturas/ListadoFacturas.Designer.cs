@@ -55,9 +55,9 @@
             // 
             // btnAccion
             // 
-            this.btnAccion.Location = new System.Drawing.Point(443, 625);
+            this.btnAccion.Location = new System.Drawing.Point(472, 625);
             this.btnAccion.Name = "btnAccion";
-            this.btnAccion.Size = new System.Drawing.Size(130, 23);
+            this.btnAccion.Size = new System.Drawing.Size(130, 40);
             this.btnAccion.TabIndex = 12;
             this.btnAccion.Text = "Ver";
             this.btnAccion.UseVisualStyleBackColor = true;
@@ -71,7 +71,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(561, 395);
+            this.dataGridView1.Size = new System.Drawing.Size(590, 395);
             this.dataGridView1.TabIndex = 11;
             // 
             // groupBox1
@@ -94,7 +94,7 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(561, 195);
+            this.groupBox1.Size = new System.Drawing.Size(590, 195);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtrar Facturas";
@@ -104,7 +104,7 @@
             this.chkDirigida.AutoSize = true;
             this.chkDirigida.Checked = true;
             this.chkDirigida.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDirigida.Location = new System.Drawing.Point(372, 162);
+            this.chkDirigida.Location = new System.Drawing.Point(411, 162);
             this.chkDirigida.Name = "chkDirigida";
             this.chkDirigida.Size = new System.Drawing.Size(15, 14);
             this.chkDirigida.TabIndex = 16;
@@ -116,14 +116,14 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(22, 158);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(102, 13);
+            this.label4.Size = new System.Drawing.Size(157, 13);
             this.label4.TabIndex = 15;
-            this.label4.Text = "A quien está dirigida";
+            this.label4.Text = "A quien está dirigida (username)";
             // 
             // txtFinIntervalo
             // 
             this.txtFinIntervalo.BackColor = System.Drawing.Color.PaleGreen;
-            this.txtFinIntervalo.Location = new System.Drawing.Point(265, 81);
+            this.txtFinIntervalo.Location = new System.Drawing.Point(304, 81);
             this.txtFinIntervalo.Name = "txtFinIntervalo";
             this.txtFinIntervalo.Size = new System.Drawing.Size(85, 20);
             this.txtFinIntervalo.TabIndex = 14;
@@ -131,21 +131,21 @@
             // txtInicioIntervalo
             // 
             this.txtInicioIntervalo.BackColor = System.Drawing.Color.PaleGreen;
-            this.txtInicioIntervalo.Location = new System.Drawing.Point(150, 80);
+            this.txtInicioIntervalo.Location = new System.Drawing.Point(189, 80);
             this.txtInicioIntervalo.Name = "txtInicioIntervalo";
             this.txtInicioIntervalo.Size = new System.Drawing.Size(93, 20);
             this.txtInicioIntervalo.TabIndex = 13;
             // 
             // dateTimePicker2
             // 
-            this.dateTimePicker2.Location = new System.Drawing.Point(150, 48);
+            this.dateTimePicker2.Location = new System.Drawing.Point(189, 48);
             this.dateTimePicker2.Name = "dateTimePicker2";
             this.dateTimePicker2.Size = new System.Drawing.Size(200, 20);
             this.dateTimePicker2.TabIndex = 12;
             // 
             // dateTimePicker1
             // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(150, 22);
+            this.dateTimePicker1.Location = new System.Drawing.Point(189, 22);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(200, 20);
             this.dateTimePicker1.TabIndex = 11;
@@ -155,7 +155,7 @@
             this.chkDetalles.AutoSize = true;
             this.chkDetalles.Checked = true;
             this.chkDetalles.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDetalles.Location = new System.Drawing.Point(372, 127);
+            this.chkDetalles.Location = new System.Drawing.Point(411, 127);
             this.chkDetalles.Name = "chkDetalles";
             this.chkDetalles.Size = new System.Drawing.Size(15, 14);
             this.chkDetalles.TabIndex = 10;
@@ -167,7 +167,7 @@
             this.chkImporte.AutoSize = true;
             this.chkImporte.Checked = true;
             this.chkImporte.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkImporte.Location = new System.Drawing.Point(372, 87);
+            this.chkImporte.Location = new System.Drawing.Point(411, 87);
             this.chkImporte.Name = "chkImporte";
             this.chkImporte.Size = new System.Drawing.Size(15, 14);
             this.chkImporte.TabIndex = 9;
@@ -179,7 +179,7 @@
             this.chkFechas.AutoSize = true;
             this.chkFechas.Checked = true;
             this.chkFechas.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkFechas.Location = new System.Drawing.Point(372, 28);
+            this.chkFechas.Location = new System.Drawing.Point(411, 28);
             this.chkFechas.Name = "chkFechas";
             this.chkFechas.Size = new System.Drawing.Size(15, 14);
             this.chkFechas.TabIndex = 8;
@@ -188,7 +188,7 @@
             // 
             // btnLimpiar
             // 
-            this.btnLimpiar.Location = new System.Drawing.Point(425, 57);
+            this.btnLimpiar.Location = new System.Drawing.Point(445, 51);
             this.btnLimpiar.Name = "btnLimpiar";
             this.btnLimpiar.Size = new System.Drawing.Size(130, 23);
             this.btnLimpiar.TabIndex = 7;
@@ -198,7 +198,7 @@
             // 
             // btnBuscar
             // 
-            this.btnBuscar.Location = new System.Drawing.Point(425, 23);
+            this.btnBuscar.Location = new System.Drawing.Point(445, 22);
             this.btnBuscar.Name = "btnBuscar";
             this.btnBuscar.Size = new System.Drawing.Size(130, 23);
             this.btnBuscar.TabIndex = 6;
@@ -208,7 +208,7 @@
             // 
             // txtDirigida
             // 
-            this.txtDirigida.Location = new System.Drawing.Point(150, 158);
+            this.txtDirigida.Location = new System.Drawing.Point(189, 158);
             this.txtDirigida.Name = "txtDirigida";
             this.txtDirigida.Size = new System.Drawing.Size(200, 20);
             this.txtDirigida.TabIndex = 5;
@@ -224,9 +224,9 @@
             // 
             // txtContenido
             // 
-            this.txtContenido.Location = new System.Drawing.Point(200, 121);
+            this.txtContenido.Location = new System.Drawing.Point(189, 121);
             this.txtContenido.Name = "txtContenido";
-            this.txtContenido.Size = new System.Drawing.Size(150, 20);
+            this.txtContenido.Size = new System.Drawing.Size(200, 20);
             this.txtContenido.TabIndex = 4;
             // 
             // label2
@@ -276,7 +276,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.ClientSize = new System.Drawing.Size(585, 677);
+            this.ClientSize = new System.Drawing.Size(617, 677);
             this.Controls.Add(this.btnSiguiente);
             this.Controls.Add(this.btnAnterior);
             this.Controls.Add(this.btnAccion);

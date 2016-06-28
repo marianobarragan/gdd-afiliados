@@ -53,7 +53,8 @@
             this.lstOpciones.ItemHeight = 20;
             this.lstOpciones.Items.AddRange(new object[] {
             "Publicación para una compra inmediata",
-            "Publicación para una subasta"});
+            "Publicación para una subasta",
+            "Ver publicaciones del usuario"});
             this.lstOpciones.Location = new System.Drawing.Point(23, 34);
             this.lstOpciones.Name = "lstOpciones";
             this.lstOpciones.Size = new System.Drawing.Size(357, 84);

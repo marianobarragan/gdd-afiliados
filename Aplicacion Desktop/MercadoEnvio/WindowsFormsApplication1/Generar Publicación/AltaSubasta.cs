@@ -184,7 +184,7 @@ namespace MercadoEnvio.Generar_Publicación
 
                 MessageBox.Show("Subasta creada exitosamente", "Nueva subasta", MessageBoxButtons.OK);
 
-                //this.Close();
+                this.Close();
             }
             catch (Exception er)
             {

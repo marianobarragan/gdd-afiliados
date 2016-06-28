@@ -37,10 +37,26 @@ namespace MercadoEnvio.Facturas
 
         private void mostrar_pagina(int numero_pagina)
         {
+            if (dt.Rows.Count == 0)
+            {
+                MessageBox.Show("No se han encontrado resultados", "Problema", MessageBoxButtons.OK);
+                dataGridView1.DataSource = null;
+                return;
+            }
+
             DataTable pagina = new DataTable();
             pagina = dt.Clone();
-
             int inicio = (numero_pagina - 1) * 50;
+
+            if (dt.Rows.Count < 50)         // caso excepcional, solo si hay menos de 50 resultados
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    pagina.ImportRow(dt.Rows[i]);
+                }
+                dataGridView1.DataSource = pagina;
+                return;
+            }
 
             for (int i = inicio; i < (inicio + 50); i++)
             {
@@ -170,9 +186,11 @@ namespace MercadoEnvio.Facturas
             }
 
             if (chkDirigida.Checked) {
-                query += " AND f.usuario_id = " + usuario_id;
+                query += " AND f.factura_id IN ( SELECT f.factura_id FROM dbme.factura f JOIN dbme.usuario u ON (u.usuario_id = f.usuario_id) WHERE u.username LIKE '%"+ txtDirigida.Text + "%')";
             }
             
+            ;
+
             dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
             if (dt.Rows.Count == 0)
             {
@@ -196,6 +214,7 @@ namespace MercadoEnvio.Facturas
             txtFinIntervalo.Text = null;
             txtContenido.Text = null;
             txtDirigida.Text = null;
+            dataGridView1.DataSource = null;
         }
     }
 }

@@ -46,7 +46,9 @@ namespace MercadoEnvio.Generar_Publicación
                     return;
                     //subasta
                 case 2:
-                    return;//modificar
+                    ListadoPublicacionesUsuario list = new ListadoPublicacionesUsuario(sesion);
+                    list.Show();
+                    return;
             
             }
         }

@@ -7,38 +7,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Configuration;
 
-using MercadoEnvio.Controller;
 using MercadoEnvio.Domain;
-using MercadoEnvio.Facturas;
+using MercadoEnvio.Controller;
 
 namespace MercadoEnvio.Generar_Publicación
 {
-    public partial class AltaCompraInmediata : Form
+    public partial class ModificarCompraInmediata : Form
     {
         public List<Rubro> rubros;
         public List<Visibilidad2> visibilidades;
         public Sesion sesion_actual;
+        public int id_publicacion;
 
-        public AltaCompraInmediata(Sesion sesion)
+        public ModificarCompraInmediata(int id, Sesion sesion)
         {
-            this.sesion_actual = sesion;
             InitializeComponent();
-            
+            id_publicacion = id;
+            sesion_actual = sesion;
 
             cargar_rubros();
-            cmbRubros.SelectedIndex = 0;
-
             cargar_visibilidad();
-
-            cmbEstado.SelectedIndex = 0;
-
             actualizar_costo_total();
         }
 
-
-        public void cargar_rubros(){
+        public void cargar_rubros()
+        {
 
             string comando = "select rubro_id, descripcion_corta from dbme.rubro";
             DataTable dataroles = (new ConexionSQL()).cargarTablaSQL(comando);
@@ -48,11 +42,11 @@ namespace MercadoEnvio.Generar_Publicación
 
             for (int i = 0; i <= (dataroles.Rows.Count - 1); i++)
             {
-               // rubros.Add(obtenerRol(dataroles.Rows[i][0].ToString(), dataroles.Rows[i][1].ToString()));
+                // rubros.Add(obtenerRol(dataroles.Rows[i][0].ToString(), dataroles.Rows[i][1].ToString()));
                 rubros.Add(new Rubro(dataroles.Rows[i][0].ToString(), dataroles.Rows[i][1].ToString()));
             }
 
-            for (int j = 0; j < rubros.Count ; j++)
+            for (int j = 0; j < rubros.Count; j++)
             {
                 // rubros.Add(obtenerRol(dataroles.Rows[i][0].ToString(), dataroles.Rows[i][1].ToString()));
                 string desc = rubros[j].descripcion_corta;
@@ -66,7 +60,7 @@ namespace MercadoEnvio.Generar_Publicación
 
             string comando = "select visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje, visibilidad_costo_envio,visibilidad_id from dbme.visibilidad";
             DataTable dataVisibilidades = (new ConexionSQL()).cargarTablaSQL(comando);
-            
+
             //obtener los roles HABILITADOS de la data
             visibilidades = new List<Visibilidad2>();
             for (int i = 0; i <= (dataVisibilidades.Rows.Count - 1); i++)
@@ -79,7 +73,8 @@ namespace MercadoEnvio.Generar_Publicación
             actualizar_costo_total();
         }
 
-        public void actualizar_costo_total() {
+        public void actualizar_costo_total()
+        {
 
             lblPrecio.Text = visibilidades[cmbVisibilidad.SelectedIndex].precio.ToString();
             lblPorcentaje.Text = visibilidades[cmbVisibilidad.SelectedIndex].porcentaje.ToString();
@@ -87,11 +82,12 @@ namespace MercadoEnvio.Generar_Publicación
 
             double costo_total;
             double porcentaje = double.Parse(visibilidades[cmbVisibilidad.SelectedIndex].porcentaje.ToString());
-            
+
             costo_total = visibilidades[cmbVisibilidad.SelectedIndex].precio;
             //costo_total = visibilidades[cmbVisibilidad.SelectedIndex].porcentaje;
 
-            if (chkRealizaEnvio.Checked) {
+            if (chkRealizaEnvio.Checked)
+            {
                 costo_total = costo_total + visibilidades[cmbVisibilidad.SelectedIndex].costo_envio;
             }
 
@@ -100,20 +96,34 @@ namespace MercadoEnvio.Generar_Publicación
             txtCostoTotal.Text = costo_total.ToString();
         }
 
-        private void label10_Click(object sender, EventArgs e)
+        private void ModificarCompraInmediata_Load(object sender, EventArgs e)
         {
+            //string comando = "SELECT e.razon_social,e.nombre_contacto,e.cuit,e.rubro_id,u.telefono, d.ciudad, d.localidad, d.codigo_postal,d.domicilio_calle,d.numero_calle, d.piso, d.departamento FROM DBME.empresa e JOIN DBME.usuario u ON (e.usuario_id = u.usuario_id) JOIN DBME.domicilio d ON (u.domicilio_id = d.domicilio_id) WHERE empresa_id = " + empresa_id;
+            string comando = "SELECT p.descripcion, p.stock , p.fecha_creacion, p.fecha_vencimiento, p.precio, p.rubro_id, p.visibilidad_id, p.estado, p.permite_preguntas, realiza_envio, p.costo FROM DBME.publicacion p WHERE p.publicacion_id = " + id_publicacion;
+            DataTable dt = (new ConexionSQL()).cargarTablaSQL(comando);
 
+            txtDescripción.Text = dt.Rows[0][0].ToString();
+            txtStock.Text = dt.Rows[0][1].ToString();
+            dateFechaInicio.Text = dt.Rows[0][2].ToString();
+            dateFechaVencimiento.Text = dt.Rows[0][3].ToString();
+            txtPrecio.Text = dt.Rows[0][4].ToString();
+            cmbRubros.SelectedIndex = Int32.Parse(dt.Rows[0][5].ToString());
+            cmbVisibilidad.SelectedIndex = Int32.Parse(dt.Rows[0][6].ToString()) -1;
+            cmbEstado.SelectedIndex = cmbEstado.FindString(dt.Rows[0][7].ToString());
+            chkPermitePreguntas.Checked = Boolean.Parse(dt.Rows[0][8].ToString());
+            chkRealizaEnvio.Checked = Boolean.Parse(dt.Rows[0][9].ToString());
+            txtCostoTotal.Text = dt.Rows[0][10].ToString();
+            
+        }
+        
+        private void cmbVisibilidad_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            actualizar_costo_total();
         }
 
-        private void AltaCompraInmediata_Load(object sender, EventArgs e)
+        private void chkRealizaEnvio_CheckedChanged(object sender, EventArgs e)
         {
-            dateFechaInicio.Value = DateTime.Parse(Program.fechaSistema()+1);
-            dateFechaVencimiento.Value = DateTime.Parse(Program.fechaSistema()+1);
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
+            actualizar_costo_total();
         }
 
         private void cmdGenerarCompra_Click(object sender, EventArgs e)
@@ -132,7 +142,7 @@ namespace MercadoEnvio.Generar_Publicación
             DateTime fechaVencimiento;
             bool realiza_envio = chkRealizaEnvio.Checked;
             double costo_total = Double.Parse(txtCostoTotal.Text);
-            
+
             try
             {
                 rubro = rubros[cmbRubros.SelectedIndex].rubro_id;
@@ -155,7 +165,7 @@ namespace MercadoEnvio.Generar_Publicación
                 MessageBox.Show("Ingrese numeros positivos en los formularios verdes", "Nueva Compra", MessageBoxButtons.OK);
                 return;
             }
-            
+
             if (precio_decimal < 0 || precio_decimal > 100)
             {
                 MessageBox.Show("La parte decimal del precio supera los limites", "Problema", MessageBoxButtons.OK);
@@ -167,7 +177,7 @@ namespace MercadoEnvio.Generar_Publicación
                 MessageBox.Show("Esta visibilidad no permite realizar envios", "Don't let your dreams be dreams", MessageBoxButtons.OK);
                 return;
             }
-           //validar fechas
+            //validar fechas
             int ant1 = DateTime.Compare(fechaInicio, DateTime.Parse(Program.fechaSistema()));
 
             if (ant1 == -1)
@@ -186,17 +196,14 @@ namespace MercadoEnvio.Generar_Publicación
 
             try
             {
-                
-                string comando = "EXECUTE DBME.crearCompraInmediata '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + precio + "." + precio_decimal + "," + rubro + "," + visibilidad_id + "," + sesion_actual.usuarioActual.usuario_id + "," + estado + "," + permitePreguntas + "," + realiza_envio + "," + costo_total;
-                //MessageBox.Show(precio_total.ToString(), "A", MessageBoxButtons.OK);
+
+                //string comando = "EXECUTE DBME.crearCompraInmediata '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + precio + "." + precio_decimal + "," + rubro + "," + visibilidad_id + "," + sesion_actual.usuarioActual.usuario_id + "," + estado + "," + permitePreguntas + "," + realiza_envio + "," + costo_total;
+                //comando = "UPDATE DBME.visibilidad SET visibilidad_descripcion = '" + txtDescripcion.Text + "',visibilidad_precio = " + txtPrecio.Text + "." + txtPrecioDecimal.Text + ",visibilidad_porcentaje = " + porcentajeString + ",visibilidad_costo_envio = " + txtCostoEnvio.Text + "." + txtCostoEnvioDecimal.Text + " WHERE visibilidad_id = " + id;
+                string comando = "UPDATE DBME.publicacion SET descripcion = '" + descripcion + "',stock = " + stock + ",fecha_creacion = '" + fechaInicio + "',fecha_vencimiento ='" + fechaVencimiento + "',precio=" + precio + "." + precio_decimal + ",rubro_id=" + rubro + ",visibilidad_id=" + visibilidad_id + ",estado = '" + estado + "', permite_preguntas = '" + permitePreguntas + "', realiza_envio ='" + realiza_envio + "', costo =" + costo_total + "WHERE publicacion_id= "+ id_publicacion;
                 (new ConexionSQL()).ejecutarComandoSQL(comando);
 
-                DetalleFacturaEmpresa det = new DetalleFacturaEmpresa();
-                det.Show();
-
-                MessageBox.Show("Publicacion creada exitosamente", "Alta Compra Inmediata", MessageBoxButtons.OK);
-                
-                //this.Close();
+                MessageBox.Show("Publicacion actualizada exitosamente", "Compra Inmediata", MessageBoxButtons.OK);
+                this.Close();
             }
             catch (Exception er)
             {
@@ -205,14 +212,19 @@ namespace MercadoEnvio.Generar_Publicación
             }
         }
 
-        private void cmbVisibilidad_SelectedIndexChanged(object sender, EventArgs e)
+        private void chkRealizaEnvio_CheckedChanged_1(object sender, EventArgs e)
         {
             actualizar_costo_total();
         }
 
-        private void chkRealizaEnvio_CheckedChanged(object sender, EventArgs e)
+        private void cmbVisibilidad_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             actualizar_costo_total();
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

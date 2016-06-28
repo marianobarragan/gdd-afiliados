@@ -6,4 +6,7 @@ chequearVencimientoPublicacion debe ver quien gano las subastas
 
 terminar de hacer los filtros de factura (a quien esta dirigida y el intervalo de fechas)
 
-generar publicacion debe hacer la verga de visibilidad gratis
+terminar alta subasta, ver bien los campos
+
+cantidad =! stock, WHY?
+

@@ -241,11 +241,23 @@
     <Compile Include="Generar Publicación\AltaSubasta.Designer.cs">
       <DependentUpon>AltaSubasta.cs</DependentUpon>
     </Compile>
+    <Compile Include="Generar Publicación\ListadoPublicacionesUsuario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generar Publicación\ListadoPublicacionesUsuario.Designer.cs">
+      <DependentUpon>ListadoPublicacionesUsuario.cs</DependentUpon>
+    </Compile>
     <Compile Include="Generar Publicación\Menu.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Generar Publicación\Menu.Designer.cs">
       <DependentUpon>Menu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Generar Publicación\ModificarCompraInmediata.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generar Publicación\ModificarCompraInmediata.Designer.cs">
+      <DependentUpon>ModificarCompraInmediata.cs</DependentUpon>
     </Compile>
     <Compile Include="Historial Cliente\Form1.cs">
       <SubType>Form</SubType>
@@ -393,6 +405,9 @@
     <EmbeddedResource Include="Generar Publicación\AltaSubasta.resx">
       <DependentUpon>AltaSubasta.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Generar Publicación\ListadoPublicacionesUsuario.resx">
+      <DependentUpon>ListadoPublicacionesUsuario.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicación\Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>
     </EmbeddedResource>
@@ -404,6 +419,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ComprarOfertar\OfertarProducto.resx">
       <DependentUpon>OfertarProducto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generar Publicación\ModificarCompraInmediata.resx">
+      <DependentUpon>ModificarCompraInmediata.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
