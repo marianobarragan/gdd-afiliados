@@ -2,9 +2,7 @@ hacer q las altas sean atomicas
 
 Hacer un trigger para cuando se borre una visibilidad, las publicaciones la tengan Gratis por default
 
-chequearVencimientoPublicacion debe ver quien gano las subastas
-
-terminar de hacer los filtros de factura (a quien esta dirigida y el intervalo de fechas)
+chequearVencimientoPublicacion debe ver quien gano las subastas y GENERAR LA FACTURA
 
 terminar alta subasta, ver bien los campos
 

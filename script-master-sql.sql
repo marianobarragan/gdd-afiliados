@@ -889,25 +889,6 @@ GO
 EXECUTE DBME.crearAdministradores
 GO
 
-/*
-BEGIN TRANSACTION
-DECLARE @usuario_id AS INT
-EXECUTE DBME.crearUsuario 'a','a','metodoGuede@sanLorenzo.com.br',NULL,NULL,NULL,NULL,NULL,NULL,'Orticalle','1000', @usuario_id OUT
-INSERT INTO DBME.administrador(nombre,apellido,usuario_id)
-VALUES ('Pablo','Guede',@usuario_id)
-EXECUTE DBME.crearAdministradores
-SELECT * FROM DBME.administrador a JOIN DBME.usuario u ON (a.usuario_id=u.usuario_id)
-DROP PROCEDURE DBME.crearDomicilio
-DROP PROCEDURE DBME.crearUsuario
-DROP PROCEDURE DBME.crearCliente
-DECLARE @cliente_id AS INT
-EXECUTE DBME.crearCliente 'do interest','sapinho','38355825','D','20120618 10:34:09 AM','sapo','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7','sapinhododeus@gemeil.com','1565212592','CABA','CABA','1102','0','6','Carlos Calvo','1781',@cliente_id OUT
-SELECT rubro_id,descripcion_larga FROM DBME.  
-SELECT nombre,apellido,numero_documento,tipo_documento FROM DBME.cliente WHERE numero_documento = '38355825'
-ROLLBACK TRANSACTION
-*/
-
-
 
 CREATE PROCEDURE DBME.nuevoCliente (@username NVARCHAR(255), @password NVARCHAR(255), @mail NVARCHAR(255), @nombre NVARCHAR(255), @apellido NVARCHAR(255),@fechaNacimiento DATETIME, @tipoDocumento NVARCHAR(3),@numero_documento NUMERIC(18,0),@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT)
 AS
@@ -931,7 +912,7 @@ BEGIN
 END;
 GO
 
---EXECUTE DBME.updateCliente 30,'Marce7','Guitarrista','13/06/1987 0:00:00','DNI',23237,'marce_ciudad7','marce_localidad7','1447','calle marce7',2337,2337,'marce depto7',2337
+
 CREATE PROCEDURE DBME.updateCliente (@cliente_id INT, @nombre NVARCHAR(255), @apellido NVARCHAR(255),@fechaNacimiento DATETIME, @tipoDocumento NVARCHAR(3),@numero_documento NUMERIC(18,0),@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT)
 AS
 BEGIN
@@ -940,8 +921,9 @@ BEGIN
 	DECLARE @usuario_id INT
 
 	SET @usuario_id = (SELECT usuario_id FROM DBME.cliente WHERE cliente_id = @cliente_id)
-	--BEGIN TRY
-		--BEGIN TRANSACTION	
+	
+	BEGIN TRY
+		BEGIN TRANSACTION	
 		
 		UPDATE DBME.domicilio 
 		SET ciudad = @ciudad, localidad = @localidad, codigo_postal = @codigo_postal, piso = @numero_piso, departamento = @departamento,domicilio_calle = @domicilio_calle, numero_calle = @altura_calle 
@@ -955,13 +937,13 @@ BEGIN
 		SET telefono = @numero_telefono 
 		WHERE usuario_id = @usuario_id
 		
-		--COMMIT TRANSACTION
-	--END TRY
-	--BEGIN CATCH
-		--SET @mensaje_error = 'Error en actualizar los datos. Se deshace la operacion entera. Lo sentimos.'
-		--RAISERROR(@mensaje_error, 12, 1)
-		--ROLLBACK TRANSACTION 
-	--END CATCH
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		SET @mensaje_error = 'Error en actualizar los datos. Se deshace la operacion entera. Lo sentimos.'
+		RAISERROR(@mensaje_error, 12, 1)
+		ROLLBACK TRANSACTION 
+	END CATCH
 
 END;
 GO
@@ -1054,8 +1036,8 @@ BEGIN
 		DECLARE @descripcion_facha AS VARCHAR(64)
 		SET @descripcion_facha = CONVERT(VARCHAR(64),@visibilidad_descripcion) + 'Costo visibilidad'
 
-		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
-		EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
+		--EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
+		--EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
 		
 		COMMIT TRANSACTION
 	END TRY
@@ -1095,8 +1077,8 @@ BEGIN
 		DECLARE @descripcion_facha AS VARCHAR(64)
 		SET @descripcion_facha = CONVERT(VARCHAR(64),@visibilidad_descripcion) + 'Costo visibilidad'
 
-		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
-		EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
+		--EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
+		--EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
 		
 		COMMIT TRANSACTION
 	END TRY
@@ -1206,7 +1188,7 @@ CREATE PROCEDURE DBME.chequearVencimientoPublicaciones (@hora_actual DATETIME)
 AS
 BEGIN
 
-	BEGIN TRY
+	--BEGIN TRY
 
 		-- verificar las publicaciones activas
 		-- marcarlas como finalizadas
@@ -1217,24 +1199,26 @@ BEGIN
 		DECLARE @publicacion_tipo NVARCHAR(255)
 		DECLARE @oferta_id_ganador INT
 
-		DECLARE publicaciones_activas CURSOR FOR
+		DECLARE publicaciones_activas2 CURSOR FOR
 		SELECT p.publicacion_id,p.publicacion_tipo
 		FROM DBME.publicacion p
 		WHERE fecha_vencimiento>@hora_actual AND p.estado = 'ACTIVA'
 		
-		OPEN publicaciones_activas 
+		
+		OPEN publicaciones_activas2 
 
-		FETCH NEXT FROM publicaciones_activas INTO
+		FETCH NEXT FROM publicaciones_activas2 INTO
 		@publicacion_id, @publicacion_tipo
-
+		
 		WHILE(@@FETCH_STATUS = 0)
 		BEGIN
 			
 			IF (@publicacion_tipo = 'Compra Inmediata')
 			BEGIN
 				UPDATE DBME.publicacion SET estado = 'FINALIZADA' 
-				WHERE publicacion_id = @publicacion_tipo
+				WHERE publicacion_id = @publicacion_id
 			END
+			
 			IF (@publicacion_tipo = 'Subasta')
 			BEGIN
 				
@@ -1243,27 +1227,28 @@ BEGIN
 				WHERE publicacion_id = @publicacion_id
 				ORDER BY monto)
 				
+				/*
 				IF (@oferta_id_ganador IS NOT NULL)
 				BEGIN
 					select * from dbme.visibilidad -- estos es chamuyo
 					--generar factura al ganador
 				END
-				
+				*/
 				UPDATE DBME.publicacion SET estado = 'FINALIZADA' 
 				WHERE publicacion_id = @publicacion_id
-
+				
 			END
-
-			FETCH NEXT FROM publicaciones_activas
+			
+			FETCH NEXT FROM publicaciones_activas2
 		END
-	
-		CLOSE publicaciones_activas
-		DEALLOCATE publicaciones_activas
-
-	END TRY
-	BEGIN CATCH
-		RAISERROR('Error chequeando el vencimiento de Publicaciones', 12, 1)
-	END CATCH
+		
+		CLOSE publicaciones_activas2
+		DEALLOCATE publicaciones_activas2
+		
+	--END TRY
+	--BEGIN CATCH
+		--RAISERROR('Error chequeando el vencimiento de Publicaciones', 12, 1)
+	--END CATCH
 		
 END; 
 GO
@@ -1354,3 +1339,4 @@ GO
 /* END PROCEDURES DOMINIO*/
 
 -- COMO EJECUTAR FUNCIONES select * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2015,'1')
+
