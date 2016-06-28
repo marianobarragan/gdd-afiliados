@@ -53,7 +53,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 31);
+            this.label2.Location = new System.Drawing.Point(12, 39);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(109, 13);
             this.label2.TabIndex = 1;
@@ -80,7 +80,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(305, 9);
+            this.label5.Location = new System.Drawing.Point(12, 113);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(35, 13);
             this.label5.TabIndex = 4;
@@ -91,7 +91,7 @@
             this.txtId.Enabled = false;
             this.txtId.Location = new System.Drawing.Point(133, 6);
             this.txtId.Name = "txtId";
-            this.txtId.Size = new System.Drawing.Size(136, 20);
+            this.txtId.Size = new System.Drawing.Size(224, 20);
             this.txtId.TabIndex = 5;
             // 
             // txtDescripcion
@@ -99,7 +99,7 @@
             this.txtDescripcion.Enabled = false;
             this.txtDescripcion.Location = new System.Drawing.Point(133, 32);
             this.txtDescripcion.Name = "txtDescripcion";
-            this.txtDescripcion.Size = new System.Drawing.Size(136, 20);
+            this.txtDescripcion.Size = new System.Drawing.Size(224, 20);
             this.txtDescripcion.TabIndex = 6;
             // 
             // txtPrecio
@@ -107,7 +107,7 @@
             this.txtPrecio.Enabled = false;
             this.txtPrecio.Location = new System.Drawing.Point(133, 58);
             this.txtPrecio.Name = "txtPrecio";
-            this.txtPrecio.Size = new System.Drawing.Size(136, 20);
+            this.txtPrecio.Size = new System.Drawing.Size(224, 20);
             this.txtPrecio.TabIndex = 7;
             // 
             // txtCantidad
@@ -115,21 +115,21 @@
             this.txtCantidad.BackColor = System.Drawing.Color.PaleGreen;
             this.txtCantidad.Location = new System.Drawing.Point(133, 84);
             this.txtCantidad.Name = "txtCantidad";
-            this.txtCantidad.Size = new System.Drawing.Size(136, 20);
+            this.txtCantidad.Size = new System.Drawing.Size(224, 20);
             this.txtCantidad.TabIndex = 8;
             this.txtCantidad.Text = "0";
             // 
             // txtStock
             // 
             this.txtStock.Enabled = false;
-            this.txtStock.Location = new System.Drawing.Point(346, 6);
+            this.txtStock.Location = new System.Drawing.Point(133, 110);
             this.txtStock.Name = "txtStock";
-            this.txtStock.Size = new System.Drawing.Size(136, 20);
+            this.txtStock.Size = new System.Drawing.Size(224, 20);
             this.txtStock.TabIndex = 9;
             // 
             // btnComprar
             // 
-            this.btnComprar.Location = new System.Drawing.Point(346, 78);
+            this.btnComprar.Location = new System.Drawing.Point(221, 136);
             this.btnComprar.Name = "btnComprar";
             this.btnComprar.Size = new System.Drawing.Size(136, 25);
             this.btnComprar.TabIndex = 10;
@@ -141,7 +141,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(504, 117);
+            this.ClientSize = new System.Drawing.Size(377, 175);
             this.Controls.Add(this.btnComprar);
             this.Controls.Add(this.txtStock);
             this.Controls.Add(this.txtCantidad);

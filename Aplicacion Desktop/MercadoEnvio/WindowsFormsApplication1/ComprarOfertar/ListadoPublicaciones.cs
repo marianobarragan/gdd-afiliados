@@ -76,7 +76,8 @@ namespace MercadoEnvio.ComprarOfertar
         {
             string query;
             armarQueryRubros();
-            query = "SELECT p.publicacion_id, p.publicacion_tipo, p.descripcion, p.stock, p.precio, p.autor_id, p.permite_preguntas, p.realiza_envio, r.descripcion_corta, v.visibilidad_descripcion FROM DBME.publicacion p JOIN DBME.rubro r ON (r.rubro_id = p.rubro_id ) JOIN DBME.visibilidad v ON (p.visibilidad_id = v.visibilidad_id) where p.estado = 'ACTIVA' AND p.descripcion LIKE '%" + txtDescripción.Text + "%'" + queryRubros + "ORDER BY v.visibilidad_precio DESC";
+
+            query = "SELECT p.publicacion_id, p.publicacion_tipo, p.descripcion, p.stock, p.precio, p.autor_id, p.permite_preguntas, p.realiza_envio, r.descripcion_corta, v.visibilidad_descripcion FROM DBME.publicacion p JOIN DBME.rubro r ON (r.rubro_id = p.rubro_id ) JOIN DBME.visibilidad v ON (p.visibilidad_id = v.visibilidad_id) where p.autor_id !=" + sesionActual.usuarioActual.usuario_id + " AND p.descripcion LIKE '%" + txtDescripción.Text + "%'" + queryRubros; //" AND p.estado = 'ACTIVA' AND ORDER BY v.visibilidad_precio DESC";
 
             
 
@@ -213,23 +214,23 @@ namespace MercadoEnvio.ComprarOfertar
 
             }
         }
-        //private void dataGridView1_SelectionChanged(object sender, EventArgs e)
-        //{
-         //   string tipo = (dataGridView1[1, dataGridView1.CurrentCell.RowIndex].Value.ToString());
-          //  MessageBox.Show(tipo, "hol", MessageBoxButtons.OK);
-           // if (tipo == "Compra Inmediata")
-           // {
-           //     btnAccion.Enabled = true;
-           //     btnAccion.Text = tipo;
-            //}
-           // else
-           //     btnAccion.Enabled = true;
-           // btnAccion.Text = tipo;
-       // }
+
+        private void btnSeleccionarTodosLosRubros_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < chklRubros.Items.Count; i++)
+            {
+                chklRubros.SetItemChecked(i, true);
+            }
     
-    
-    
-    
-    
+        }
+
+        private void btnDeseleccionarTodosLosRubros_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < chklRubros.Items.Count; i++)
+            {
+                chklRubros.SetItemChecked(i, false);
+            }
+        }
+        
     }
 }

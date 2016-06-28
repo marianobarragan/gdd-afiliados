@@ -45,10 +45,10 @@ namespace MercadoEnvio.ComprarOfertar
 
         private void btnComprar_Click(object sender, EventArgs e)
         {
-            int cantidad_a_comprar;
+            uint cantidad_a_comprar;
             try
             {
-                cantidad_a_comprar = Int32.Parse(txtCantidad.Text);
+                cantidad_a_comprar = UInt32.Parse(txtCantidad.Text);
             }
             catch
             {
@@ -73,7 +73,7 @@ namespace MercadoEnvio.ComprarOfertar
                 string crearCompra = "INSERT INTO DBME.compra	(cantidad,fecha,autor_id,publicacion_id,esta_calificada) VALUES (" + cantidad_a_comprar + ", GETDATE()," + usuario + "," + id_publ + ", 0)";
                 string updatePublicacion = "UPDATE DBME.publicacion SET estado = 'FINALIZADA' WHERE publicacion_id = " + id_publ;
                 //LLAMAR A FUNCION CREAR FACTURA Y MOSTRARLA
-
+                
                 (new ConexionSQL()).ejecutarComandoSQL(crearCompra);
                 (new ConexionSQL()).ejecutarComandoSQL(updatePublicacion);
 

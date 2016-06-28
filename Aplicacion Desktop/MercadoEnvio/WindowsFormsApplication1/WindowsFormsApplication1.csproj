@@ -265,12 +265,6 @@
     <Compile Include="Generar Publicación\ModificarSubasta.Designer.cs">
       <DependentUpon>ModificarSubasta.cs</DependentUpon>
     </Compile>
-    <Compile Include="Historial Cliente\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Historial Cliente\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Historial Cliente\HistorialDelCliente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -431,9 +425,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicación\ModificarSubasta.resx">
       <DependentUpon>ModificarSubasta.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Historial Cliente\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\HistorialDelCliente.resx">
       <DependentUpon>HistorialDelCliente.cs</DependentUpon>

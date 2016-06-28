@@ -28,10 +28,9 @@ namespace MercadoEnvio.Generar_Publicación
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
+            
             string query;
-
-            query = "SELECT p.publicacion_id, p.publicacion_tipo, p.descripcion, p.estado, p.stock, p.precio, p.autor_id, p.permite_preguntas, p.realiza_envio, r.descripcion_corta, v.visibilidad_descripcion FROM DBME.publicacion p JOIN DBME.rubro r ON (r.rubro_id = p.rubro_id ) JOIN DBME.visibilidad v ON (p.visibilidad_id = v.visibilidad_id) where p.estado = 'BORRADOR' OR p.estado = 'PAUSADA' OR p.estado = 'ACTIVA'  ORDER BY v.visibilidad_precio DESC";
-
+            query = "SELECT p.publicacion_id, p.publicacion_tipo, p.descripcion, p.estado, p.stock, p.precio, p.autor_id, p.permite_preguntas, p.realiza_envio, r.descripcion_corta, v.visibilidad_descripcion FROM DBME.publicacion p JOIN DBME.rubro r ON (r.rubro_id = p.rubro_id ) JOIN DBME.visibilidad v ON (p.visibilidad_id = v.visibilidad_id) where ( p.autor_id = " + sesion_actual.usuarioActual.usuario_id + ") AND (p.estado = 'BORRADOR' OR p.estado = 'PAUSADA' OR p.estado = 'ACTIVA') ORDER BY v.visibilidad_precio DESC";
 
 
             dt = (new Controller.ConexionSQL().cargarTablaSQL(query));

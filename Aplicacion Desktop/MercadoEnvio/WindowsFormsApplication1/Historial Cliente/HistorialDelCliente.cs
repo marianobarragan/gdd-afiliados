@@ -13,6 +13,10 @@ namespace MercadoEnvio.Historial_Cliente
     public partial class HistorialDelCliente : Form
     {
         public int idCliente;
+        public DataTable dt;
+        public int pagina_actual;
+        public int paginas_totales;
+
         public HistorialDelCliente(int ClienteID)
         {
             InitializeComponent();
@@ -31,15 +35,16 @@ namespace MercadoEnvio.Historial_Cliente
             {
               
             //string dsd = textBox1.Text;
-            string query = "SELECT * FROM DBME.compra WHERE autor_id = "+idCliente;
-            DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
-            if (dt.Rows.Count == 0)
-            {
-                MessageBox.Show("No se han encontrado resultados", "Problema" , MessageBoxButtons.OK);
-                dataGridView1.DataSource = null;
-                return;
-            }
-            dataGridView1.DataSource = dt;
+            //string query = "SELECT * FROM DBME.compra WHERE autor_id = "+idCliente;
+                string query = "EXECUTE DBME.historialComprasYSubastas " + idCliente;
+                dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
+                if (dt.Rows.Count == 0)
+                {
+                    MessageBox.Show("No se han encontrado resultados", "Problema" , MessageBoxButtons.OK);
+                    dataGridView1.DataSource = null;
+                    return;
+                }
+                //dataGridView1.DataSource = dt;
 
             }
             if (listBox1.GetItemText(listBox1.SelectedItem) == "Resumen De Estrellas")
@@ -47,36 +52,105 @@ namespace MercadoEnvio.Historial_Cliente
 
                 //string dsd = textBox1.Text;
                 string query = "EXECUTE DBME.cantidadDeCalificacionesDelUsuario " + idCliente;
-                DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
+                dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
                 if (dt.Rows.Count == 0)
                 {
                     MessageBox.Show("No se han encontrado resultados", "Problema", MessageBoxButtons.OK);
                     dataGridView1.DataSource = null;
                     return;
                 }
-                dataGridView1.DataSource = dt;
+                //dataGridView1.DataSource = dt;
 
             }
             if (listBox1.GetItemText(listBox1.SelectedItem) == "Operaciones Que Faltan Por Calificar") 
             {
                 string query = "SELECT * from DBME.compra WHERE (autor_id = " + idCliente+" AND esta_calificada = 0)";
-                DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
+                dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
                 if (dt.Rows.Count == 0)
                 {
                     MessageBox.Show("No se han encontrado resultados", "Problema", MessageBoxButtons.OK);
                     dataGridView1.DataSource = null;
                     return;
                 }
-                dataGridView1.DataSource = dt;
+                //dataGridView1.DataSource = dt;
 
+                
             }
-
+            
+            paginas_totales = dt.Rows.Count / 50;
+            mostrar_pagina(1);
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {
 
         }
-        
+
+        private void btnAnterior_Click(object sender, EventArgs e)
+        {
+            if (pagina_actual == 1)
+            {
+                return;
+            }
+            pagina_actual -= 1;
+            try
+            {
+                mostrar_pagina(pagina_actual);
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void btnSiguiente_Click(object sender, EventArgs e)
+        {
+            if (pagina_actual >= paginas_totales)
+            {
+                return;
+            }
+            pagina_actual += 1;
+            try
+            {
+                mostrar_pagina(pagina_actual);
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void mostrar_pagina(int numero_pagina)
+        {
+            if (dt.Rows.Count == 0)
+            {
+                MessageBox.Show("No se han encontrado resultados", "Problema", MessageBoxButtons.OK);
+                dataGridView1.DataSource = null;
+                return;
+            }
+
+            DataTable pagina = new DataTable();
+            pagina = dt.Clone();
+
+            int inicio = (numero_pagina - 1) * 50;
+
+            if (dt.Rows.Count < 50)         // caso excepcional, solo si hay menos de 50 resultados
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    pagina.ImportRow(dt.Rows[i]);
+                }
+
+                dataGridView1.DataSource = pagina;
+                return;
+            }
+
+            for (int i = inicio; i < (inicio + 50); i++)
+            {
+                pagina.ImportRow(dt.Rows[i]);
+            }
+
+            dataGridView1.DataSource = pagina;
+        }
     }
 }

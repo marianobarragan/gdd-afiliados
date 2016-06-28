@@ -70,9 +70,13 @@ namespace MercadoEnvio.VistaPrincipal
 
             if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "COMPRAR/OFERTAR")
             {
-                if (!poseeMasDeTresCompras()) {
+                if (!poseeMasDeTresCompras())
+                {
                     ComprarOfertar.ListadoPublicaciones listadoPublicaciones = new ComprarOfertar.ListadoPublicaciones(sesion);
                     listadoPublicaciones.Show();
+                }
+                else {
+                    MessageBox.Show("No puede comprar/ofertar porque posee 3 compras sin calificar", "Error", MessageBoxButtons.OK);
                 }
                 return;
             }
@@ -104,15 +108,23 @@ namespace MercadoEnvio.VistaPrincipal
         }
 
         private bool poseeMasDeTresCompras() {
-            return false;
 
+            string query = "SELECT COUNT(*) FROM DBME.compra WHERE (autor_id = " + sesion.usuarioActual.usuario_id + " AND esta_calificada = 0)";
+            DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
+            if (dt.Rows.Count == 0)
+            {
+                MessageBox.Show("No se han encontrado resultados", "Problema", MessageBoxButtons.OK);
+                //dataGridView1.DataSource = null;
+                return false;
+            }
+            
+            int cantidadComprasSinCalificar = Int32.Parse(dt.Rows[0][0].ToString());
+
+            return cantidadComprasSinCalificar > 3;
         }
 
         private void button2_Click(object sender, EventArgs e)
-        {
-
-            
-
+        { 
             this.Close();
         }
 
