@@ -1049,6 +1049,52 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE DBME.crearSubasta (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME, @costo NUMERIC(18,2), @rubro_id INT, @visibilidad_id NUMERIC(18,0), @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit, @valor_inicial DECIMAL(10,2))
+AS
+BEGIN
+
+	DECLARE @mensaje_error AS NVARCHAR(99)
+	DECLARE @publicacion_id AS NUMERIC(18,0)
+	
+	DECLARE @visibilidad_descripcion AS NVARCHAR(255) 
+	SET @visibilidad_descripcion = (SELECT visibilidad_descripcion FROM dbme.visibilidad WHERE visibilidad_id = @visibilidad_id)
+	
+	DECLARE @factura_id AS INT
+
+	BEGIN TRY
+		BEGIN TRANSACTION	
+
+		IF ((SELECT es_nuevo FROM DBME.usuario WHERE usuario_id = @autor_id) = 1 )
+		BEGIN
+			SET @costo = 0
+			UPDATE DBME.usuario SET es_nuevo = 0 WHERE usuario_id = @autor_id
+		END
+
+		INSERT INTO DBME.publicacion (publicacion_tipo, descripcion, stock, fecha_creacion, fecha_vencimiento, costo, rubro_id, visibilidad_id, autor_id, estado ,permite_preguntas, realiza_envio, valor_inicial)
+		VALUES ('Subasta', @descripcion, @stock, @fecha_creacion,@fecha_vencimiento, @costo, @rubro_id, @visibilidad_id , @autor_id, @estado ,@permite_preguntas, @realiza_envio , @valor_inicial)
+
+		SET @publicacion_id = SCOPE_IDENTITY()
+		DECLARE @descripcion_facha AS VARCHAR(64)
+		SET @descripcion_facha = CONVERT(VARCHAR(64),@visibilidad_descripcion) + 'Costo visibilidad'
+
+		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
+		EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
+		
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		SET @mensaje_error = 'Error en crear la nueva publicacion. Se deshace la operacion entera. Lo sentimos.'
+		RAISERROR(@mensaje_error, 12, 1)
+		ROLLBACK TRANSACTION 
+	END CATCH
+END;
+GO
+
+
+
+/* END PROCEDURES CREACIONALES */
+
+/* START PROCEDURES COMUNICACION */
 
 
 CREATE PROCEDURE DBME.loginUsuario (@username nvarchar(255),@contrasenia nvarchar(255))
@@ -1153,7 +1199,7 @@ BEGIN
 		DECLARE publicaciones_activas2 CURSOR FOR
 		SELECT p.publicacion_id,p.publicacion_tipo
 		FROM DBME.publicacion p
-		WHERE fecha_vencimiento>@hora_actual AND p.estado = 'ACTIVA'
+		WHERE fecha_vencimiento<@hora_actual AND p.estado = 'ACTIVA'
 		
 		
 		OPEN publicaciones_activas2 
