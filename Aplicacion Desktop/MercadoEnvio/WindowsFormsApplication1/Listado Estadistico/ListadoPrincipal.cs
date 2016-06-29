@@ -83,7 +83,7 @@ namespace MercadoEnvio.Listado_Estadistico
             
             try
             {
-                //int anio = Int32.Parse(txtAño.Text);
+                uint anio = UInt32.Parse(txtAño.Text);
                 //int trimestre = lstTrimestre.SelectedIndex + 1;
                 //string visibilidad = lstVisibilidad.SelectedItem.ToString();
                 rubro = rubros[cmbRubros.SelectedIndex].rubro_id;
@@ -130,7 +130,7 @@ namespace MercadoEnvio.Listado_Estadistico
                 break;
 
                 default:
-             //      imprimir un error
+             //      imprimir un error o no hacer nada
                 break;
             }
               button1.Enabled = true;   
@@ -157,12 +157,7 @@ namespace MercadoEnvio.Listado_Estadistico
 
             //else
             
-            
 
-
-
-            
-           
         }
 
         private void ListadoPrincipal_Load(object sender, EventArgs e)
