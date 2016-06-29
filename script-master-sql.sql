@@ -1076,8 +1076,8 @@ BEGIN
 		DECLARE @descripcion_facha AS VARCHAR(64)
 		SET @descripcion_facha = CONVERT(VARCHAR(64),@visibilidad_descripcion) + 'Costo visibilidad'
 
-		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
-		EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
+		--EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
+		--EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
 		
 		COMMIT TRANSACTION
 	END TRY
