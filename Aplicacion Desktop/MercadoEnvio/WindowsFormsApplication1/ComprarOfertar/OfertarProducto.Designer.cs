@@ -37,6 +37,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnOfertar = new System.Windows.Forms.Button();
+            this.txtOfertaDecimal = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // txtOferta
@@ -44,7 +45,7 @@
             this.txtOferta.BackColor = System.Drawing.Color.PaleGreen;
             this.txtOferta.Location = new System.Drawing.Point(133, 84);
             this.txtOferta.Name = "txtOferta";
-            this.txtOferta.Size = new System.Drawing.Size(136, 20);
+            this.txtOferta.Size = new System.Drawing.Size(92, 20);
             this.txtOferta.TabIndex = 16;
             // 
             // txtPrecio
@@ -117,11 +118,20 @@
             this.btnOfertar.UseVisualStyleBackColor = true;
             this.btnOfertar.Click += new System.EventHandler(this.btnOfertar_Click);
             // 
+            // txtOfertaDecimal
+            // 
+            this.txtOfertaDecimal.BackColor = System.Drawing.Color.PaleGreen;
+            this.txtOfertaDecimal.Location = new System.Drawing.Point(232, 84);
+            this.txtOfertaDecimal.Name = "txtOfertaDecimal";
+            this.txtOfertaDecimal.Size = new System.Drawing.Size(37, 20);
+            this.txtOfertaDecimal.TabIndex = 18;
+            // 
             // OfertarProducto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(411, 120);
+            this.Controls.Add(this.txtOfertaDecimal);
             this.Controls.Add(this.btnOfertar);
             this.Controls.Add(this.txtOferta);
             this.Controls.Add(this.txtPrecio);
@@ -151,5 +161,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnOfertar;
+        private System.Windows.Forms.TextBox txtOfertaDecimal;
     }
 }

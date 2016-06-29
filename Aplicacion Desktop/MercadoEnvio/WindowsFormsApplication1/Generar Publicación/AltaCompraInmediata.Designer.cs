@@ -124,8 +124,7 @@
             this.cmbEstado.FormattingEnabled = true;
             this.cmbEstado.Items.AddRange(new object[] {
             "BORRADOR",
-            "ACTIVA",
-            "PAUSADA"});
+            "ACTIVA"});
             this.cmbEstado.Location = new System.Drawing.Point(135, 313);
             this.cmbEstado.Name = "cmbEstado";
             this.cmbEstado.Size = new System.Drawing.Size(151, 21);

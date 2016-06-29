@@ -387,9 +387,6 @@
     <EmbeddedResource Include="Facturas\DetalleFactura.resx">
       <DependentUpon>DetalleFactura.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Facturas\ListadoFacturas.resx">
-      <DependentUpon>ListadoFacturas.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicación\AltaCompraInmediata.resx">
       <DependentUpon>AltaCompraInmediata.cs</DependentUpon>
     </EmbeddedResource>

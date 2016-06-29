@@ -8,4 +8,4 @@ cantidad =! stock, WHY?
 
 crear muchas compras inmediatas y subastas para testeo
 
-chequear por que chequearVencimientoPublicacion  no funca bien
+ver q onda con las unidades decimales en alta publicacion/subasta

@@ -77,7 +77,7 @@ namespace MercadoEnvio.ComprarOfertar
             string query;
             armarQueryRubros();
 
-            query = "SELECT p.publicacion_id, p.publicacion_tipo, p.descripcion, p.stock, p.precio, p.autor_id, p.permite_preguntas, p.realiza_envio, r.descripcion_corta, v.visibilidad_descripcion FROM DBME.publicacion p JOIN DBME.rubro r ON (r.rubro_id = p.rubro_id ) JOIN DBME.visibilidad v ON (p.visibilidad_id = v.visibilidad_id) where p.autor_id !=" + sesionActual.usuarioActual.usuario_id + " AND p.descripcion LIKE '%" + txtDescripción.Text + "%'" + queryRubros; //" AND p.estado = 'ACTIVA' AND ORDER BY v.visibilidad_precio DESC";
+            query = "SELECT p.publicacion_id, p.publicacion_tipo, p.descripcion, p.stock, p.valor_actual, p.autor_id, p.permite_preguntas, p.realiza_envio, r.descripcion_corta, v.visibilidad_descripcion FROM DBME.publicacion p JOIN DBME.rubro r ON (r.rubro_id = p.rubro_id ) JOIN DBME.visibilidad v ON (p.visibilidad_id = v.visibilidad_id) where p.autor_id !=" + sesionActual.usuarioActual.usuario_id + " AND p.descripcion LIKE '%" + txtDescripción.Text + "%'" + queryRubros+" AND p.estado = 'ACTIVA' ORDER BY v.visibilidad_precio DESC";
 
             
 
@@ -154,7 +154,7 @@ namespace MercadoEnvio.ComprarOfertar
             string tipo = (dataGridView1[1, dataGridView1.CurrentCell.RowIndex].Value.ToString());
             string descripcion = (dataGridView1[2, dataGridView1.CurrentCell.RowIndex].Value.ToString());
             int stock = Int32.Parse(dataGridView1[3, dataGridView1.CurrentCell.RowIndex].Value.ToString());
-            float precio = float.Parse(dataGridView1[4, dataGridView1.CurrentCell.RowIndex].Value.ToString());
+            double precio = Double.Parse(dataGridView1[4, dataGridView1.CurrentCell.RowIndex].Value.ToString());
             
             
             //MessageBox.Show(tipo, "hol", MessageBoxButtons.OK);

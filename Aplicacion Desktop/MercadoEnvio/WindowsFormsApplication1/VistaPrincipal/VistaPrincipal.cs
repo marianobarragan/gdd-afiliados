@@ -92,7 +92,7 @@ namespace MercadoEnvio.VistaPrincipal
                 Calificar.ListadoDePublicacionesSinCalificar lst = new Calificar.ListadoDePublicacionesSinCalificar(sesion.usuarioActual.usuario_id);
                 lst.Show();
             }
-
+            /*
             if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "CONSULTA DE FACTURAS REALIZADAS AL VENDEDOR")
             {
                 Facturas.ListadoFacturas facturas = new Facturas.ListadoFacturas(sesion.usuarioActual.usuario_id);
@@ -103,7 +103,7 @@ namespace MercadoEnvio.VistaPrincipal
             {
                 Listado_Estadistico.SeleccionarListado listadoEstadistico = new Listado_Estadistico.SeleccionarListado();
                 listadoEstadistico.Show();
-            }
+            }*/
             
         }
 
@@ -139,7 +139,7 @@ namespace MercadoEnvio.VistaPrincipal
             label5.Text = sesion.usuarioActual.nombreUsuario;
             label6.Text = Program.fechaSistema();
 
-            string c = "EXECUTE DBME.chequearVencimientoPublicaciones '" + DateTime.Parse(Program.fechaSistema()) + "'";
+            string c = "EXECUTE DBME.chequearVencimientoPublicaciones";
             try{    
                 new ConexionSQL().ejecutarComandoSQL(c);
             }

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtValorInicialDecimal = new System.Windows.Forms.TextBox();
             this.dateFechaInicio = new System.Windows.Forms.DateTimePicker();
             this.label14 = new System.Windows.Forms.Label();
             this.cmbEstado = new System.Windows.Forms.ComboBox();
@@ -60,7 +61,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtDescripción = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.txtValorInicialDecimal = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -94,6 +94,14 @@
             this.groupBox1.Text = "Crear Subasta";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
+            // txtValorInicialDecimal
+            // 
+            this.txtValorInicialDecimal.BackColor = System.Drawing.Color.PaleGreen;
+            this.txtValorInicialDecimal.Location = new System.Drawing.Point(199, 181);
+            this.txtValorInicialDecimal.Name = "txtValorInicialDecimal";
+            this.txtValorInicialDecimal.Size = new System.Drawing.Size(57, 20);
+            this.txtValorInicialDecimal.TabIndex = 41;
+            // 
             // dateFechaInicio
             // 
             this.dateFechaInicio.Location = new System.Drawing.Point(133, 258);
@@ -116,8 +124,7 @@
             this.cmbEstado.FormattingEnabled = true;
             this.cmbEstado.Items.AddRange(new object[] {
             "BORRADOR",
-            "ACTIVA",
-            "PAUSADA"});
+            "ACTIVA"});
             this.cmbEstado.Location = new System.Drawing.Point(135, 323);
             this.cmbEstado.Name = "cmbEstado";
             this.cmbEstado.Size = new System.Drawing.Size(146, 21);
@@ -389,14 +396,6 @@
             this.label4.Size = new System.Drawing.Size(63, 13);
             this.label4.TabIndex = 11;
             this.label4.Text = "Descripción";
-            // 
-            // txtValorInicialDecimal
-            // 
-            this.txtValorInicialDecimal.BackColor = System.Drawing.Color.PaleGreen;
-            this.txtValorInicialDecimal.Location = new System.Drawing.Point(199, 181);
-            this.txtValorInicialDecimal.Name = "txtValorInicialDecimal";
-            this.txtValorInicialDecimal.Size = new System.Drawing.Size(57, 20);
-            this.txtValorInicialDecimal.TabIndex = 41;
             // 
             // AltaSubasta
             // 

@@ -15,11 +15,11 @@ namespace MercadoEnvio.ComprarOfertar
     {
         int id_publ;
         string descripcion_Producto;
-        float precio_Producto;
+        double precio_Producto;
         int stock_Disponible;
         int usuario;
 
-        public ComprarProducto(int id,string descripcion,float precio,int stock,int usuario_id)
+        public ComprarProducto(int id,string descripcion,double precio,int stock,int usuario_id)
         {
             InitializeComponent();
             id_publ = id;
@@ -71,11 +71,11 @@ namespace MercadoEnvio.ComprarOfertar
             try
             {
                 string crearCompra = "INSERT INTO DBME.compra	(cantidad,fecha,autor_id,publicacion_id,esta_calificada) VALUES (" + cantidad_a_comprar + ", GETDATE()," + usuario + "," + id_publ + ", 0)";
-                string updatePublicacion = "UPDATE DBME.publicacion SET estado = 'FINALIZADA' WHERE publicacion_id = " + id_publ;
+                //string updatePublicacion = "UPDATE DBME.publicacion SET estado = 'FINALIZADA' WHERE publicacion_id = " + id_publ;
                 //LLAMAR A FUNCION CREAR FACTURA Y MOSTRARLA
                 
                 (new ConexionSQL()).ejecutarComandoSQL(crearCompra);
-                (new ConexionSQL()).ejecutarComandoSQL(updatePublicacion);
+                //(new ConexionSQL()).ejecutarComandoSQL(updatePublicacion);
 
                 this.Close();
 

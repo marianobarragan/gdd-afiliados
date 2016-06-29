@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 using MercadoEnvio.Domain;
 using MercadoEnvio.Controller;
+using MercadoEnvio.Facturas;
 
 namespace MercadoEnvio.Generar_Publicación
 {
@@ -19,6 +20,7 @@ namespace MercadoEnvio.Generar_Publicación
         public List<Visibilidad2> visibilidades;
         public Sesion sesion_actual;
         public int id_publicacion;
+        public string estadoInicial;
 
         public ModificarSubasta(int id, Sesion sesion)
         {
@@ -113,6 +115,55 @@ namespace MercadoEnvio.Generar_Publicación
             chkPermitePreguntas.Checked = Boolean.Parse(dt.Rows[0][8].ToString());
             chkRealizaEnvio.Checked = Boolean.Parse(dt.Rows[0][9].ToString());
             txtCostoTotal.Text = dt.Rows[0][10].ToString();
+
+            estadoInicial = dt.Rows[0][7].ToString();
+
+            if (estadoInicial == "ACTIVA")
+            {
+                txtDescripción.Enabled = false;
+                txtStock.Enabled = false;
+                txtValorInicial.Enabled = false;
+                txtValorInicialDecimal.Enabled = false;
+                cmbRubros.Enabled = false;
+                dateFechaInicio.Enabled = false;
+                dateFechaVencimiento.Enabled = false;
+                cmbVisibilidad.Enabled = false;
+                chkRealizaEnvio.Enabled = false;
+                chkPermitePreguntas.Enabled = false;
+
+                cmbEstado.Items.Clear();
+                cmbEstado.Items.Add("ACTIVA");
+                cmbEstado.Items.Add("PAUSADA");
+                cmbEstado.Items.Add("FINALIZADA");
+                cmbEstado.SelectedIndex = cmbEstado.FindString(estadoInicial);
+            }
+
+            if (estadoInicial == "BORRADOR")
+            {
+                cmbEstado.Items.Clear();
+                cmbEstado.Items.Add("ACTIVA");
+                cmbEstado.Items.Add("BORRADOR");
+                cmbEstado.SelectedIndex = cmbEstado.FindString(estadoInicial);
+            }
+
+            if (estadoInicial == "PAUSADA")
+            {
+                txtDescripción.Enabled = false;
+                txtStock.Enabled = false;
+                txtValorInicial.Enabled = false;
+                txtValorInicialDecimal.Enabled = false;
+                cmbRubros.Enabled = false;
+                dateFechaInicio.Enabled = false;
+                dateFechaVencimiento.Enabled = false;
+                cmbVisibilidad.Enabled = false;
+                chkRealizaEnvio.Enabled = false;
+                chkPermitePreguntas.Enabled = false;
+
+                cmbEstado.Items.Add("ACTIVA");
+                cmbEstado.Items.Add("PAUSADA");
+                cmbEstado.Items.Add("FINALIZADA");
+                cmbEstado.SelectedIndex = cmbEstado.FindString(estadoInicial);
+            }
         }
 
         private void cmdGenerarCompra_Click(object sender, EventArgs e)
@@ -190,6 +241,14 @@ namespace MercadoEnvio.Generar_Publicación
                 //comando = "UPDATE DBME.visibilidad SET visibilidad_descripcion = '" + txtDescripcion.Text + "',visibilidad_precio = " + txtPrecio.Text + "." + txtPrecioDecimal.Text + ",visibilidad_porcentaje = " + porcentajeString + ",visibilidad_costo_envio = " + txtCostoEnvio.Text + "." + txtCostoEnvioDecimal.Text + " WHERE visibilidad_id = " + id;
                 string comando = "UPDATE DBME.publicacion SET descripcion = '" + descripcion + "',stock = " + stock + ",fecha_creacion = '" + fechaInicio + "',fecha_vencimiento ='" + fechaVencimiento + "',valor_inicial=" + precio + "." + precio_decimal + ",rubro_id=" + rubro + ",visibilidad_id=" + visibilidad_id + ",estado = '" + estado + "', permite_preguntas = '" + permitePreguntas + "', realiza_envio ='" + realiza_envio + "', costo =" + costo_total + "WHERE publicacion_id= " + id_publicacion;
                 (new ConexionSQL()).ejecutarComandoSQL(comando);
+
+                if (estadoInicial == "BORRADOR" && estado == "ACTIVA")
+                {
+                    string comando2 = "EXECUTE DBME.crearFacturasDelBorrador " + id_publicacion;
+                    DataTable factura_id = new ConexionSQL().cargarTablaSQL(comando2);
+                    DetalleFactura det = new DetalleFactura(Int32.Parse(factura_id.Rows[0][0].ToString()));
+                    det.Show();
+                }
 
                 MessageBox.Show("Publicacion actualizada exitosamente", "Compra Inmediata", MessageBoxButtons.OK);
                 this.Close();

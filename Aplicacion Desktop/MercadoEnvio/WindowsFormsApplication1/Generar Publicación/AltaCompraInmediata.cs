@@ -186,16 +186,19 @@ namespace MercadoEnvio.Generar_Publicación
 
             try
             {
-                
-                string comando = "EXECUTE DBME.crearCompraInmediata '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + precio + "." + precio_decimal + "," + rubro + "," + visibilidad_id + "," + sesion_actual.usuarioActual.usuario_id + "," + estado + "," + permitePreguntas + "," + realiza_envio + "," + costo_total;
-                //MessageBox.Show(precio_total.ToString(), "A", MessageBoxButtons.OK);
-                DataTable factura_id = new ConexionSQL().cargarTablaSQL(comando);
 
+                string comando = "EXECUTE DBME.crearCompraInmediata '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + precio + "." + precio_decimal + "," + rubro + "," + visibilidad_id + "," + sesion_actual.usuarioActual.usuario_id + "," + estado + "," + permitePreguntas + "," + realiza_envio + "," + costo_total;
+                DataTable factura_id = new ConexionSQL().cargarTablaSQL(comando);
                 
+
+                if (estado == "ACTIVA") {
+                    
+                    DetalleFactura det = new DetalleFactura(Int32.Parse(factura_id.Rows[0][0].ToString()));
+                    det.Show();
+                }
 
                 MessageBox.Show("Publicacion creada exitosamente", "Alta Compra Inmediata", MessageBoxButtons.OK);
-                DetalleFactura det = new DetalleFactura(Int32.Parse(factura_id.Rows[0][0].ToString()));
-                det.Show();
+                this.Close();
                 return;
             }
             catch (Exception er)

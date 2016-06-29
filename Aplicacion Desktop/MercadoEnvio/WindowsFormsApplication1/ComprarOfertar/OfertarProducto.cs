@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MercadoEnvio.Controller;
 
 namespace MercadoEnvio.ComprarOfertar
 {
@@ -15,7 +16,7 @@ namespace MercadoEnvio.ComprarOfertar
         int id_publ;
         int usuario;
 
-        public OfertarProducto(int id, string descripcion, float precio, int stock, int usuario_id)
+        public OfertarProducto(int id, string descripcion, double precio, int stock, int usuario_id)
         {
             InitializeComponent();
             txtId.Text = id.ToString();
@@ -33,9 +34,14 @@ namespace MercadoEnvio.ComprarOfertar
         private void btnOfertar_Click(object sender, EventArgs e)
         {
             double valor_a_ofertar;
+            double valor_a_ofertarDecimal;
+           
             try
             {
+
                 valor_a_ofertar = Double.Parse(txtOferta.Text);
+                valor_a_ofertarDecimal = Double.Parse(txtOfertaDecimal.Text);
+                
             }
             catch {
                 
@@ -45,11 +51,26 @@ namespace MercadoEnvio.ComprarOfertar
 
             try
             {
+                if (valor_a_ofertarDecimal >= 100 || valor_a_ofertarDecimal < 0)
+                {
+                    MessageBox.Show("Debe ingresar un valor decimal entre 0 y 100", "Ofertar", MessageBoxButtons.OK);
+                    return;
+                }
 
-                string crearOferta = "INSERT INTO DBME.oferta (fecha,monto,publicacion_id,autor_id) VALUES (GETDATE()," +valor_a_ofertar+ "," + id_publ + ","+usuario+")";
-                string updatePublicacion = "UPDATE DBME.publicacion SET valor_actual = "+valor_a_ofertar+" WHERE publicacion_id = " + id_publ;
+                double valorOfertar = Double.Parse(txtOferta.Text + "." + txtOfertaDecimal.Text);
+                if (valorOfertar <= Double.Parse(txtPrecio.Text))
+                {
+                    MessageBox.Show("Debe ingresar un valor mayor al actual", "Ofertar", MessageBoxButtons.OK);
+                    return;
+                }
+
+
+
+                string crearOferta = "INSERT INTO DBME.oferta (fecha,monto,publicacion_id,autor_id) VALUES (DBME.getHoraDelSistema()," + txtOferta.Text + "." + txtOfertaDecimal.Text + "," + id_publ + "," + usuario + ")";
+                string updatePublicacion = "UPDATE DBME.publicacion SET valor_actual = " + txtOferta.Text + "." + txtOfertaDecimal.Text + " WHERE publicacion_id = " + id_publ;
                 MessageBox.Show(crearOferta, "A", MessageBoxButtons.OK);
-                //(new ConexionSQL()).ejecutarComandoSQL(comando);
+                (new ConexionSQL()).ejecutarComandoSQL(crearOferta);
+                (new ConexionSQL()).ejecutarComandoSQL(updatePublicacion);
                 MessageBox.Show(updatePublicacion, "A", MessageBoxButtons.OK);
                 this.Close();
             }

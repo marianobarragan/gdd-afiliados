@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 using MercadoEnvio.Domain;
 using MercadoEnvio.Controller;
+using MercadoEnvio.Facturas;
 
 namespace MercadoEnvio.Generar_Publicación
 {
@@ -179,12 +180,19 @@ namespace MercadoEnvio.Generar_Publicación
 
                 //CREATE PROCEDURE DBME.crearSubasta (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME, @costo NUMERIC(18,2), @rubro_id INT, @visibilidad_id NUMERIC(18,0), @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit, @valor_inicial DECIMAL(10,2))
                 string comando = "EXECUTE DBME.crearSubasta '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + costo_total + "," + rubro + "," + visibilidad_id + "," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "'," + permitePreguntas + "," + realiza_envio + "," + precio + "." + precio_decimal;
-                //MessageBox.Show(comando, "subasta", MessageBoxButtons.OK);
-                (new ConexionSQL()).ejecutarComandoSQL(comando);
+                DataTable factura_id = new ConexionSQL().cargarTablaSQL(comando);
+
+
+                if (estado == "ACTIVA")
+                {
+
+                    DetalleFactura det = new DetalleFactura(Int32.Parse(factura_id.Rows[0][0].ToString()));
+                    det.Show();
+                }
 
                 MessageBox.Show("Subasta creada exitosamente", "Nueva subasta", MessageBoxButtons.OK);
-
                 this.Close();
+                return;
             }
             catch (Exception er)
             {
