@@ -206,17 +206,11 @@
     <Compile Include="Domain\Usuario.cs" />
     <Compile Include="Domain\Visibilidad.cs" />
     <Compile Include="Domain\Visibilidad2.cs" />
-    <Compile Include="Facturas\DetalleFacturaCliente.cs">
+    <Compile Include="Facturas\DetalleFactura.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Facturas\DetalleFacturaCliente.Designer.cs">
-      <DependentUpon>DetalleFacturaCliente.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Facturas\DetalleFacturaEmpresa.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Facturas\DetalleFacturaEmpresa.Designer.cs">
-      <DependentUpon>DetalleFacturaEmpresa.cs</DependentUpon>
+    <Compile Include="Facturas\DetalleFactura.Designer.cs">
+      <DependentUpon>DetalleFactura.cs</DependentUpon>
     </Compile>
     <Compile Include="Facturas\ListadoFacturas.cs">
       <SubType>Form</SubType>
@@ -390,11 +384,8 @@
     <EmbeddedResource Include="Calificar\ListadoDePublicacionesSinCalificar.resx">
       <DependentUpon>ListadoDePublicacionesSinCalificar.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Facturas\DetalleFacturaCliente.resx">
-      <DependentUpon>DetalleFacturaCliente.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Facturas\DetalleFacturaEmpresa.resx">
-      <DependentUpon>DetalleFacturaEmpresa.cs</DependentUpon>
+    <EmbeddedResource Include="Facturas\DetalleFactura.resx">
+      <DependentUpon>DetalleFactura.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Facturas\ListadoFacturas.resx">
       <DependentUpon>ListadoFacturas.cs</DependentUpon>
