@@ -1033,11 +1033,12 @@ BEGIN
 
 		SET @publicacion_id = SCOPE_IDENTITY()
 		DECLARE @descripcion_facha AS VARCHAR(64)
-		SET @descripcion_facha = CONVERT(VARCHAR(64),@visibilidad_descripcion) + 'Costo visibilidad'
+		SET @descripcion_facha =  'Costo visibilidad ' + CONVERT(VARCHAR(64),@visibilidad_descripcion) 
 
-		--EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
-		--EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
-		
+		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
+		EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
+
+		select @factura_id
 		COMMIT TRANSACTION
 	END TRY
 	BEGIN CATCH
@@ -1301,6 +1302,19 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE DBME.devolverInformacionFactura (@usuario_id INT)
+AS
+BEGIN
+	IF (EXISTS(SELECT usuario_id FROM DBME.empresa WHERE usuario_id = @usuario_id))
+	BEGIN
+		SELECT 'empresa'
+	END
+	ELSE
+	BEGIN
+		SELECT 'cliente'
+	END
+
+END;
 
 /* END PROCEDURES DOMINIO*/
 
