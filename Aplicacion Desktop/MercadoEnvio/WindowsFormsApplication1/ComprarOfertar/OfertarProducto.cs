@@ -15,8 +15,10 @@ namespace MercadoEnvio.ComprarOfertar
     {
         int id_publ;
         int usuario;
+        ListadoPublicaciones listado;
 
-        public OfertarProducto(int id, string descripcion, double precio, int stock, int usuario_id)
+
+        public OfertarProducto(int id, string descripcion, double precio, int stock, int usuario_id, ListadoPublicaciones listado)
         {
             InitializeComponent();
             txtId.Text = id.ToString();
@@ -24,6 +26,7 @@ namespace MercadoEnvio.ComprarOfertar
             txtPrecio.Text = precio.ToString();
             id_publ = id;
             usuario = usuario_id;
+            this.listado = listado;
         }
 
         private void OfertarProducto_Load(object sender, EventArgs e)
@@ -57,7 +60,8 @@ namespace MercadoEnvio.ComprarOfertar
                     return;
                 }
 
-                double valorOfertar = Double.Parse(txtOferta.Text + "." + txtOfertaDecimal.Text);
+                double valorOfertar = Double.Parse(txtOferta.Text + "," + txtOfertaDecimal.Text);
+                MessageBox.Show("valor_a_ofertar: "+ valor_a_ofertar + "  valorOfertar: " + valorOfertar , "A", MessageBoxButtons.OK);
                 if (valorOfertar <= Double.Parse(txtPrecio.Text))
                 {
                     MessageBox.Show("Debe ingresar un valor mayor al actual", "Ofertar", MessageBoxButtons.OK);
@@ -68,10 +72,12 @@ namespace MercadoEnvio.ComprarOfertar
 
                 string crearOferta = "INSERT INTO DBME.oferta (fecha,monto,publicacion_id,autor_id) VALUES (DBME.getHoraDelSistema()," + txtOferta.Text + "." + txtOfertaDecimal.Text + "," + id_publ + "," + usuario + ")";
                 string updatePublicacion = "UPDATE DBME.publicacion SET valor_actual = " + txtOferta.Text + "." + txtOfertaDecimal.Text + " WHERE publicacion_id = " + id_publ;
-                MessageBox.Show(crearOferta, "A", MessageBoxButtons.OK);
+                //MessageBox.Show(crearOferta, "A", MessageBoxButtons.OK);
                 (new ConexionSQL()).ejecutarComandoSQL(crearOferta);
                 (new ConexionSQL()).ejecutarComandoSQL(updatePublicacion);
-                MessageBox.Show(updatePublicacion, "A", MessageBoxButtons.OK);
+                //MessageBox.Show(updatePublicacion, "A", MessageBoxButtons.OK);
+                
+                listado.actualizar_busqueda();
                 this.Close();
             }
             catch (Exception er)

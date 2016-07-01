@@ -124,6 +124,7 @@
             this.MaximizeBox = false;
             this.Name = "HistorialDelCliente";
             this.Text = "HistorialDelCliente";
+            this.Load += new System.EventHandler(this.HistorialDelCliente_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);

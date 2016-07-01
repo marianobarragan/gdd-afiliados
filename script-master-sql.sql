@@ -314,8 +314,8 @@ BEGIN
 	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Empresa_Cod_Postal = d.codigo_postal)
 	WHERE Publ_Empresa_Mail IS NOT NULL
 	
-	INSERT INTO DBME.empresa(usuario_id,razon_social,cuit,fecha_creacion,habilitado)
-	SELECT DISTINCT u.usuario_id,Publ_Empresa_Razon_Social,Publ_Empresa_Cuit,Publ_Empresa_Fecha_Creacion,1
+	INSERT INTO DBME.empresa(usuario_id,razon_social,cuit,fecha_creacion,habilitado,nombre_contacto)
+	SELECT DISTINCT u.usuario_id,Publ_Empresa_Razon_Social,Publ_Empresa_Cuit,Publ_Empresa_Fecha_Creacion,1,'Usuario Migrado'
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Empresa_Mail = u.mail) 
 
 	--UPDATE DBME.usuario SET password = SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', password)), 3, 250) 
@@ -592,49 +592,6 @@ GO
 /* END MIGRACION */
 
 
-/* START TRIGGERS */
-
-CREATE TRIGGER DBME.triggerCrearFacturaLuegoDeCompra
-ON DBME.compra
-AFTER INSERT
-AS
-BEGIN
-
-	DECLARE @cantidad NUMERIC(18,0)
-	DECLARE @hora DATETIME
-	DECLARE @autor_id INT
-	DECLARE @factura_id INT
-			
-	DECLARE @visibilidad NVARCHAR(255)
-	DECLARE @costo_envio NUMERIC(10,2)
-	DECLARE @comision NUMERIC(10,2) 
-	DECLARE @publicacion_id AS NUMERIC(18,0) = (SELECT TOP 1 publicacion_id FROM inserted)
-	DECLARE @costo NUMERIC(18,2) = (SELECT costo FROM DBME.publicacion WHERE publicacion_id = @publicacion_id)
-
-	IF ((SELECT estado FROM DBME.publicacion WHERE publicacion_id = @publicacion_id) = 'Subasta')
-	BEGIN 
-
-		DECLARE @oferta_id_ganador AS INT
-		SET @oferta_id_ganador = (SELECT TOP 1 o.oferta_id 
-		FROM dbme.oferta o
-		WHERE o.publicacion_id = @publicacion_id
-		ORDER BY o.monto DESC)
-
-		SELECT @cantidad = cantidad,@hora = DBME.getHoraDelSistema(),@autor_id = o.autor_id,@visibilidad = v.visibilidad_descripcion,@costo_envio = v.visibilidad_costo_envio,@comision = visibilidad_porcentaje * o.monto
-		FROM DBME.publicacion p JOIN DBME.oferta o ON (p.publicacion_id = o.publicacion_id) JOIN DBME.visibilidad v ON (v.visibilidad_id = p.visibilidad_id)
-		WHERE o.oferta_id=@oferta_id_ganador
-
-		DECLARE @CostoTotal AS NUMERIC(18,2) = @costo_envio + @comision
-
-		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@CostoTotal,@factura_id OUT
-		EXECUTE DBME.crearDetalleFactura 1,'Costo envio ',@factura_id,@costo_envio
-		EXECUTE DBME.crearDetalleFactura 1,'Comision',@factura_id,@comision
-	END;
-					
-	
-END;
-GO
-/* END TRIGGERS */
 
 
 /* START FUNCTIONS */
@@ -670,44 +627,47 @@ GO
 
 
 --TOP PROD NO VENDIDOS--
-
+/*
 CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeProductosNoVendidos(@trimestre TINYINT,@anio INTEGER, @visibilidad NVARCHAR(255))
 RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, mail_vendedor NVARCHAR(255), cantidad_productos_sin_vender BIGINT)
 AS 
 BEGIN 
-DECLARE @inicio AS INT
-DECLARE @fin AS INT
+	DECLARE @inicio AS INT
+	DECLARE @fin AS INT
 
-SET @inicio =
-		 CASE @trimestre
-	     WHEN 1 THEN 1
-         WHEN 2 THEN 4   
-         WHEN 3 THEN 7   
-         ELSE 10  
-END
-SET @fin = @inicio + 2
+	SET @inicio =
+			 CASE @trimestre
+			 WHEN 1 THEN 1
+			 WHEN 2 THEN 4   
+			 WHEN 3 THEN 7   
+			 ELSE 10  
+	END
+	SET @fin = @inicio + 2
 
-If @visibilidad = 'Ninguno'
-BEGIN
-	INSERT INTO @TABLA_RESULTADO(id_vendedor,mail_vendedor ,cantidad_productos_sin_vender)
-	SELECT  TOP 5 u.usuario_id, u.mail, SUM(p.stock) as Cantidad_Productos_No_Vendidos 
-	FROM DBME.usuario u JOIN DBME.publicacion p ON(u.usuario_id = p.autor_id)
-	WHERE YEAR(p.fecha_creacion) = @anio AND MONTH(p.fecha_creacion) Between @inicio AND @fin
-	GROUP BY u.usuario_id, u.mail
-	ORDER BY Cantidad_Productos_No_Vendidos DESC
-	RETURN
-END
-ELSE
-	INSERT INTO @TABLA_RESULTADO(id_vendedor,mail_vendedor ,cantidad_productos_sin_vender)
-	SELECT u.usuario_id, u.mail, SUM(p.stock) as Cantidad_Productos_No_Vendidos 
-	FROM DBME.usuario u JOIN DBME.publicacion p ON(u.usuario_id = p.autor_id) JOIN dbme.visibilidad v ON(p.visibilidad_id = v.visibilidad_id)
-	WHERE YEAR(p.fecha_creacion) = @anio AND MONTH(p.fecha_creacion) Between @inicio AND @fin AND v.visibilidad_descripcion = @visibilidad 
-	GROUP BY u.usuario_id, u.mail
-	ORDER BY Cantidad_Productos_No_Vendidos DESC
+	If @visibilidad = 'Ninguno'
+	BEGIN
+		INSERT INTO @TABLA_RESULTADO(id_vendedor,mail_vendedor ,cantidad_productos_sin_vender)
+		SELECT  TOP 5 u.usuario_id, u.mail, SUM(p.stock) as Cantidad_Productos_No_Vendidos 
+		FROM DBME.usuario u JOIN DBME.publicacion p ON(u.usuario_id = p.autor_id)
+		WHERE YEAR(p.fecha_creacion) = @anio AND MONTH(p.fecha_creacion) Between @inicio AND @fin
+		GROUP BY u.usuario_id, u.mail
+		ORDER BY Cantidad_Productos_No_Vendidos DESC
+		RETURN
+	END
+	ELSE
+		INSERT INTO @TABLA_RESULTADO(id_vendedor,mail_vendedor ,cantidad_productos_sin_vender)
+		SELECT u.usuario_id, u.mail, SUM(p.stock) as Cantidad_Productos_No_Vendidos 
+		FROM DBME.usuario u JOIN DBME.publicacion p ON(u.usuario_id = p.autor_id) JOIN dbme.visibilidad v ON(p.visibilidad_id = v.visibilidad_id)
+		WHERE YEAR(p.fecha_creacion) = @anio AND MONTH(p.fecha_creacion) Between @inicio AND @fin AND v.visibilidad_descripcion = @visibilidad 
+		GROUP BY u.usuario_id, u.mail
+		ORDER BY Cantidad_Productos_No_Vendidos DESC
+		RETURN
+	END
 END;
 GO
 
 --TOP PROD COMPRADOS--
+
 
 CREATE FUNCTION DBME.topClientesConMayorCantidadDeProductosComprados(@trimestre TINYINT,@anio INTEGER,@rubro INT)
 RETURNS @TABLA_RESULTADO TABLE ( id_cliente INT, nombre_cliente NVARCHAR(255), apellido_cliente NVARCHAR(255), cantidad_productos_comprados BIGINT)
@@ -756,7 +716,7 @@ SET @fin = @inicio + 2
 
 	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,cantidad_facturas)
 		
-	SELECT TOP 5 u.usuario_id, u.username, COUNT(f.usuario_id) as facturas_realizadas 
+	SELECT TOP 5 u.usuario_id, u.username, ,COUNT(f.usuario_id) as facturas_realizadas 
 	FROM DBME.usuario u JOIN DBME.factura f ON (u.usuario_id = f.usuario_id)
 	WHERE YEAR(f.fecha) = @anio AND MONTH(f.fecha) Between @inicio AND @fin
 	GROUP BY u.usuario_id, u.username
@@ -794,7 +754,7 @@ SET @fin = @inicio + 2
 	RETURN
 END;
 GO
-
+*/
 /* END FUNCTIONS */
 
 
@@ -1200,6 +1160,97 @@ GO
 
 /* END PROCEDURES CREACIONALES */
 
+/* START TRIGGERS */
+
+CREATE TRIGGER DBME.triggerCrearFacturaLuegoDeCompra
+ON DBME.compra
+FOR INSERT
+AS
+BEGIN
+
+	DECLARE @hora DATETIME
+	DECLARE @autor_id INT
+	DECLARE @factura_id INT
+			
+	DECLARE @visibilidad NVARCHAR(255)
+	DECLARE @costo_envio NUMERIC(10,2)
+	DECLARE @comision NUMERIC(10,2) 
+	DECLARE @publicacion_id AS NUMERIC(18,0) = (SELECT publicacion_id FROM inserted)
+	DECLARE @costo NUMERIC(18,2) = (SELECT costo FROM DBME.publicacion WHERE publicacion_id = @publicacion_id)
+	DECLARE @cantidad NUMERIC(18,0) = (SELECT cantidad FROM inserted)
+
+	IF ((SELECT publicacion_tipo FROM DBME.publicacion WHERE publicacion_id = @publicacion_id) = 'Subasta')
+	BEGIN 
+
+		DECLARE @oferta_id_ganador AS INT
+		SET @oferta_id_ganador = (SELECT TOP 1 o.oferta_id 
+		FROM dbme.oferta o
+		WHERE o.publicacion_id = @publicacion_id
+		ORDER BY o.monto DESC)
+
+		SELECT @cantidad = cantidad,@hora = DBME.getHoraDelSistema(),@autor_id = p.autor_id,@visibilidad = v.visibilidad_descripcion,@costo_envio = v.visibilidad_costo_envio,@comision = visibilidad_porcentaje * o.monto
+		FROM DBME.publicacion p JOIN DBME.oferta o ON (p.publicacion_id = o.publicacion_id) JOIN DBME.visibilidad v ON (v.visibilidad_id = p.visibilidad_id)
+		WHERE o.oferta_id=@oferta_id_ganador
+
+		IF ((SELECT realiza_envio FROM DBME.publicacion WHERE publicacion_id = @publicacion_id) = 0)
+		BEGIN	
+			SET @costo_envio = 0
+		END
+
+		DECLARE @CostoTotal AS NUMERIC(18,2) = @costo_envio + @comision
+
+		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@CostoTotal,@factura_id OUT
+		EXECUTE DBME.crearDetalleFactura 1,'Costo envio ',@factura_id,@costo_envio
+		EXECUTE DBME.crearDetalleFactura 1,'Comision',@factura_id,@comision
+	END;
+					
+	IF ((SELECT publicacion_tipo FROM DBME.publicacion WHERE publicacion_id = @publicacion_id AND estado = 'ACTIVA') = 'Compra Inmediata')
+	BEGIN 
+		
+		SELECT @costo_envio = v.visibilidad_costo_envio,@comision = p.precio*i.cantidad*v.visibilidad_porcentaje
+		FROM DBME.visibilidad v JOIN DBME.publicacion p ON (v.visibilidad_id = p.visibilidad_id) JOIN inserted i ON (p.publicacion_id = i.publicacion_id) 
+		WHERE p.publicacion_id = @publicacion_id
+		
+		IF ((SELECT realiza_envio FROM DBME.publicacion WHERE publicacion_id = @publicacion_id) = 0)
+		BEGIN	
+			SET @costo_envio = 0
+		END
+
+		SET @autor_id = (SELECT autor_id FROM dbme.publicacion WHERE publicacion_id = @publicacion_id)
+		SET @CostoTotal = @costo_envio + @comision
+
+		
+		IF((SELECT stock FROM DBME.publicacion WHERE publicacion_id = @publicacion_id) = 0)
+		BEGIN
+			UPDATE DBME.publicacion
+			SET estado = 'FINALIZADA'
+			WHERE publicacion_id = @publicacion_id
+		END
+
+		/*
+		UPDATE DBME.publicacion
+		SET stock = stock-i.cantidad 
+		FROM inserted i
+		WHERE i.publicacion_id = @publicacion_id
+		*/
+
+		UPDATE DBME.publicacion
+		SET stock = stock - @cantidad
+		WHERE publicacion_id = @publicacion_id
+
+		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@CostoTotal,@factura_id OUT
+		EXECUTE DBME.crearDetalleFactura 1,'Costo envio ',@factura_id,@costo_envio
+		EXECUTE DBME.crearDetalleFactura @cantidad,'Comision',@factura_id,@comision
+
+	END
+
+	
+END;
+GO
+
+/* END TRIGGERS */
+
+
 /* START PROCEDURES COMUNICACION */
 
 
@@ -1361,20 +1412,24 @@ BEGIN
 				
 				*/
 				DECLARE @cantidad NUMERIC(18,0)
-					DECLARE @hora DATETIME
-					DECLARE @autor_id INT
+				DECLARE @hora DATETIME
+				DECLARE @autor_id INT
 
-					SET @oferta_id_ganador = (SELECT TOP 1 o.oferta_id 
+				SET @oferta_id_ganador = (SELECT TOP 1 o.oferta_id 
 				FROM dbme.oferta o
 				WHERE o.publicacion_id = @publicacion_id
 				ORDER BY o.monto DESC)
 
-					SELECT @cantidad = cantidad,@hora = DBME.getHoraDelSistema(),@autor_id = o.autor_id--,@visibilidad = v.visibilidad_descripcion,@costo_envio = v.visibilidad_costo_envio,@comision = visibilidad_porcentaje * o.monto
+				IF (@oferta_id_ganador IS NOT NULL)
+				BEGIN
+					SELECT @cantidad = stock,@hora = DBME.getHoraDelSistema(),@autor_id = o.autor_id--,@visibilidad = v.visibilidad_descripcion,@costo_envio = v.visibilidad_costo_envio,@comision = visibilidad_porcentaje * o.monto
 					FROM DBME.publicacion p JOIN DBME.oferta o ON (p.publicacion_id = o.publicacion_id) JOIN DBME.visibilidad v ON (v.visibilidad_id = p.visibilidad_id)
 					WHERE o.oferta_id=@oferta_id_ganador
-
-				INSERT INTO DBME.compra (cantidad,fecha,autor_id,publicacion_id,esta_calificada)
-				VALUES (@cantidad,@hora,@autor_id,@publicacion_id,0)
+					
+					INSERT INTO DBME.compra (cantidad,fecha,autor_id,publicacion_id,esta_calificada)
+					VALUES (@cantidad,@hora,@autor_id,@publicacion_id,0)
+				
+				END
 
 				UPDATE DBME.publicacion SET estado = 'FINALIZADA' 
 				WHERE publicacion_id = @publicacion_id
@@ -1433,13 +1488,14 @@ CREATE PROCEDURE DBME.historialComprasYSubastas (@usuario_id INT)
 AS
 BEGIN
 
-	SELECT oferta_id as ofertas,monto,fecha,publicacion_id,'Oferta'
+	(SELECT oferta_id as ofertas,monto,fecha,publicacion_id,'Oferta'
 	FROM DBME.oferta o 
 	WHERE o.autor_id = @usuario_id
 	UNION
 	SELECT compra_id,cantidad,fecha,publicacion_id,'Compra'
 	FROM DBME.compra c
-	WHERE c.autor_id = @usuario_id
+	WHERE c.autor_id = @usuario_id)
+	ORDER BY fecha DESC
 
 END;
 GO

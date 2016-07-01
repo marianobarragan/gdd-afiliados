@@ -52,7 +52,7 @@ namespace MercadoEnvio.ComprarOfertar
                 string desc = rubros[j].descripcion_corta;
                 chklRubros.Items.Add(desc);
             }
-
+            btnSeleccionarTodosLosRubros_Click(null, null);
         }
 
         private void armarQueryRubros() {
@@ -69,7 +69,12 @@ namespace MercadoEnvio.ComprarOfertar
 
         private void ListadoPublicaciones_Load(object sender, EventArgs e)
         {
+            
+        }
 
+        public void actualizar_busqueda()
+        {
+            btnBuscar_Click(null,null);
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)
@@ -77,7 +82,7 @@ namespace MercadoEnvio.ComprarOfertar
             string query;
             armarQueryRubros();
 
-            query = "SELECT p.publicacion_id, p.publicacion_tipo, p.descripcion, p.stock, p.valor_actual, p.autor_id, p.permite_preguntas, p.realiza_envio, r.descripcion_corta, v.visibilidad_descripcion FROM DBME.publicacion p JOIN DBME.rubro r ON (r.rubro_id = p.rubro_id ) JOIN DBME.visibilidad v ON (p.visibilidad_id = v.visibilidad_id) where p.autor_id !=" + sesionActual.usuarioActual.usuario_id + " AND p.descripcion LIKE '%" + txtDescripción.Text + "%'" + queryRubros+" AND p.estado = 'ACTIVA' ORDER BY v.visibilidad_precio DESC";
+            query = "SELECT p.publicacion_id, p.publicacion_tipo, p.descripcion, p.stock, p.valor_actual, p.precio, p.autor_id, p.permite_preguntas, p.realiza_envio, r.descripcion_corta, v.visibilidad_descripcion FROM DBME.publicacion p JOIN DBME.rubro r ON (r.rubro_id = p.rubro_id ) JOIN DBME.visibilidad v ON (p.visibilidad_id = v.visibilidad_id) where p.autor_id !=" + sesionActual.usuarioActual.usuario_id + " AND p.descripcion LIKE '%" + txtDescripción.Text + "%'" + queryRubros+" AND p.estado = 'ACTIVA' ORDER BY v.visibilidad_precio, p.fecha_creacion DESC";
 
             
 
@@ -150,11 +155,23 @@ namespace MercadoEnvio.ComprarOfertar
 
         private void btnAccion_Click(object sender, EventArgs e)
         {
+            string query = "SELECT COUNT(*) FROM DBME.compra WHERE (autor_id = " + sesionActual.usuarioActual.usuario_id + " AND esta_calificada = 0)";
+            DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
+            
+            int cantidadComprasSinCalificar = Int32.Parse(dt.Rows[0][0].ToString());
+
+            if (cantidadComprasSinCalificar > 3)
+            {
+                MessageBox.Show("Tiene más de 3 compras sin calificar. No puede realizar más compras", "Problema", MessageBoxButtons.OK);
+                this.Close();
+                return;
+            }
+                        
             int publicacion_id = Int32.Parse(dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString());
             string tipo = (dataGridView1[1, dataGridView1.CurrentCell.RowIndex].Value.ToString());
             string descripcion = (dataGridView1[2, dataGridView1.CurrentCell.RowIndex].Value.ToString());
             int stock = Int32.Parse(dataGridView1[3, dataGridView1.CurrentCell.RowIndex].Value.ToString());
-            double precio = Double.Parse(dataGridView1[4, dataGridView1.CurrentCell.RowIndex].Value.ToString());
+            double precio;
             
             
             //MessageBox.Show(tipo, "hol", MessageBoxButtons.OK);
@@ -163,13 +180,14 @@ namespace MercadoEnvio.ComprarOfertar
                  /* p.publicacion_id, p.publicacion_tipo, p.descripcion, p.stock, p.precio, p.autor_id, p.permite_preguntas, p.realiza_envio, r.descripcion_corta, v.visibilidad_descripcion */
 
                  /* string id,string descripcion,float precio,string stock,int usuario_id */
-                 ComprarOfertar.ComprarProducto comprarProducto = new ComprarProducto( publicacion_id, descripcion, precio, stock, sesionActual.usuarioActual.usuario_id);
+                 precio = Double.Parse(dataGridView1[5, dataGridView1.CurrentCell.RowIndex].Value.ToString()); 
+                ComprarOfertar.ComprarProducto comprarProducto = new ComprarProducto( publicacion_id, descripcion, precio, stock, sesionActual.usuarioActual.usuario_id, this);
                  //ComprarOfertar.ComprarProducto comprarProducto = new ComprarOfertar.ComprarProducto(,,,,sesionActual.usuarioActual.usuario_id); //id,string descripcion,float precio,string stock,int usuario_id
                 comprarProducto.Show();
             }
             else{
-
-                ComprarOfertar.OfertarProducto ofertarProducto = new ComprarOfertar.OfertarProducto(publicacion_id, descripcion, precio, stock, sesionActual.usuarioActual.usuario_id);
+                precio = Double.Parse(dataGridView1[4, dataGridView1.CurrentCell.RowIndex].Value.ToString());
+                ComprarOfertar.OfertarProducto ofertarProducto = new ComprarOfertar.OfertarProducto(publicacion_id, descripcion, precio, stock, sesionActual.usuarioActual.usuario_id, this);
                 ofertarProducto.Show();
 
             }

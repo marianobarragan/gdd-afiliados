@@ -42,7 +42,7 @@ namespace MercadoEnvio.Calificar
             string comando = "EXECUTE DBME.calificarAlVendedor " + compra_id + "," + cliente_id + ",'" + textBox4.Text +"',"+lstCalificacion.Text+"";
             (new ConexionSQL()).ejecutarComandoSQL(comando);
             MessageBox.Show("Calificacion Cargada Correctamente", "Exito", MessageBoxButtons.OK);
-            
+            this.Close();
         }
     }
 }

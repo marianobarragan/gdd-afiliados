@@ -9,3 +9,11 @@ cantidad =! stock, WHY?
 crear muchas compras inmediatas y subastas para testeo
 
 ver q onda con las unidades decimales en alta publicacion/subasta
+
+listado publicaciones debe chequear la hora de inicio
+
+cambiar el costo de envio la puta madre dios
+
+sacar el mensaje en ofertar producto
+
+sapo tiene que arreglar el precio y precio decimal en modificar publicacion

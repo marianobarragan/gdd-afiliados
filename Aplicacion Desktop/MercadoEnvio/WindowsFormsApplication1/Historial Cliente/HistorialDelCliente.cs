@@ -152,5 +152,10 @@ namespace MercadoEnvio.Historial_Cliente
 
             dataGridView1.DataSource = pagina;
         }
+
+        private void HistorialDelCliente_Load(object sender, EventArgs e)
+        {
+            listBox1.SelectedIndex = 0;
+        }
     }
 }

@@ -26,8 +26,9 @@ namespace MercadoEnvio.Calificar
             DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
             if (dt.Rows.Count == 0)
             {
-                MessageBox.Show("No se han encontrado resultados", "Problema", MessageBoxButtons.OK);
+                MessageBox.Show("No posee calificaciones pendientes", "Calificar al vendedor", MessageBoxButtons.OK);
                 dataGridView1.DataSource = null;
+                this.Close();
                 return;
             }
             dataGridView1.DataSource = dt;
@@ -48,6 +49,8 @@ namespace MercadoEnvio.Calificar
             }
             int id2 = Int32.Parse(dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString());
             Calificar.CalificarAlVendedor calificarVendedor = new Calificar.CalificarAlVendedor(id2, idCliente);
+            calificarVendedor.Show();
+            this.Close();
         }
     }
 }

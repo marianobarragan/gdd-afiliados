@@ -92,13 +92,13 @@ namespace MercadoEnvio.VistaPrincipal
                 Calificar.ListadoDePublicacionesSinCalificar lst = new Calificar.ListadoDePublicacionesSinCalificar(sesion.usuarioActual.usuario_id);
                 lst.Show();
             }
-            /*
+            
             if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "CONSULTA DE FACTURAS REALIZADAS AL VENDEDOR")
             {
                 Facturas.ListadoFacturas facturas = new Facturas.ListadoFacturas(sesion.usuarioActual.usuario_id);
                 facturas.Show();
             }
-
+            /*
             if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "LISTADO ESTADISTICO")
             {
                 Listado_Estadistico.SeleccionarListado listadoEstadistico = new Listado_Estadistico.SeleccionarListado();

@@ -282,6 +282,7 @@
             this.Controls.Add(this.btnAccion);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "ListadoFacturas";
             this.Text = "ListadoFacturas";

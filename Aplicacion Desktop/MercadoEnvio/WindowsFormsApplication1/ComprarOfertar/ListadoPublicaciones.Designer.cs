@@ -34,13 +34,13 @@
             this.btnAccion = new System.Windows.Forms.Button();
             this.btnAnterior = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnDeseleccionarTodosLosRubros = new System.Windows.Forms.Button();
+            this.btnSeleccionarTodosLosRubros = new System.Windows.Forms.Button();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.txtDescripción = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.chklRubros = new System.Windows.Forms.CheckedListBox();
-            this.btnSeleccionarTodosLosRubros = new System.Windows.Forms.Button();
-            this.btnDeseleccionarTodosLosRubros = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -121,6 +121,26 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Busqueda";
             // 
+            // btnDeseleccionarTodosLosRubros
+            // 
+            this.btnDeseleccionarTodosLosRubros.Location = new System.Drawing.Point(223, 91);
+            this.btnDeseleccionarTodosLosRubros.Name = "btnDeseleccionarTodosLosRubros";
+            this.btnDeseleccionarTodosLosRubros.Size = new System.Drawing.Size(165, 23);
+            this.btnDeseleccionarTodosLosRubros.TabIndex = 7;
+            this.btnDeseleccionarTodosLosRubros.Text = "Deseleccionar todos los rubros";
+            this.btnDeseleccionarTodosLosRubros.UseVisualStyleBackColor = true;
+            this.btnDeseleccionarTodosLosRubros.Click += new System.EventHandler(this.btnDeseleccionarTodosLosRubros_Click);
+            // 
+            // btnSeleccionarTodosLosRubros
+            // 
+            this.btnSeleccionarTodosLosRubros.Location = new System.Drawing.Point(223, 63);
+            this.btnSeleccionarTodosLosRubros.Name = "btnSeleccionarTodosLosRubros";
+            this.btnSeleccionarTodosLosRubros.Size = new System.Drawing.Size(165, 23);
+            this.btnSeleccionarTodosLosRubros.TabIndex = 6;
+            this.btnSeleccionarTodosLosRubros.Text = "Seleccionar todos los rubros";
+            this.btnSeleccionarTodosLosRubros.UseVisualStyleBackColor = true;
+            this.btnSeleccionarTodosLosRubros.Click += new System.EventHandler(this.btnSeleccionarTodosLosRubros_Click);
+            // 
             // btnBuscar
             // 
             this.btnBuscar.Location = new System.Drawing.Point(836, 20);
@@ -167,26 +187,6 @@
             this.chklRubros.Size = new System.Drawing.Size(196, 94);
             this.chklRubros.TabIndex = 0;
             // 
-            // btnSeleccionarTodosLosRubros
-            // 
-            this.btnSeleccionarTodosLosRubros.Location = new System.Drawing.Point(223, 63);
-            this.btnSeleccionarTodosLosRubros.Name = "btnSeleccionarTodosLosRubros";
-            this.btnSeleccionarTodosLosRubros.Size = new System.Drawing.Size(165, 23);
-            this.btnSeleccionarTodosLosRubros.TabIndex = 6;
-            this.btnSeleccionarTodosLosRubros.Text = "Seleccionar todos los rubros";
-            this.btnSeleccionarTodosLosRubros.UseVisualStyleBackColor = true;
-            this.btnSeleccionarTodosLosRubros.Click += new System.EventHandler(this.btnSeleccionarTodosLosRubros_Click);
-            // 
-            // btnDeseleccionarTodosLosRubros
-            // 
-            this.btnDeseleccionarTodosLosRubros.Location = new System.Drawing.Point(223, 91);
-            this.btnDeseleccionarTodosLosRubros.Name = "btnDeseleccionarTodosLosRubros";
-            this.btnDeseleccionarTodosLosRubros.Size = new System.Drawing.Size(165, 23);
-            this.btnDeseleccionarTodosLosRubros.TabIndex = 7;
-            this.btnDeseleccionarTodosLosRubros.Text = "Deseleccionar todos los rubros";
-            this.btnDeseleccionarTodosLosRubros.UseVisualStyleBackColor = true;
-            this.btnDeseleccionarTodosLosRubros.Click += new System.EventHandler(this.btnDeseleccionarTodosLosRubros_Click);
-            // 
             // ListadoPublicaciones
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -195,6 +195,7 @@
             this.ClientSize = new System.Drawing.Size(950, 562);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ListadoPublicaciones";

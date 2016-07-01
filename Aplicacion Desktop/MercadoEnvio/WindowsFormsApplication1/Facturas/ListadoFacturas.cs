@@ -191,7 +191,7 @@ namespace MercadoEnvio.Facturas
 
             if (chkDirigida.Checked)
             {
-                query += " AND f.factura_id IN ( SELECT f.factura_id FROM dbme.factura f JOIN dbme.usuario u ON (u.usuario_id = f.usuario_id) WHERE u.username LIKE '%" + txtDirigida.Text + "%')";
+                query += " AND f.factura_id IN ( SELECT f.factura_id FROM dbme.factura f JOIN dbme.usuario u ON (u.usuario_id = f.usuario_id) WHERE u.username LIKE '%" + txtDirigida.Text + "%') ORDER BY f.fecha desc, f.factura_id";
             }
 
             ;

@@ -33,6 +33,7 @@ namespace MercadoEnvio.Facturas
 
         private void DetalleFactura_Load(object sender, EventArgs e)
         {
+            lblNumeroFactura.Text = factura_id.ToString();
             string comando = "SELECT YEAR(fecha), MONTH(fecha), DAY(fecha), usuario_id,monto_total FROM DBME.factura WHERE factura_id = " + factura_id;
             DataTable dataFactura = (new ConexionSQL().cargarTablaSQL(comando));
             txtAnio.Text = dataFactura.Rows[0][0].ToString();
@@ -53,7 +54,7 @@ namespace MercadoEnvio.Facturas
 
             if (dataUsuario2.Rows[0][0].ToString() == "empresa")
             {
-                string comando4 = "SELECT cuit,nombre_contacto WHERE usuario_id =  " + idUsuario;
+                string comando4 = "SELECT cuit,nombre_contacto FROM DBME.empresa WHERE usuario_id = " + idUsuario;
                 DataTable dataUsuario3 = (new ConexionSQL().cargarTablaSQL(comando4));
                 lbl3.Text = "CUIT: ";
                 lbl4.Text = "Nombre Contacto: ";
@@ -67,7 +68,16 @@ namespace MercadoEnvio.Facturas
                 lbl7.Text = dataUsuario3.Rows[0][0].ToString();
                 lbl8.Text = dataUsuario3.Rows[0][1].ToString();
             }
-            
+
+            string comando6 = "SELECT * FROM DBME.factura_detalle WHERE factura_id = " + factura_id;
+            DataTable dataFactura2 = (new ConexionSQL().cargarTablaSQL(comando6));
+
+            dataGridView1.DataSource = dataFactura2;
+        }
+
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

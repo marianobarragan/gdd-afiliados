@@ -18,8 +18,9 @@ namespace MercadoEnvio.ComprarOfertar
         double precio_Producto;
         int stock_Disponible;
         int usuario;
+        ListadoPublicaciones listado;
 
-        public ComprarProducto(int id,string descripcion,double precio,int stock,int usuario_id)
+        public ComprarProducto(int id,string descripcion,double precio,int stock,int usuario_id, ListadoPublicaciones listado)
         {
             InitializeComponent();
             id_publ = id;
@@ -36,6 +37,7 @@ namespace MercadoEnvio.ComprarOfertar
 
             usuario = usuario_id;
 
+            this.listado = listado;
         }
 
         private void ComprarProducto_Load(object sender, EventArgs e)
@@ -70,13 +72,14 @@ namespace MercadoEnvio.ComprarOfertar
 
             try
             {
-                string crearCompra = "INSERT INTO DBME.compra	(cantidad,fecha,autor_id,publicacion_id,esta_calificada) VALUES (" + cantidad_a_comprar + ", GETDATE()," + usuario + "," + id_publ + ", 0)";
+                string crearCompra = "INSERT INTO DBME.compra (cantidad,fecha,autor_id,publicacion_id,esta_calificada) VALUES (" + cantidad_a_comprar + ", DBME.getHoraDelSistema()," + usuario + "," + id_publ + ", 0)";
                 //string updatePublicacion = "UPDATE DBME.publicacion SET estado = 'FINALIZADA' WHERE publicacion_id = " + id_publ;
                 //LLAMAR A FUNCION CREAR FACTURA Y MOSTRARLA
                 
                 (new ConexionSQL()).ejecutarComandoSQL(crearCompra);
                 //(new ConexionSQL()).ejecutarComandoSQL(updatePublicacion);
 
+                listado.actualizar_busqueda();
                 this.Close();
 
 
