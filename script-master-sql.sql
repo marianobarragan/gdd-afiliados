@@ -671,7 +671,7 @@ GO
 
 --TOP PROD NO VENDIDOS--
 
-CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeProductosNoVendidos(@trimestre TINYINT,@anio INTEGER,@hayVisibilidad TINYINT, @visibilidad NVARCHAR(255))
+CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeProductosNoVendidos(@trimestre TINYINT,@anio INTEGER, @visibilidad NVARCHAR(255))
 RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, mail_vendedor NVARCHAR(255), cantidad_productos_sin_vender BIGINT)
 AS 
 BEGIN 
@@ -687,7 +687,7 @@ SET @inicio =
 END
 SET @fin = @inicio + 2
 
-If @hayVisibilidad = 0
+If @visibilidad = 'Ninguno'
 BEGIN
 	INSERT INTO @TABLA_RESULTADO(id_vendedor,mail_vendedor ,cantidad_productos_sin_vender)
 	SELECT  TOP 5 u.usuario_id, u.mail, SUM(p.stock) as Cantidad_Productos_No_Vendidos 

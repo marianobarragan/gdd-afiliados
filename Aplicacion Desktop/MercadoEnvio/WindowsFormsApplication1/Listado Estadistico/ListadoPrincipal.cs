@@ -16,6 +16,7 @@ namespace MercadoEnvio.Listado_Estadistico
     {
         public int indice;
         public List<Rubro> rubros;
+        public string descripcionVisibilidad;
 
         public ListadoPrincipal(int index)
         {
@@ -23,6 +24,7 @@ namespace MercadoEnvio.Listado_Estadistico
             int indice = index;
             textBox1.Text = indice.ToString();
             //Sacar esto de aca arriba
+            descripcionVisibilidad = "Ninguno";
 
             if (indice == 1)
             {
@@ -71,13 +73,14 @@ namespace MercadoEnvio.Listado_Estadistico
         }
         private void lstTrimestre_SelectedIndexChanged(object sender, EventArgs e)
         {
-
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             uint rubro;
-
+            descripcionVisibilidad = lstVisibilidad.SelectedItem.ToString();
+            MessageBox.Show(descripcionVisibilidad, "hola", MessageBoxButtons.OK);
+        
             string comandoMIL = "SELECT * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2016,1)";
             this.ejecutarComando(comandoMIL);
             
