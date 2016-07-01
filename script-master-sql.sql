@@ -668,112 +668,133 @@ BEGIN
 END;
 GO
 
-/*
-CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeProductosNoVendidos(@trimestre TINYINT,@anio INTEGER,@visibilidad VARCHAR(255))
+
+--TOP PROD NO VENDIDOS--
+
+CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeProductosNoVendidos(@trimestre TINYINT,@anio INTEGER,@hayVisibilidad TINYINT, @visibilidad NVARCHAR(255))
 RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, mail_vendedor NVARCHAR(255), cantidad_productos_sin_vender BIGINT)
 AS 
 BEGIN 
+DECLARE @inicio AS INT
+DECLARE @fin AS INT
+
+SET @inicio =
+		 CASE @trimestre
+	     WHEN 1 THEN 1
+         WHEN 2 THEN 4   
+         WHEN 3 THEN 7   
+         ELSE 10  
+END
+SET @fin = @inicio + 2
+
+If @hayVisibilidad = 0
+BEGIN
 	INSERT INTO @TABLA_RESULTADO(id_vendedor,mail_vendedor ,cantidad_productos_sin_vender)
-	
-	SELECT u.usuario_id, u.mail, SUM(p.stock) as Cantidad_Productos_No_Vendidos 
+	SELECT  TOP 5 u.usuario_id, u.mail, SUM(p.stock) as Cantidad_Productos_No_Vendidos 
 	FROM DBME.usuario u JOIN DBME.publicacion p ON(u.usuario_id = p.autor_id)
+	WHERE YEAR(p.fecha_creacion) = @anio AND MONTH(p.fecha_creacion) Between @inicio AND @fin
 	GROUP BY u.usuario_id, u.mail
 	ORDER BY Cantidad_Productos_No_Vendidos DESC
-
 	RETURN
+END
+ELSE
+	INSERT INTO @TABLA_RESULTADO(id_vendedor,mail_vendedor ,cantidad_productos_sin_vender)
+	SELECT u.usuario_id, u.mail, SUM(p.stock) as Cantidad_Productos_No_Vendidos 
+	FROM DBME.usuario u JOIN DBME.publicacion p ON(u.usuario_id = p.autor_id) JOIN dbme.visibilidad v ON(p.visibilidad_id = v.visibilidad_id)
+	WHERE YEAR(p.fecha_creacion) = @anio AND MONTH(p.fecha_creacion) Between @inicio AND @fin AND v.visibilidad_descripcion = @visibilidad 
+	GROUP BY u.usuario_id, u.mail
+	ORDER BY Cantidad_Productos_No_Vendidos DESC
 END;
 GO
-*/
+
+--TOP PROD COMPRADOS--
+
 CREATE FUNCTION DBME.topClientesConMayorCantidadDeProductosComprados(@trimestre TINYINT,@anio INTEGER,@rubro INT)
 RETURNS @TABLA_RESULTADO TABLE ( id_cliente INT, nombre_cliente NVARCHAR(255), apellido_cliente NVARCHAR(255), cantidad_productos_comprados BIGINT)
 AS 
 BEGIN
-	--Falta Filtrado por Rubro, Fecha y Visibilidad
-	If (@trimestre = 1)
-	BEGIN
-		INSERT INTO @TABLA_RESULTADO(id_cliente,nombre_cliente,apellido_cliente,cantidad_productos_comprados)
+DECLARE @inicio AS INT
+DECLARE @fin AS INT
+
+SET @inicio =
+		 CASE @trimestre
+	     WHEN 1 THEN 1
+         WHEN 2 THEN 4   
+         WHEN 3 THEN 7   
+         ELSE 10  
+END
+SET @fin = @inicio + 2
+
+INSERT INTO @TABLA_RESULTADO(id_cliente,nombre_cliente,apellido_cliente,cantidad_productos_comprados)
 		SELECT TOP 5 c.cliente_id, c.nombre,c.apellido,  SUM(c2.cantidad) as compras_Realizadas 
-		FROM DBME.cliente c JOIN DBME.compra c2 ON (c.usuario_id = c2.autor_id) JOIN DBME.publicacion p ON(c2.publicacion_id = p.publicacion_id)
-			WHERE YEAR(c2.fecha) = @anio AND MONTH(c2.fecha) Between 1 AND 3 AND p.rubro_id = @rubro
-			Group By c.cliente_id, c.nombre, c.apellido
-			Order By compras_Realizadas DESC	
-	END;
-	If (@trimestre = 2)
-	BEGIN
-		INSERT INTO @TABLA_RESULTADO(id_cliente,nombre_cliente,apellido_cliente,cantidad_productos_comprados)
-		SELECT TOP 5 c.cliente_id, c.nombre,c.apellido,  SUM(c2.cantidad) as compras_Realizadas 
-		FROM DBME.cliente c JOIN DBME.compra c2 ON (c.usuario_id = c2.autor_id) JOIN DBME.publicacion p ON(c2.publicacion_id = p.publicacion_id)
-			WHERE YEAR(c2.fecha) = @anio AND MONTH(c2.fecha) Between 4 AND 6 AND p.rubro_id = @rubro
-			Group By c.cliente_id, c.nombre, c.apellido
-			Order By compras_Realizadas DESC	
-	END;
-	If (@trimestre = 3)
-	BEGIN
-		INSERT INTO @TABLA_RESULTADO(id_cliente,nombre_cliente,apellido_cliente,cantidad_productos_comprados)
-		SELECT TOP 5 c.cliente_id, c.nombre,c.apellido,  SUM(c2.cantidad) as compras_Realizadas 
-		FROM DBME.cliente c JOIN DBME.compra c2 ON (c.usuario_id = c2.autor_id) JOIN DBME.publicacion p ON(c2.publicacion_id = p.publicacion_id)
-			WHERE YEAR(c2.fecha) = @anio AND MONTH(c2.fecha) Between 7 AND 9 AND p.rubro_id = @rubro
-			Group By c.cliente_id, c.nombre, c.apellido
-			Order By compras_Realizadas DESC	
-	END
-	ELSE 
-		INSERT INTO @TABLA_RESULTADO(id_cliente,nombre_cliente,apellido_cliente,cantidad_productos_comprados)
-		SELECT TOP 5 c.cliente_id, c.nombre,c.apellido,  SUM(c2.cantidad) as compras_Realizadas 
-		FROM DBME.cliente c JOIN DBME.compra c2 ON (c.usuario_id = c2.autor_id) JOIN DBME.publicacion p ON(c2.publicacion_id = p.publicacion_id)
-			WHERE YEAR(c2.fecha) = @anio AND MONTH(c2.fecha) Between 10 AND 12 AND p.rubro_id = @rubro
-			Group By c.cliente_id, c.nombre, c.apellido
-			Order By compras_Realizadas DESC	
-	RETURN
+		FROM DBME.cliente c JOIN DBME.compra c2 ON (c.usuario_id = c2.autor_id) JOIN DBME.publicacion p ON(c2.publicacion_id = p.publicacion_id) 
+		WHERE YEAR(c2.fecha) = @anio AND MONTH(c2.fecha) Between @inicio AND @fin
+		Group By c.cliente_id, c.nombre, c.apellido
+		Order By compras_Realizadas DESC
+		RETURN
+
 END;
 GO
 
+--TOP MAX FACT--
 
-/*
 CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeFacturas(@trimestre TINYINT,@anio INTEGER)-- dentro de un mes y año particular
 RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), cantidad_facturas BIGINT)
 AS 
 BEGIN 
+DECLARE @inicio AS INT
+DECLARE @fin AS INT
+
+SET @inicio =
+		 CASE @trimestre
+	     WHEN 1 THEN 1
+         WHEN 2 THEN 4   
+         WHEN 3 THEN 7   
+         ELSE 10  
+END
+SET @fin = @inicio + 2
+
 	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,cantidad_facturas)
-	
-	--podemos obtener las mejores 5 empresas y dsp las mejores 5 clientes y dsp agarrar top 5 de esos 10
-	-pero por que compra id es null? Yo le pregunte a SAPo y me dijo que no pudo migrar bien eso
-
-	-- TOP 5 EMPRESAS
-	SELECT TOP 5 e.empresa_id, e.razon_social, e.nombre_contacto, COUNT(f.factura_id) as facturas_Realizadas FROM DBME.empresa e JOIN DBME.publicacion p ON (e.empresa_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
-	GROUP BY e.empresa_id, e.razon_social, e.nombre_contacto
-	ORDER BY facturas_Realizadas DESC
-
-	-- TOP 5 CLIENTES
-	
-	SELECT c1.cliente_id, c1.nombre, c1.apellido, COUNT(f.factura_id) as facturas_Realizadas FROM DBME.cliente c1 JOIN DBME.publicacion p ON (c1.usuario_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
-	GROUP BY c1.cliente_id, c1.nombre, c1.apellido
-	ORDER BY facturas_Realizadas 
-	
-
+		
+	SELECT TOP 5 u.usuario_id, u.username, COUNT(f.usuario_id) as facturas_realizadas 
+	FROM DBME.usuario u JOIN DBME.factura f ON (u.usuario_id = f.usuario_id)
+	WHERE YEAR(f.fecha) = @anio AND MONTH(f.fecha) Between @inicio AND @fin
+	GROUP BY u.usuario_id, u.username
+	ORDER BY facturas_realizadas DESC
 	
 	RETURN
 END;
 GO
 
-CREATE FUNCTION DBME.topVendedoresConMayorMontoFacturado(@trimestre,@anio INTEGER)-- dentro de un mes y año particular
-RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), monto_facturado BIGINT)
+--TOP MAX MONTO--
+
+CREATE FUNCTION DBME.topVendedoresConMayorMontoFacturado(@trimestre INT,@anio INTEGER)
+RETURNS @TABLA_RESULTADO TABLE (id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), monto_facturado BIGINT)
 AS 
 BEGIN 
-	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,monto_facturado)
-	
-	
-	-- TOP 5 EMPRESAS
-	SELECT TOP 5 e.empresa_id, e.razon_social, f.factura_id, SUM(f.monto_total) as facturas_Realizadas FROM DBME.empresa e JOIN DBME.publicacion p ON (e.empresa_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
-	GROUP BY e.empresa_id, e.razon_social, f.factura_id
+DECLARE @inicio AS INT
+DECLARE @fin AS INT
 
-	-- TOP 5 CLIENTES
-	SELECT TOP 5 c1.cliente_id, c1.nombre, c1.apellido, SUM(f.monto_total) as facturas_Realizadas FROM DBME.cliente c JOIN DBME.publicacion p ON (c1.cliente_id = p.autor_id) JOIN DBME.compra c ON(p.publicacion_id = c.publicacion_id) JOIN DBME.factura f ON(f.compra_id = c.compra_id)
-	GROUP BY e.empresa_id, e.razon_social, f.factura_id
+SET @inicio =
+		 CASE @trimestre
+	     WHEN 1 THEN 1
+         WHEN 2 THEN 4   
+         WHEN 3 THEN 7   
+         ELSE 10  
+END
+SET @fin = @inicio + 2
+
+	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,monto_facturado)
+	SELECT TOP 5 u.usuario_id, u.username, SUM(f.monto_total) as facturas_realizadas 
+	FROM DBME.usuario u JOIN DBME.factura f ON (u.usuario_id = f.usuario_id)
+	WHERE YEAR(f.fecha) = @anio AND MONTH(f.fecha) Between @inicio AND @fin
+	GROUP BY u.usuario_id, u.username
+	ORDER BY facturas_realizadas DESC
 	
 	RETURN
 END;
 GO
-*/
+
 /* END FUNCTIONS */
 
 
