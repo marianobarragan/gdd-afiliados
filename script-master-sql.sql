@@ -593,20 +593,47 @@ GO
 
 
 /* START TRIGGERS */
-/*
-CREATE TRIGGER InsertarEnFuncionalidadXRolLuegoDeRol
-ON DBME.rol
+
+CREATE TRIGGER DBME.triggerCrearFacturaLuegoDeCompra
+ON DBME.compra
 AFTER INSERT
-AS 
+AS
 BEGIN
-	INSERT INTO DBME.rol_x_funcionalidad (rol_id,funcionalidad_id)
-	SELECT rol_id,funcionalidad_id FROM inserted
+
+	DECLARE @cantidad NUMERIC(18,0)
+	DECLARE @hora DATETIME
+	DECLARE @autor_id INT
+	DECLARE @factura_id INT
+			
+	DECLARE @visibilidad NVARCHAR(255)
+	DECLARE @costo_envio NUMERIC(10,2)
+	DECLARE @comision NUMERIC(10,2) 
+	DECLARE @publicacion_id AS NUMERIC(18,0) = (SELECT TOP 1 publicacion_id FROM inserted)
+	DECLARE @costo NUMERIC(18,2) = (SELECT costo FROM DBME.publicacion WHERE publicacion_id = @publicacion_id)
+
+	IF ((SELECT estado FROM DBME.publicacion WHERE publicacion_id = @publicacion_id) = 'Subasta')
+	BEGIN 
+
+		DECLARE @oferta_id_ganador AS INT
+		SET @oferta_id_ganador = (SELECT TOP 1 o.oferta_id 
+		FROM dbme.oferta o
+		WHERE o.publicacion_id = @publicacion_id
+		ORDER BY o.monto DESC)
+
+		SELECT @cantidad = cantidad,@hora = DBME.getHoraDelSistema(),@autor_id = o.autor_id,@visibilidad = v.visibilidad_descripcion,@costo_envio = v.visibilidad_costo_envio,@comision = visibilidad_porcentaje * o.monto
+		FROM DBME.publicacion p JOIN DBME.oferta o ON (p.publicacion_id = o.publicacion_id) JOIN DBME.visibilidad v ON (v.visibilidad_id = p.visibilidad_id)
+		WHERE o.oferta_id=@oferta_id_ganador
+
+		DECLARE @CostoTotal AS NUMERIC(18,2) = @costo_envio + @comision
+
+		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@CostoTotal,@factura_id OUT
+		EXECUTE DBME.crearDetalleFactura 1,'Costo envio ',@factura_id,@costo_envio
+		EXECUTE DBME.crearDetalleFactura 1,'Comision',@factura_id,@comision
+	END;
+					
 	
-
-
+END;
 GO
-*/
-
 /* END TRIGGERS */
 
 
@@ -1279,7 +1306,7 @@ BEGIN
 			IF (@publicacion_tipo = 'Subasta')
 			BEGIN
 				
-				SET @oferta_id_ganador = (SELECT TOP 1 o.oferta_id 
+				/*SET @oferta_id_ganador = (SELECT TOP 1 o.oferta_id 
 				FROM dbme.oferta o
 				WHERE o.publicacion_id = @publicacion_id
 				ORDER BY o.monto DESC)
@@ -1288,9 +1315,7 @@ BEGIN
 				IF (@oferta_id_ganador IS NOT NULL)
 				BEGIN
 					
-					DECLARE @cantidad NUMERIC(18,0)
-					DECLARE @hora DATETIME
-					DECLARE @autor_id INT
+					
 					DECLARE @factura_id INT
 					DECLARE @costo NUMERIC(18,2) = (SELECT costo FROM DBME.publicacion WHERE publicacion_id = @publicacion_id)
 					DECLARE @visibilidad NVARCHAR(255)
@@ -1301,8 +1326,7 @@ BEGIN
 					FROM DBME.publicacion p JOIN DBME.oferta o ON (p.publicacion_id = o.publicacion_id) JOIN DBME.visibilidad v ON (v.visibilidad_id = p.visibilidad_id)
 					WHERE o.oferta_id=@oferta_id_ganador
 
-					INSERT INTO DBME.compra (cantidad,fecha,autor_id,publicacion_id,esta_calificada)
-					VALUES (@cantidad,@hora,@autor_id,@publicacion_id,0)
+					
 
 					DECLARE @descripcion_facha AS VARCHAR(64)
 					SET @descripcion_facha =  'Costo visibilidad ' + CONVERT(VARCHAR(64),@visibilidad) 
@@ -1314,9 +1338,25 @@ BEGIN
 
 				END
 				
+				*/
+				DECLARE @cantidad NUMERIC(18,0)
+					DECLARE @hora DATETIME
+					DECLARE @autor_id INT
+
+					SET @oferta_id_ganador = (SELECT TOP 1 o.oferta_id 
+				FROM dbme.oferta o
+				WHERE o.publicacion_id = @publicacion_id
+				ORDER BY o.monto DESC)
+
+					SELECT @cantidad = cantidad,@hora = DBME.getHoraDelSistema(),@autor_id = o.autor_id--,@visibilidad = v.visibilidad_descripcion,@costo_envio = v.visibilidad_costo_envio,@comision = visibilidad_porcentaje * o.monto
+					FROM DBME.publicacion p JOIN DBME.oferta o ON (p.publicacion_id = o.publicacion_id) JOIN DBME.visibilidad v ON (v.visibilidad_id = p.visibilidad_id)
+					WHERE o.oferta_id=@oferta_id_ganador
+
+				INSERT INTO DBME.compra (cantidad,fecha,autor_id,publicacion_id,esta_calificada)
+				VALUES (@cantidad,@hora,@autor_id,@publicacion_id,0)
+
 				UPDATE DBME.publicacion SET estado = 'FINALIZADA' 
 				WHERE publicacion_id = @publicacion_id
-				
 			END
 			
 			FETCH NEXT FROM publicaciones_activas2 INTO @publicacion_id, @publicacion_tipo
@@ -1396,6 +1436,7 @@ BEGIN
 	END
 
 END;
+GO
 
 CREATE PROCEDURE DBME.crearFacturasDelBorrador (@publicacion_id NUMERIC(18,0)) 
 AS
