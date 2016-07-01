@@ -1,19 +1,11 @@
-Hacer un trigger para cuando se borre una visibilidad, las publicaciones la tengan Gratis por default
-
-chequearVencimientoPublicacion debe ver quien gano las subastas y GENERAR LA FACTURA
-
 terminar alta subasta, ver bien los campos
 
-cantidad =! stock, WHY?
-
-crear muchas compras inmediatas y subastas para testeo
+nunca dejar de testear
 
 ver q onda con las unidades decimales en alta publicacion/subasta
 
-listado publicaciones debe chequear la hora de inicio
+sapo tiene que arreglar el precio y precio decimal en modificar publicacion que los decimales se cargan al reves
 
-cambiar el costo de envio la puta madre dios
+hacer la baja logica de visibilidad, rol y usuarios
 
-sacar el mensaje en ofertar producto
-
-sapo tiene que arreglar el precio y precio decimal en modificar publicacion
+borrar campo fecha_finalizaciom_subasta en publicacion

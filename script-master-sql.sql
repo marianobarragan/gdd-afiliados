@@ -354,11 +354,11 @@ BEGIN
 
 	--Se migran los fabricante de la tabla Maestra
 	INSERT INTO DBME.visibilidad( visibilidad_descripcion, visibilidad_porcentaje, visibilidad_precio, visibilidad_costo_envio)
-	SELECT DISTINCT Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio, (180 - Publicacion_Visibilidad_Precio)
+	SELECT DISTINCT Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio, 50
 	FROM gd_esquema.Maestra
 
 	UPDATE DBME.visibilidad
-	SET visibilidad_costo_envio = (180 - visibilidad_precio)
+	SET visibilidad_costo_envio = 50
 	
 	UPDATE DBME.visibilidad
 	SET visibilidad_costo_envio = 0
@@ -1201,7 +1201,7 @@ BEGIN
 
 		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@CostoTotal,@factura_id OUT
 		EXECUTE DBME.crearDetalleFactura 1,'Costo envio ',@factura_id,@costo_envio
-		EXECUTE DBME.crearDetalleFactura 1,'Comision',@factura_id,@comision
+		EXECUTE DBME.crearDetalleFactura @cantidad,'Comision',@factura_id,@comision
 	END;
 					
 	IF ((SELECT publicacion_tipo FROM DBME.publicacion WHERE publicacion_id = @publicacion_id AND estado = 'ACTIVA') = 'Compra Inmediata')

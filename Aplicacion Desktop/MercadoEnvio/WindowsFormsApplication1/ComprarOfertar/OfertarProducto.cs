@@ -61,7 +61,6 @@ namespace MercadoEnvio.ComprarOfertar
                 }
 
                 double valorOfertar = Double.Parse(txtOferta.Text + "," + txtOfertaDecimal.Text);
-                MessageBox.Show("valor_a_ofertar: "+ valor_a_ofertar + "  valorOfertar: " + valorOfertar , "A", MessageBoxButtons.OK);
                 if (valorOfertar <= Double.Parse(txtPrecio.Text))
                 {
                     MessageBox.Show("Debe ingresar un valor mayor al actual", "Ofertar", MessageBoxButtons.OK);

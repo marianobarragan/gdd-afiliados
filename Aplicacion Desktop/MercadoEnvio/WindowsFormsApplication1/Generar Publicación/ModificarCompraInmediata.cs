@@ -108,7 +108,9 @@ namespace MercadoEnvio.Generar_Publicación
             txtStock.Text = dt.Rows[0][1].ToString();
             dateFechaInicio.Text = dt.Rows[0][2].ToString();
             dateFechaVencimiento.Text = dt.Rows[0][3].ToString();
-            txtPrecio.Text = dt.Rows[0][4].ToString();
+            string[] datos = dt.Rows[0][4].ToString().Split(',');
+            txtPrecio.Text = datos[0];
+            txtPrecioDecimal.Text = datos[1];
             cmbRubros.SelectedIndex = Int32.Parse(dt.Rows[0][5].ToString());
             cmbVisibilidad.SelectedIndex = Int32.Parse(dt.Rows[0][6].ToString()) -1;
             cmbEstado.SelectedIndex = cmbEstado.FindString(dt.Rows[0][7].ToString());
