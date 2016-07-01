@@ -627,7 +627,7 @@ GO
 
 
 --TOP PROD NO VENDIDOS--
-/*
+
 CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeProductosNoVendidos(@trimestre TINYINT,@anio INTEGER, @visibilidad NVARCHAR(255))
 RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, mail_vendedor NVARCHAR(255), cantidad_productos_sin_vender BIGINT)
 AS 
@@ -662,7 +662,7 @@ BEGIN
 		GROUP BY u.usuario_id, u.mail
 		ORDER BY Cantidad_Productos_No_Vendidos DESC
 		RETURN
-	END
+	
 END;
 GO
 
@@ -699,7 +699,7 @@ GO
 --TOP MAX FACT--
 
 CREATE FUNCTION DBME.topVendedoresConMayorCantidadDeFacturas(@trimestre TINYINT,@anio INTEGER)-- dentro de un mes y año particular
-RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), cantidad_facturas BIGINT)
+RETURNS @TABLA_RESULTADO TABLE ( id_vendedor INT, nombre_vendedor NVARCHAR(255), cantidad_facturas BIGINT)
 AS 
 BEGIN 
 DECLARE @inicio AS INT
@@ -714,9 +714,9 @@ SET @inicio =
 END
 SET @fin = @inicio + 2
 
-	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,cantidad_facturas)
+	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,cantidad_facturas)
 		
-	SELECT TOP 5 u.usuario_id, u.username, ,COUNT(f.usuario_id) as facturas_realizadas 
+	SELECT TOP 5 u.usuario_id, u.username, COUNT(f.usuario_id) as facturas_realizadas 
 	FROM DBME.usuario u JOIN DBME.factura f ON (u.usuario_id = f.usuario_id)
 	WHERE YEAR(f.fecha) = @anio AND MONTH(f.fecha) Between @inicio AND @fin
 	GROUP BY u.usuario_id, u.username
@@ -729,7 +729,7 @@ GO
 --TOP MAX MONTO--
 
 CREATE FUNCTION DBME.topVendedoresConMayorMontoFacturado(@trimestre INT,@anio INTEGER)
-RETURNS @TABLA_RESULTADO TABLE (id_vendedor INT, nombre_vendedor NVARCHAR(255), apellido_vendedor NVARCHAR(255), monto_facturado BIGINT)
+RETURNS @TABLA_RESULTADO TABLE (id_vendedor INT, nombre_vendedor NVARCHAR(255), monto_facturado BIGINT)
 AS 
 BEGIN 
 DECLARE @inicio AS INT
@@ -744,7 +744,7 @@ SET @inicio =
 END
 SET @fin = @inicio + 2
 
-	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,apellido_vendedor,monto_facturado)
+	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,monto_facturado)
 	SELECT TOP 5 u.usuario_id, u.username, SUM(f.monto_total) as facturas_realizadas 
 	FROM DBME.usuario u JOIN DBME.factura f ON (u.usuario_id = f.usuario_id)
 	WHERE YEAR(f.fecha) = @anio AND MONTH(f.fecha) Between @inicio AND @fin
