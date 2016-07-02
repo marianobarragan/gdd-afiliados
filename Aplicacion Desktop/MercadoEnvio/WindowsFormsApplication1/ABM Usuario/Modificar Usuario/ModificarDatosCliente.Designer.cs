@@ -56,11 +56,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.chkHabilitado = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkHabilitado);
             this.groupBox1.Controls.Add(this.txtNumeroTelefono);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.txtDepartamento);
@@ -328,6 +330,17 @@
             this.label1.TabIndex = 33;
             this.label1.Text = "Apellido";
             // 
+            // chkHabilitado
+            // 
+            this.chkHabilitado.AutoSize = true;
+            this.chkHabilitado.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkHabilitado.Location = new System.Drawing.Point(126, 211);
+            this.chkHabilitado.Name = "chkHabilitado";
+            this.chkHabilitado.Size = new System.Drawing.Size(146, 20);
+            this.chkHabilitado.TabIndex = 60;
+            this.chkHabilitado.Text = "Usuario Habilitado?";
+            this.chkHabilitado.UseVisualStyleBackColor = true;
+            // 
             // ModificarDatosCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -375,5 +388,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox chkHabilitado;
     }
 }

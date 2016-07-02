@@ -54,11 +54,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.chkHabilitado = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkHabilitado);
             this.groupBox1.Controls.Add(this.cmbRubros);
             this.groupBox1.Controls.Add(this.txtNumeroTelefono);
             this.groupBox1.Controls.Add(this.label8);
@@ -304,6 +306,17 @@
             this.label1.TabIndex = 63;
             this.label1.Text = "Razón Social";
             // 
+            // chkHabilitado
+            // 
+            this.chkHabilitado.AutoSize = true;
+            this.chkHabilitado.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkHabilitado.Location = new System.Drawing.Point(138, 209);
+            this.chkHabilitado.Name = "chkHabilitado";
+            this.chkHabilitado.Size = new System.Drawing.Size(167, 24);
+            this.chkHabilitado.TabIndex = 88;
+            this.chkHabilitado.Text = "Usuario Habilitado?";
+            this.chkHabilitado.UseVisualStyleBackColor = true;
+            // 
             // ModificarDatosEmpresa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -349,5 +362,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox chkHabilitado;
     }
 }

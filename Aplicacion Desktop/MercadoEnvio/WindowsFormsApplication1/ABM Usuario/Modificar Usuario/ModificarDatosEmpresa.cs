@@ -52,7 +52,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
 
         private void ModificarDatosEmpresa_Load(object sender, EventArgs e)
         {
-            string comando = "SELECT e.razon_social,e.nombre_contacto,e.cuit,e.rubro_id,u.telefono, d.ciudad, d.localidad, d.codigo_postal,d.domicilio_calle,d.numero_calle, d.piso, d.departamento FROM DBME.empresa e JOIN DBME.usuario u ON (e.usuario_id = u.usuario_id) JOIN DBME.domicilio d ON (u.domicilio_id = d.domicilio_id) WHERE empresa_id = " + empresa_id;
+            string comando = "SELECT e.razon_social,e.nombre_contacto,e.cuit,e.rubro_id,u.telefono, d.ciudad, d.localidad, d.codigo_postal,d.domicilio_calle,d.numero_calle, d.piso, d.departamento, u.habilitado FROM DBME.empresa e JOIN DBME.usuario u ON (e.usuario_id = u.usuario_id) JOIN DBME.domicilio d ON (u.domicilio_id = d.domicilio_id) WHERE empresa_id = " + empresa_id;
             DataTable dt = (new ConexionSQL()).cargarTablaSQL(comando);
 
             txtRazonSocial.Text = dt.Rows[0][0].ToString();
@@ -67,6 +67,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
             txtAlturaCalle.Text = dt.Rows[0][9].ToString();
             txtNumeroPiso.Text = dt.Rows[0][10].ToString();
             txtDepartamento.Text = dt.Rows[0][11].ToString();
+            chkHabilitado.Checked = Boolean.Parse(dt.Rows[0][12].ToString());
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -89,6 +90,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
             uint numero_piso;
             string departamento = txtDepartamento.Text;
             uint numero_telefono;
+            bool habilitado = chkHabilitado.Checked;
 
             try
             {
@@ -112,7 +114,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
             try // actualizar empresa
             {
 
-                string comando = "EXECUTE DBME.updateEmpresa " + empresa_id + ",'" + nombre + "','" + razon_social + "','" + CUIT + "'," + rubro + ",'" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "','" + altura_calle + "','" + numero_piso + "','" + departamento + "','" + numero_telefono + "'";
+                string comando = "EXECUTE DBME.updateEmpresa " + empresa_id + ",'" + nombre + "','" + razon_social + "','" + CUIT + "'," + rubro + ",'" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "','" + altura_calle + "','" + numero_piso + "','" + departamento + "','" + numero_telefono + "', " + habilitado;
                 //MessageBox.Show(comando, "Update", MessageBoxButtons.OK);
                 (new ConexionSQL()).ejecutarComandoSQL(comando);
                 MessageBox.Show("Empresa actualizada exitosamente", "Update", MessageBoxButtons.OK);

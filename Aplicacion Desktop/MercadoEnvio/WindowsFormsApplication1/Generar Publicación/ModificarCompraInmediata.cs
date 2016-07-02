@@ -233,7 +233,7 @@ namespace MercadoEnvio.Generar_Publicación
             //validar fechas
             int ant1 = DateTime.Compare(fechaInicio, DateTime.Parse(Program.fechaSistema()));
 
-            if (ant1 == -1)
+            if (ant1 == -1 && estadoInicial == "BORRADOR")
             {
                 MessageBox.Show("La fecha de inicio no puede ser anterior a la fecha del sistema", "Problema", MessageBoxButtons.OK);
                 return;
@@ -241,7 +241,7 @@ namespace MercadoEnvio.Generar_Publicación
 
             int ant2 = DateTime.Compare(fechaInicio, fechaVencimiento);
 
-            if (ant2 != -1)
+            if (ant2 != -1 && estadoInicial == "BORRADOR")
             {
                 MessageBox.Show("La fecha de inicio no puede ser despues de la de finalización ", "Problema", MessageBoxButtons.OK);
                 return;

@@ -67,7 +67,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
         {
             
             string query;
-            query = "SELECT c.cliente_id,c.apellido,c.nombre,c.numero_documento,c.fecha_nacimiento, u.mail FROM DBME.cliente c JOIN DBME.usuario u ON (c.usuario_id = u.usuario_id) where cliente_id IS NOT NULL ";
+            query = "SELECT c.cliente_id,c.apellido,c.nombre,c.numero_documento,c.fecha_nacimiento, u.mail,u.usuario_id FROM DBME.cliente c JOIN DBME.usuario u ON (c.usuario_id = u.usuario_id) WHERE cliente_id IS NOT NULL AND u.posee_baja_logica = 0";
 
             if (chkNombre.Checked) { 
                 query = query + " AND nombre LIKE '%" + txtNombre.Text + "%'";
@@ -119,13 +119,14 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
             }
 
             uint id2 = UInt32.Parse(dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString());
+            uint id1 = UInt32.Parse(dataGridView1[6, dataGridView1.CurrentCell.RowIndex].Value.ToString());
 
             if (discriminador == "Borrar") {
-                DialogResult h = MessageBox.Show("¿Seguro que desea dar de baja al usuario seleccionado?", "BAJA USUARIO", MessageBoxButtons.YesNo);
+                DialogResult h = MessageBox.Show("¿Seguro que desea dar de baja al usuario seleccionado? Esta operación es irreversible", "BAJA USUARIO", MessageBoxButtons.YesNo);
 
                 if (h == DialogResult.Yes)
                 {
-                    string query = "UPDATE FROM DBME.cliente SET habilitado = 0 WHERE cliente_id = " + id2;
+                    string query = "UPDATE FROM DBME.usuario SET posee_baja_logica = 0 WHERE cliente_id = " + id1;
                     (new ConexionSQL()).ejecutarComandoSQL(query);
                 }
 

@@ -49,16 +49,16 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
                 MessageBox.Show("Seleccione una Fila", discriminador + " Cliente", MessageBoxButtons.OK);
                 return;
             }
-
+            uint id1 = UInt32.Parse(dataGridView1[6, dataGridView1.CurrentCell.RowIndex].Value.ToString());
             uint id2 = UInt32.Parse(dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString());
 
             if (discriminador == "Borrar")
             {
-                DialogResult h = MessageBox.Show("¿Seguro que desea borrar la empresa seleccionada?", "BORRAR EMPRESA", MessageBoxButtons.YesNo);
+                DialogResult h = MessageBox.Show("¿Seguro que desea dar de baja a la empresa seleccionada? Esta operación es irreversible", "BAJA EMPRESA", MessageBoxButtons.YesNo);
 
                 if (h == DialogResult.Yes)
                 {
-                    string q = "UPDATE FROM DBME.empresa SET habilitado = 0 WHERE cliente_id = " + id2; //baja logica del sistema
+                    string q = "UPDATE FROM DBME.usuario SET posee_baja_logica = 1 WHERE usuario_id = " + id1; //baja logica del sistema
                     (new ConexionSQL()).ejecutarComandoSQL(q);
                 }
 
@@ -91,7 +91,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
         private void button1_Click(object sender, EventArgs e)
         {
             string query;
-            query = "SELECT e.empresa_id,e.razon_social,e.cuit,e.fecha_creacion,e.nombre_contacto, u.mail FROM DBME.empresa e JOIN DBME.usuario u ON (e.usuario_id = u.usuario_id) where e.habilitado = 1 ";
+            query = "SELECT e.empresa_id,e.razon_social,e.cuit,e.fecha_creacion,e.nombre_contacto, u.mail, u.usuario_id FROM DBME.empresa e JOIN DBME.usuario u ON (e.usuario_id = u.usuario_id) where u.habilitado = 1 AND u.posee_baja_logica = 0";
 
             if (chkRazonSocial.Checked) {
                 query = query + " AND razon_social LIKE '%" + txtRazonSocial.Text + "%'";

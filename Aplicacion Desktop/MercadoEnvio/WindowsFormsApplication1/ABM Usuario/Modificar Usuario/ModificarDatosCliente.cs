@@ -24,7 +24,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
 
         private void ModificarDatosCliente_Load(object sender, EventArgs e)
         {
-            string comando = "select c.apellido, c.nombre, c.tipo_documento, c.numero_documento, c.fecha_nacimiento, u.telefono, d.ciudad, d.localidad, d.codigo_postal,d.domicilio_calle,d.numero_calle, d.piso, d.departamento from dbme.cliente c JOIN DBME.usuario u ON (u.usuario_id = c.usuario_id) JOIN DBME.domicilio d ON (u.domicilio_id = d.domicilio_id) WHERE cliente_id = " + cliente_id;
+            string comando = "select c.apellido, c.nombre, c.tipo_documento, c.numero_documento, c.fecha_nacimiento, u.telefono, d.ciudad, d.localidad, d.codigo_postal,d.domicilio_calle,d.numero_calle, d.piso, d.departamento, u.habilitado from dbme.cliente c JOIN DBME.usuario u ON (u.usuario_id = c.usuario_id) JOIN DBME.domicilio d ON (u.domicilio_id = d.domicilio_id) WHERE cliente_id = " + cliente_id;
             DataTable dt = (new ConexionSQL()).cargarTablaSQL(comando);
 
             txtApellido.Text = dt.Rows[0][0].ToString();
@@ -40,7 +40,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
             txtAlturaCalle.Text = dt.Rows[0][10].ToString();
             txtNumeroPiso.Text = dt.Rows[0][11].ToString();
             txtDepartamento.Text = dt.Rows[0][12].ToString();
-
+            chkHabilitado.Checked = Boolean.Parse(dt.Rows[0][13].ToString());
             //DataTable dataVisibilidad = (new ConexionSQL()).cargarTablaSQL(comando);
         }
 
@@ -60,6 +60,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
             uint numero_piso;
             string departamento = txtDepartamento.Text;
             uint numero_telefono;
+            bool habilitado = chkHabilitado.Checked;
 
             try
             {
@@ -95,7 +96,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
             try
             {
 
-                string comando = "EXECUTE DBME.updateCliente "+cliente_id+",'" + nombre + "','" + apellido + "','" + fechaNacimiento + "','" + tipoDocumento + "'," + documento + ",'" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "'," + altura_calle + "," + numero_piso + ",'" + departamento + "'," + numero_telefono;
+                string comando = "EXECUTE DBME.updateCliente "+cliente_id+",'" + nombre + "','" + apellido + "','" + fechaNacimiento + "','" + tipoDocumento + "'," + documento + ",'" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "'," + altura_calle + "," + numero_piso + ",'" + departamento + "'," + numero_telefono + "," + habilitado;
                 //MessageBox.Show(comando, "A", MessageBoxButtons.OK);
                 (new ConexionSQL()).ejecutarComandoSQL(comando);
                 //textBox1.Text = comando;

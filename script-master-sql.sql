@@ -49,7 +49,8 @@ CREATE TABLE DBME.usuario(
 	domicilio_id INT FOREIGN KEY REFERENCES DBME.domicilio(domicilio_id),
 	fecha_creacion DATETIME,
 	telefono BIGINT,
-	es_nuevo BIT
+	es_nuevo BIT,
+	posee_baja_logica BIT
 );
 GO
 
@@ -68,7 +69,6 @@ CREATE TABLE DBME.cliente(
 	numero_documento NUMERIC(18,0) UNIQUE,
 	tipo_documento NVARCHAR(3) CHECK(tipo_documento IN ('DNI','LE','LC')),
 	fecha_nacimiento DATETIME,
-	habilitado BIT,
 	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id) 
 );
 GO
@@ -88,7 +88,6 @@ CREATE TABLE DBME.empresa(
 	nombre_contacto VARCHAR(25),
 	rubro_id INT FOREIGN KEY REFERENCES DBME.rubro(rubro_id),
 	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id),
-	habilitado BIT
 );
 GO
 
@@ -288,13 +287,13 @@ AS
 BEGIN
 
 
-	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id,fecha_creacion,telefono,es_nuevo)
-	SELECT DISTINCT Publ_Cli_Mail,Publ_Cli_Mail,HASHBYTES('SHA2_256',Publ_Cli_Mail),1,0, d.domicilio_id ,NULL,NULL,0
+	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id,fecha_creacion,telefono,es_nuevo,posee_baja_logica)
+	SELECT DISTINCT Publ_Cli_Mail,Publ_Cli_Mail,HASHBYTES('SHA2_256',Publ_Cli_Mail),1,0, d.domicilio_id ,NULL,NULL,0,0
 	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Cli_Cod_Postal = d.codigo_postal)
 	WHERE Publ_Cli_Mail IS NOT NULL
 	
-	INSERT INTO DBME.cliente(usuario_id,apellido,nombre,numero_documento,tipo_documento,fecha_nacimiento,habilitado)
-	SELECT DISTINCT u.usuario_id, m.Publ_Cli_Apeliido, m.Publ_Cli_Nombre,m.Publ_Cli_Dni,'DNI',m.Publ_Cli_Fecha_Nac,1
+	INSERT INTO DBME.cliente(usuario_id,apellido,nombre,numero_documento,tipo_documento,fecha_nacimiento)
+	SELECT DISTINCT u.usuario_id, m.Publ_Cli_Apeliido, m.Publ_Cli_Nombre,m.Publ_Cli_Dni,'DNI',m.Publ_Cli_Fecha_Nac
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Cli_Mail = u.mail)
 	
 	
@@ -308,13 +307,13 @@ CREATE PROCEDURE DBME.migrarEmpresas
 AS
 BEGIN
 	
-	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id ,fecha_creacion,telefono,es_nuevo)
-	SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Mail,HASHBYTES('SHA2_256',Publ_Empresa_Mail),1,0, d.domicilio_id ,NULL,NULL,0
+	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id ,fecha_creacion,telefono,es_nuevo,posee_baja_logica)
+	SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Mail,HASHBYTES('SHA2_256',Publ_Empresa_Mail),1,0, d.domicilio_id ,NULL,NULL,0,0
 	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Empresa_Cod_Postal = d.codigo_postal)
 	WHERE Publ_Empresa_Mail IS NOT NULL
 	
-	INSERT INTO DBME.empresa(usuario_id,razon_social,cuit,fecha_creacion,habilitado,nombre_contacto)
-	SELECT DISTINCT u.usuario_id,Publ_Empresa_Razon_Social,Publ_Empresa_Cuit,Publ_Empresa_Fecha_Creacion,1,'Usuario Migrado'
+	INSERT INTO DBME.empresa(usuario_id,razon_social,cuit,fecha_creacion,nombre_contacto)
+	SELECT DISTINCT u.usuario_id,Publ_Empresa_Razon_Social,Publ_Empresa_Cuit,Publ_Empresa_Fecha_Creacion,'Usuario Migrado'
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Empresa_Mail = u.mail) 
 
 	--UPDATE DBME.usuario SET password = SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', password)), 3, 250) 
@@ -352,8 +351,8 @@ AS
 BEGIN
 
 	--Se migran los fabricante de la tabla Maestra
-	INSERT INTO DBME.visibilidad( visibilidad_descripcion, visibilidad_porcentaje, visibilidad_precio, visibilidad_costo_envio,visibilidad_habilitada)
-	SELECT DISTINCT Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio, 50,1
+	INSERT INTO DBME.visibilidad( visibilidad_descripcion, visibilidad_porcentaje, visibilidad_precio, visibilidad_costo_envio)
+	SELECT DISTINCT Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio, 50
 	FROM gd_esquema.Maestra
 
 	UPDATE DBME.visibilidad
@@ -469,21 +468,21 @@ BEGIN
 
 	--DECLARE cursor_para_publicaciones CURSOR FOR
 	INSERT INTO DBME.publicacion(publicacion_id,descripcion,cantidad,stock,fecha_creacion,fecha_vencimiento,precio,estado,publicacion_tipo,rubro_id,visibilidad_id,autor_id,permite_preguntas,realiza_envio)
-	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'FINALIZADA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0  
+	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'ACTIVA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0  
 	FROM gd_esquema.Maestra m JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion) JOIN DBME.rubro r ON (m.Publicacion_Rubro_Descripcion = r.descripcion_corta) JOIN DBME.usuario u ON (u.mail = m.Publ_Cli_Mail)
 	WHERE Publicacion_Tipo = 'Compra Inmediata' AND Publ_Cli_Mail IS NOT NULL
 	UNION
-	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'FINALIZADA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0  
+	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'ACTIVA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0  
 	FROM gd_esquema.Maestra m JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion) JOIN DBME.rubro r ON (m.Publicacion_Rubro_Descripcion = r.descripcion_corta) JOIN DBME.usuario u ON (u.mail = m.Publ_Empresa_Mail)
 	WHERE Publicacion_Tipo = 'Compra Inmediata' AND Publ_Empresa_Mail IS NOT NULL
 
 	INSERT INTO DBME.publicacion(publicacion_id,descripcion,cantidad,stock,fecha_creacion,fecha_vencimiento,precio,estado,publicacion_tipo,rubro_id,visibilidad_id,autor_id,permite_preguntas,realiza_envio,valor_inicial,valor_actual)
-	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'FINALIZADA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0,MIN(Oferta_Monto),MAX(Oferta_Monto)  
+	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'ACTIVA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0,MIN(Oferta_Monto),MAX(Oferta_Monto)  
 	FROM gd_esquema.Maestra m JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion) JOIN DBME.rubro r ON (m.Publicacion_Rubro_Descripcion = r.descripcion_corta) JOIN DBME.usuario u ON (u.mail = m.Publ_Cli_Mail)
 	WHERE Publicacion_Tipo = 'Subasta' AND Publ_Cli_Mail IS NOT NULL
 	GROUP BY Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,Publicacion_Estado,Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id
 	UNION
-	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'FINALIZADA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0,MIN(Oferta_Monto),MAX(Oferta_Monto)  
+	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'ACTIVA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0,MIN(Oferta_Monto),MAX(Oferta_Monto)  
 	FROM gd_esquema.Maestra m JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion) JOIN DBME.rubro r ON (m.Publicacion_Rubro_Descripcion = r.descripcion_corta) JOIN DBME.usuario u ON (u.mail = m.Publ_Empresa_Mail)
 	WHERE Publicacion_Tipo = 'Subasta' AND Publ_Empresa_Mail IS NOT NULL
 	GROUP BY Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,Publicacion_Estado,Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id
@@ -832,8 +831,8 @@ BEGIN
 
 	EXECUTE DBME.crearUsuario @username,@password,@mail,@telefono,@ciudad,@localidad,@codigo_postal,@piso,@departamento,@domicilio_calle,@numero_calle, @usuario_id OUT
 	
-	INSERT INTO DBME.cliente(apellido,nombre,numero_documento,tipo_documento,fecha_nacimiento,usuario_id,habilitado)
-	VALUES (@apellido,@nombre,@numero_documento,@tipo_documento,@fecha_nacimiento,@usuario_id,1)
+	INSERT INTO DBME.cliente(apellido,nombre,numero_documento,tipo_documento,fecha_nacimiento,usuario_id)
+	VALUES (@apellido,@nombre,@numero_documento,@tipo_documento,@fecha_nacimiento,@usuario_id)
 
 	SET @cliente_id = SCOPE_IDENTITY()
 	
@@ -868,8 +867,8 @@ BEGIN
 
 	EXECUTE DBME.crearUsuario @username,@password,@mail,@telefono,@ciudad,@localidad,@codigo_postal,@piso,@departamento,@domicilio_calle,@numero_calle, @usuario_id OUT
 	
-	INSERT INTO DBME.empresa(razon_social,cuit,fecha_creacion,nombre_contacto,rubro_id,usuario_id,habilitado)
-	VALUES (@razon_social,@cuit,@fecha_creacion,@nombre_contacto,@rubro_id,@usuario_id,1)
+	INSERT INTO DBME.empresa(razon_social,cuit,fecha_creacion,nombre_contacto,rubro_id,usuario_id)
+	VALUES (@razon_social,@cuit,@fecha_creacion,@nombre_contacto,@rubro_id,@usuario_id)
 
 	SET @cliente_id = SCOPE_IDENTITY()
 
@@ -920,13 +919,13 @@ END;
 GO
 
 
-CREATE PROCEDURE DBME.updateCliente (@cliente_id INT, @nombre NVARCHAR(255), @apellido NVARCHAR(255),@fechaNacimiento DATETIME, @tipoDocumento NVARCHAR(3),@numero_documento NUMERIC(18,0),@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT)
+CREATE PROCEDURE DBME.updateCliente (@cliente_id INT, @nombre NVARCHAR(255), @apellido NVARCHAR(255),@fechaNacimiento DATETIME, @tipoDocumento NVARCHAR(3),@numero_documento NUMERIC(18,0),@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT, @habilitado BIT)
 AS
 BEGIN
 
 	DECLARE @mensaje_error varchar(100)
 	DECLARE @usuario_id INT
-
+	DECLARE @domicilio_id INT
 	SET @usuario_id = (SELECT usuario_id FROM DBME.cliente WHERE cliente_id = @cliente_id)
 	
 	BEGIN TRY
@@ -941,7 +940,7 @@ BEGIN
 		WHERE usuario_id = @usuario_id
 		
 		UPDATE DBME.usuario 
-		SET telefono = @numero_telefono 
+		SET telefono = @numero_telefono,habilitado = @habilitado
 		WHERE usuario_id = @usuario_id
 		
 		COMMIT TRANSACTION
@@ -981,27 +980,30 @@ END;
 GO
 
 
-CREATE PROCEDURE DBME.updateEmpresa (@empresa_id INT, @nombre NVARCHAR(255), @razon_social NVARCHAR(255),@cuit NVARCHAR(50),@rubro_id INT ,@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT)
+CREATE PROCEDURE DBME.updateEmpresa (@empresa_id INT, @nombre NVARCHAR(255), @razon_social NVARCHAR(255),@cuit NVARCHAR(50),@rubro_id INT ,@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT, @habilitado BIT)
 AS
 BEGIN
 
 	DECLARE @mensaje_error varchar(100)
 	DECLARE @usuario_id INT
+	DECLARE @domicilio_id INT
 
 	SET @usuario_id = (SELECT usuario_id FROM DBME.empresa WHERE empresa_id = @empresa_id)
+	SET @domicilio_id = (SELECT domicilio_id FROM DBME.usuario WHERE usuario_id = @usuario_id)
+
 	BEGIN TRY
 		BEGIN TRANSACTION	
 		
 		UPDATE DBME.domicilio 
 		SET ciudad = @ciudad, localidad = @localidad, codigo_postal = @codigo_postal, piso = @numero_piso, departamento = @departamento,domicilio_calle = @domicilio_calle, numero_calle = @altura_calle 
-		WHERE domicilio_id = @usuario_id
+		WHERE domicilio_id = @domicilio_id
 		
 		UPDATE DBME.empresa 
 		SET razon_social = @razon_social, cuit = @cuit, nombre_contacto = @nombre, rubro_id = @rubro_id
 		WHERE empresa_id = @empresa_id
 		
 		UPDATE DBME.usuario 
-		SET telefono = @numero_telefono 
+		SET telefono = @numero_telefono,habilitado = @habilitado 
 		WHERE usuario_id = @usuario_id
 		
 		COMMIT TRANSACTION
@@ -1262,11 +1264,12 @@ BEGIN
 	DECLARE @u_habilitado bit
 	DECLARE @cantidad_intentos_fallidos tinyint
 	DECLARE @mensaje_error varchar(300)
+	DECLARE @u_baja bit
 
 	SET @contrasenia = HASHBYTES('SHA2_256',@contrasenia)
 
 	
-	SELECT @u_id = usuario_id, @u_password = password, @u_habilitado = habilitado, @cantidad_intentos_fallidos = cantidad_intentos_fallidos
+	SELECT @u_id = usuario_id, @u_password = password, @u_habilitado = habilitado, @cantidad_intentos_fallidos = cantidad_intentos_fallidos,@u_baja = posee_baja_logica
 	FROM DBME.usuario
 	WHERE DBME.usuario.username = @username 
 	
@@ -1285,10 +1288,18 @@ BEGIN
 		
 	END
 	
+	IF (@u_baja = 1)
+	BEGIN
+		-- no se encontro usuario
+		SET @mensaje_error = 'El usuario ya no forma parte del sistema'
+		RAISERROR(@mensaje_error, 12, 1)
+		
+	END
+
 	IF (@u_habilitado = 0)
 	BEGIN
 		-- el usuario esta deshabilitado
-		SET @mensaje_error = 'El usuario se encuentra deshabilitado'
+		SET @mensaje_error = 'El usuario se encuentra deshabilitado, contacte al administrador'
 		RAISERROR(@mensaje_error, 12, 1)
 		
 	END
@@ -1358,7 +1369,7 @@ BEGIN
 		DECLARE publicaciones_activas2 CURSOR FOR
 		SELECT p.publicacion_id,p.publicacion_tipo
 		FROM DBME.publicacion p
-		WHERE fecha_vencimiento<@hora_actual AND (p.estado = 'ACTIVA' OR p.estado = 'PAUSADA')
+		WHERE fecha_vencimiento<=@hora_actual AND (p.estado = 'ACTIVA' OR p.estado = 'PAUSADA')
 		
 		
 		OPEN publicaciones_activas2 
