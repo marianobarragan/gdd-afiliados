@@ -125,7 +125,6 @@ CREATE TABLE DBME.publicacion(
 	permite_preguntas bit,
 	realiza_envio bit,
 	cantidad INT,
-	fecha_finalizacion_subasta DATETIME,
 	valor_inicial DECIMAL(10,2),
 	valor_actual DECIMAL(10,2)
 
@@ -353,8 +352,8 @@ AS
 BEGIN
 
 	--Se migran los fabricante de la tabla Maestra
-	INSERT INTO DBME.visibilidad( visibilidad_descripcion, visibilidad_porcentaje, visibilidad_precio, visibilidad_costo_envio)
-	SELECT DISTINCT Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio, 50
+	INSERT INTO DBME.visibilidad( visibilidad_descripcion, visibilidad_porcentaje, visibilidad_precio, visibilidad_costo_envio,visibilidad_habilitada)
+	SELECT DISTINCT Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio, 50,1
 	FROM gd_esquema.Maestra
 
 	UPDATE DBME.visibilidad
@@ -489,12 +488,13 @@ BEGIN
 	WHERE Publicacion_Tipo = 'Subasta' AND Publ_Empresa_Mail IS NOT NULL
 	GROUP BY Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,Publicacion_Estado,Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id
 	
+	/*	
 	UPDATE DBME.publicacion 
 	SET fecha_finalizacion_subasta = g.Compra_Fecha
 	FROM gd_esquema.Maestra g 
 	WHERE g.Publicacion_Cod = publicacion_id AND g.publicacion_tipo = 'Subasta'
 		
-	/*
+	
 	DECLARE @Publicacion_Cod AS NUMERIC(18,0)
 	DECLARE @Publicacion_Descripcion AS NVARCHAR(255) 
 	DECLARE @Publicacion_Tipo AS NVARCHAR(255)
@@ -754,7 +754,7 @@ SET @fin = @inicio + 2
 	RETURN
 END;
 GO
-*/
+
 /* END FUNCTIONS */
 
 

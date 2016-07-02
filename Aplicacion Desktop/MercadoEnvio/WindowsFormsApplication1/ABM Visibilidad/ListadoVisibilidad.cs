@@ -105,7 +105,7 @@ namespace MercadoEnvio.ABM_Visibilidad
             } else { 
                 
                 //TODO eliminar la visibilidad
-                DialogResult h = MessageBox.Show("¿Seguro que desea borrar el rol seleccionado?", "BORRAR ROL", MessageBoxButtons.YesNo);
+                DialogResult h = MessageBox.Show("¿Seguro que desea dar de baja el rol seleccionado?", "ROL", MessageBoxButtons.YesNo);
                 
                 if (h == DialogResult.Yes)
                 {

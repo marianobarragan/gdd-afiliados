@@ -179,7 +179,7 @@ namespace MercadoEnvio.Generar_Publicación
             {
 
                 //CREATE PROCEDURE DBME.crearSubasta (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME, @costo NUMERIC(18,2), @rubro_id INT, @visibilidad_id NUMERIC(18,0), @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit, @valor_inicial DECIMAL(10,2))
-                string comando = "EXECUTE DBME.crearSubasta '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + costo_total + "," + rubro + "," + visibilidad_id + "," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "'," + permitePreguntas + "," + realiza_envio + "," + precio + "." + precio_decimal;
+                string comando = "EXECUTE DBME.crearSubasta '" + descripcion + "'," + stock + ",'" + fechaInicio + "','" + fechaVencimiento + "'," + costo_total + "," + rubro + "," + visibilidad_id + "," + sesion_actual.usuarioActual.usuario_id + ",'" + estado + "'," + permitePreguntas + "," + realiza_envio + "," + precio + "." + txtValorInicialDecimal.Text;
                 DataTable factura_id = new ConexionSQL().cargarTablaSQL(comando);
 
 

@@ -251,7 +251,7 @@ namespace MercadoEnvio.Generar_Publicación
             {
                 //MessageBox.Show("estadoinicial:"+estadoInicial+"  estadoactual:"+estado, "Problema", MessageBoxButtons.OK);
 
-                string comando = "UPDATE DBME.publicacion SET descripcion = '" + descripcion + "',stock = " + stock + ",fecha_creacion = '" + fechaInicio + "',fecha_vencimiento ='" + fechaVencimiento + "',precio=" + precio + "." + precio_decimal + ",rubro_id=" + rubro + ",visibilidad_id=" + visibilidad_id + ",estado = '" + estado + "', permite_preguntas = '" + permitePreguntas + "', realiza_envio ='" + realiza_envio + "', costo =" + costo_total + "WHERE publicacion_id= " + id_publicacion;
+                string comando = "UPDATE DBME.publicacion SET descripcion = '" + descripcion + "',stock = " + stock + ",fecha_creacion = '" + fechaInicio + "',fecha_vencimiento ='" + fechaVencimiento + "',precio=" + precio + "." + txtPrecioDecimal.Text + ",rubro_id=" + rubro + ",visibilidad_id=" + visibilidad_id + ",estado = '" + estado + "', permite_preguntas = '" + permitePreguntas + "', realiza_envio ='" + realiza_envio + "', costo =" + costo_total + "WHERE publicacion_id= " + id_publicacion;
                 (new ConexionSQL()).ejecutarComandoSQL(comando);
                 
                 if (estadoInicial == "BORRADOR" && estado == "ACTIVA")

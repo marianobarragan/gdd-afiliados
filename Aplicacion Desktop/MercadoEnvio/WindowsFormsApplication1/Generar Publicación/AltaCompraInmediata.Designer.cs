@@ -248,6 +248,7 @@
             this.txtCostoTotal.Name = "txtCostoTotal";
             this.txtCostoTotal.Size = new System.Drawing.Size(121, 20);
             this.txtCostoTotal.TabIndex = 26;
+            this.txtCostoTotal.TextChanged += new System.EventHandler(this.txtCostoTotal_TextChanged);
             // 
             // chkRealizaEnvio
             // 
@@ -404,6 +405,7 @@
             this.BackColor = System.Drawing.Color.LightSkyBlue;
             this.ClientSize = new System.Drawing.Size(696, 393);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "AltaCompraInmediata";
             this.Text = "AltaCompraInmediata";

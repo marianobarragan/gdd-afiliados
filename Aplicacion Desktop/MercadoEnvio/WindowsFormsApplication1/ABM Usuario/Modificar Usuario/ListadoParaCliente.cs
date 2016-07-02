@@ -121,7 +121,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
             uint id2 = UInt32.Parse(dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString());
 
             if (discriminador == "Borrar") {
-                DialogResult h = MessageBox.Show("¿Seguro que desea borrar el rol seleccionado?", "BORRAR ROL", MessageBoxButtons.YesNo);
+                DialogResult h = MessageBox.Show("¿Seguro que desea dar de baja al usuario seleccionado?", "BAJA USUARIO", MessageBoxButtons.YesNo);
 
                 if (h == DialogResult.Yes)
                 {
