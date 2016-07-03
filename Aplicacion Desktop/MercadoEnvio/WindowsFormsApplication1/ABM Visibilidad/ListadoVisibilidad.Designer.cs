@@ -180,9 +180,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.SkyBlue;
-            this.ClientSize = new System.Drawing.Size(597, 459);
+            this.ClientSize = new System.Drawing.Size(597, 467);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "ListadoVisibilidad";
             this.Text = "ListadoVisibilidad";
             this.Load += new System.EventHandler(this.ListadoVisibilidad_Load);

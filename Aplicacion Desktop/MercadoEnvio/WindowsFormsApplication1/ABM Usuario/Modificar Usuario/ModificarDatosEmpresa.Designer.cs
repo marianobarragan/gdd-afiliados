@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkHabilitado = new System.Windows.Forms.CheckBox();
             this.cmbRubros = new System.Windows.Forms.ComboBox();
             this.txtNumeroTelefono = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -54,7 +55,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.chkHabilitado = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -93,6 +93,17 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos Empresa";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // chkHabilitado
+            // 
+            this.chkHabilitado.AutoSize = true;
+            this.chkHabilitado.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkHabilitado.Location = new System.Drawing.Point(138, 209);
+            this.chkHabilitado.Name = "chkHabilitado";
+            this.chkHabilitado.Size = new System.Drawing.Size(167, 24);
+            this.chkHabilitado.TabIndex = 88;
+            this.chkHabilitado.Text = "Usuario Habilitado?";
+            this.chkHabilitado.UseVisualStyleBackColor = true;
             // 
             // cmbRubros
             // 
@@ -306,17 +317,6 @@
             this.label1.TabIndex = 63;
             this.label1.Text = "Razón Social";
             // 
-            // chkHabilitado
-            // 
-            this.chkHabilitado.AutoSize = true;
-            this.chkHabilitado.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkHabilitado.Location = new System.Drawing.Point(138, 209);
-            this.chkHabilitado.Name = "chkHabilitado";
-            this.chkHabilitado.Size = new System.Drawing.Size(167, 24);
-            this.chkHabilitado.TabIndex = 88;
-            this.chkHabilitado.Text = "Usuario Habilitado?";
-            this.chkHabilitado.UseVisualStyleBackColor = true;
-            // 
             // ModificarDatosEmpresa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -324,6 +324,7 @@
             this.BackColor = System.Drawing.Color.DarkTurquoise;
             this.ClientSize = new System.Drawing.Size(790, 330);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "ModificarDatosEmpresa";
             this.Text = "ModificarDatosEmpresa";

@@ -98,12 +98,12 @@ namespace MercadoEnvio.VistaPrincipal
                 Facturas.ListadoFacturas facturas = new Facturas.ListadoFacturas(sesion.usuarioActual.usuario_id);
                 facturas.Show();
             }
-            /*
+            
             if (lstFunciones.GetItemText(lstFunciones.SelectedItem) == "LISTADO ESTADISTICO")
             {
                 Listado_Estadistico.SeleccionarListado listadoEstadistico = new Listado_Estadistico.SeleccionarListado();
                 listadoEstadistico.Show();
-            }*/
+            }
             
         }
 

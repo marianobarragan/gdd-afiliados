@@ -42,7 +42,7 @@
             // 
             this.btnSiguiente.BackColor = System.Drawing.Color.Crimson;
             this.btnSiguiente.Font = new System.Drawing.Font("Wingdings", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.btnSiguiente.Location = new System.Drawing.Point(314, 625);
+            this.btnSiguiente.Location = new System.Drawing.Point(387, 625);
             this.btnSiguiente.Name = "btnSiguiente";
             this.btnSiguiente.Size = new System.Drawing.Size(119, 45);
             this.btnSiguiente.TabIndex = 19;
@@ -54,7 +54,7 @@
             // 
             this.btnAnterior.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.btnAnterior.Font = new System.Drawing.Font("Wingdings", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.btnAnterior.Location = new System.Drawing.Point(189, 625);
+            this.btnAnterior.Location = new System.Drawing.Point(262, 625);
             this.btnAnterior.Name = "btnAnterior";
             this.btnAnterior.Size = new System.Drawing.Size(119, 45);
             this.btnAnterior.TabIndex = 18;
@@ -64,9 +64,9 @@
             // 
             // btnAccion
             // 
-            this.btnAccion.Location = new System.Drawing.Point(472, 625);
+            this.btnAccion.Location = new System.Drawing.Point(649, 625);
             this.btnAccion.Name = "btnAccion";
-            this.btnAccion.Size = new System.Drawing.Size(130, 40);
+            this.btnAccion.Size = new System.Drawing.Size(134, 40);
             this.btnAccion.TabIndex = 17;
             this.btnAccion.Text = "Ver";
             this.btnAccion.UseVisualStyleBackColor = true;
@@ -80,14 +80,14 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(590, 510);
+            this.dataGridView1.Size = new System.Drawing.Size(771, 510);
             this.dataGridView1.TabIndex = 16;
             // 
             // btnBuscar
             // 
-            this.btnBuscar.Location = new System.Drawing.Point(445, 22);
+            this.btnBuscar.Location = new System.Drawing.Point(637, 22);
             this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.Size = new System.Drawing.Size(130, 23);
+            this.btnBuscar.Size = new System.Drawing.Size(119, 23);
             this.btnBuscar.TabIndex = 6;
             this.btnBuscar.Text = "Buscar";
             this.btnBuscar.UseVisualStyleBackColor = true;
@@ -98,22 +98,23 @@
             this.groupBox1.Controls.Add(this.btnBuscar);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(590, 91);
+            this.groupBox1.Size = new System.Drawing.Size(771, 91);
             this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Publicaciones del Usuario";
+            this.groupBox1.Text = "Publicaciones del Usuario (Activas y Borradores)";
             // 
             // ListadoPublicacionesUsuario
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.ClientSize = new System.Drawing.Size(618, 677);
+            this.ClientSize = new System.Drawing.Size(795, 677);
             this.Controls.Add(this.btnSiguiente);
             this.Controls.Add(this.btnAnterior);
             this.Controls.Add(this.btnAccion);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "ListadoPublicacionesUsuario";
             this.Text = "ListadoPublicacionesUsuario";

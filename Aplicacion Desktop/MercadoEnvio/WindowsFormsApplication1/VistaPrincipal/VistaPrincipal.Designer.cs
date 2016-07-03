@@ -81,11 +81,11 @@
             // btnLogout
             // 
             this.btnLogout.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLogout.Location = new System.Drawing.Point(680, 392);
+            this.btnLogout.Location = new System.Drawing.Point(684, 392);
             this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(105, 31);
+            this.btnLogout.Size = new System.Drawing.Size(145, 31);
             this.btnLogout.TabIndex = 1;
-            this.btnLogout.Text = "Cerrar";
+            this.btnLogout.Text = "Cerrar Sesión";
             this.btnLogout.UseVisualStyleBackColor = true;
             this.btnLogout.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -100,7 +100,7 @@
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(543, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(255, 216);
+            this.groupBox2.Size = new System.Drawing.Size(286, 216);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Sesión actual:";
@@ -167,10 +167,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SkyBlue;
-            this.ClientSize = new System.Drawing.Size(808, 435);
+            this.ClientSize = new System.Drawing.Size(841, 435);
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "VistaPrincipal";
             this.Text = "MERCADO ENVIO - Menu Principal";

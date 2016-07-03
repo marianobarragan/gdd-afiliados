@@ -80,6 +80,7 @@
             this.Controls.Add(this.btnVolver);
             this.Controls.Add(this.btnIrVista);
             this.Controls.Add(this.lstOpciones);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SeleccionarListado";

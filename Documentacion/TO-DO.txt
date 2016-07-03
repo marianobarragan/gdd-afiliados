@@ -7,5 +7,3 @@ ver q onda con las unidades decimales en alta publicacion/subasta
 sapo tiene que arreglar el precio y precio decimal en modificar publicacion que los decimales se cargan al reves
 
 hacer la baja logica de visibilidad, rol y usuarios
-
-borrar campo fecha_finalizaciom_subasta en publicacion

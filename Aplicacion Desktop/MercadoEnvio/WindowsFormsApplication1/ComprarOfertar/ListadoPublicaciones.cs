@@ -83,13 +83,13 @@ namespace MercadoEnvio.ComprarOfertar
             armarQueryRubros();
 
             query = "SELECT p.publicacion_id, p.publicacion_tipo, p.descripcion, p.stock, p.valor_actual, p.precio, p.estado, p.autor_id, p.permite_preguntas, p.realiza_envio, r.descripcion_corta, v.visibilidad_descripcion FROM DBME.publicacion p JOIN DBME.rubro r ON (r.rubro_id = p.rubro_id ) JOIN DBME.visibilidad v ON (p.visibilidad_id = v.visibilidad_id) WHERE p.fecha_creacion < DBME.getHoraDelSistema() AND p.autor_id !=" + sesionActual.usuarioActual.usuario_id + " AND p.descripcion LIKE '%" + txtDescripción.Text + "%'" + queryRubros + " AND (p.estado = 'ACTIVA' OR p.estado = 'PAUSADA') ORDER BY v.visibilidad_precio, p.fecha_creacion DESC";
-
+            //query = "SELECT p.publicacion_id, p.publicacion_tipo, p.descripcion, p.stock, p.valor_actual, p.precio, p.estado, p.autor_id, p.permite_preguntas, p.realiza_envio, r.descripcion_corta, v.visibilidad_descripcion FROM DBME.publicacion p JOIN DBME.rubro r ON (r.rubro_id = p.rubro_id ) JOIN DBME.visibilidad v ON (p.visibilidad_id = v.visibilidad_id) WHERE p.autor_id !=" + sesionActual.usuarioActual.usuario_id +  queryRubros + " AND (p.estado = 'ACTIVA' OR p.estado = 'PAUSADA') ORDER BY v.visibilidad_precio, p.fecha_creacion DESC";
             
 
             dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
             if (dt.Rows.Count == 0)
             {
-                MessageBox.Show("No se han encontrado resultados", "Problema", MessageBoxButtons.OK);
+                MessageBox.Show("No se han encontrado resultados. Recuerde que se muestran las publicaciones activas que se encuentren pasadas de su fecha de inicio", "Problema", MessageBoxButtons.OK);
                 dataGridView1.DataSource = null;
                 return;
             }
@@ -166,7 +166,13 @@ namespace MercadoEnvio.ComprarOfertar
                 this.Close();
                 return;
             }
-                        
+
+            if (dataGridView1.Rows.Count == 0 || dataGridView1.CurrentRow == null || dataGridView1.SelectedCells.Count == 0) //si la tabla esta vacia, no apuntas a nadie
+            {
+                MessageBox.Show("Seleccione una Fila", "Listado de Publicaciones", MessageBoxButtons.OK);
+                return;
+            }
+            
             int publicacion_id = Int32.Parse(dataGridView1[0, dataGridView1.CurrentCell.RowIndex].Value.ToString());
             string tipo = (dataGridView1[1, dataGridView1.CurrentCell.RowIndex].Value.ToString());
             string descripcion = (dataGridView1[2, dataGridView1.CurrentCell.RowIndex].Value.ToString());

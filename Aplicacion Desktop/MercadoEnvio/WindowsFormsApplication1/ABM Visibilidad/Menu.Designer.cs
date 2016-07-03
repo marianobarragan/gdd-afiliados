@@ -87,10 +87,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SkyBlue;
-            this.ClientSize = new System.Drawing.Size(439, 300);
+            this.ClientSize = new System.Drawing.Size(432, 286);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnVolver);
             this.Controls.Add(this.btnIrVista);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Menu";
             this.Text = "Menu";
             this.Load += new System.EventHandler(this.Menu_Load);

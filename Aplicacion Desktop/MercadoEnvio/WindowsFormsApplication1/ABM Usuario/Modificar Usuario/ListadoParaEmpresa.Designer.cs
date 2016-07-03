@@ -172,7 +172,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(487, 325);
+            this.dataGridView1.Size = new System.Drawing.Size(493, 325);
             this.dataGridView1.TabIndex = 8;
             // 
             // btnAccion
@@ -193,6 +193,7 @@
             this.Controls.Add(this.btnAccion);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "ListadoParaEmpresa";
             this.Text = "ListadoParaEmpresa";
