@@ -64,7 +64,7 @@ namespace MercadoEnvio.Generar_Publicación
         public void cargar_visibilidad()
         {
 
-            string comando = "select visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje, visibilidad_costo_envio,visibilidad_id from dbme.visibilidad";
+            string comando = "select visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje, visibilidad_costo_envio,visibilidad_id from dbme.visibilidad where posee_baja_logica = 0";
             DataTable dataVisibilidades = (new ConexionSQL()).cargarTablaSQL(comando);
             
             //obtener los roles HABILITADOS de la data
@@ -126,17 +126,19 @@ namespace MercadoEnvio.Generar_Publicación
             int visibilidad_id;
             bool permitePreguntas = chkPermitePreguntas.Checked;
             string estado;
-
+            string visibilidad_descripcion;
 
             DateTime fechaInicio;
             DateTime fechaVencimiento;
             bool realiza_envio = chkRealizaEnvio.Checked;
             double costo_total = Double.Parse(txtCostoTotal.Text);
             
+
             try
             {
                 rubro = rubros[cmbRubros.SelectedIndex].rubro_id;
-                visibilidad_id = cmbVisibilidad.SelectedIndex +1;
+                //visibilidad_id = cmbVisibilidad.SelectedIndex +1;
+                visibilidad_descripcion = cmbVisibilidad.GetItemText(cmbVisibilidad.SelectedItem);
                 estado = cmbEstado.GetItemText(cmbEstado.SelectedItem);
                 fechaInicio = DateTime.Parse(dateFechaInicio.Text);
                 fechaVencimiento = DateTime.Parse(dateFechaVencimiento.Text);
@@ -144,6 +146,12 @@ namespace MercadoEnvio.Generar_Publicación
                 precio = UInt32.Parse(txtPrecio.Text);
                 precio_decimal = UInt32.Parse(txtPrecioDecimal.Text);
                 costo_total = Double.Parse(txtCostoTotal.Text);
+
+
+                
+                string comando5 = "SELECT visibilidad_id FROM DBME.visibilidad WHERE visibilidad_descripcion = '" + visibilidad_descripcion + "'";
+                DataTable data_visibilidad = new ConexionSQL().cargarTablaSQL(comando5);
+                visibilidad_id = Int32.Parse(data_visibilidad.Rows[0][0].ToString());
             }
             catch (System.FormatException)
             {

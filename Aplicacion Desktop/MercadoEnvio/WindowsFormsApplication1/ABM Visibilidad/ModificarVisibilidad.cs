@@ -42,7 +42,8 @@ namespace MercadoEnvio.ABM_Visibilidad
             txtCostoEnvio.Enabled = false;
             txtCostoEnvioDecimal.Enabled = false;
             txtPrecioDecimal.Enabled = false;
-            string comando = "select visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje,visibilidad_costo_envio from dbme.visibilidad WHERE visibilidad_id = "+ id;
+            chkBajaLogica.Enabled = false;
+            string comando = "select visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje,visibilidad_costo_envio, posee_baja_logica from dbme.visibilidad WHERE visibilidad_id = " + id;
            
             DataTable dataVisibilidad = (new ConexionSQL()).cargarTablaSQL(comando);
             //MessageBox.Show(datos2[0], "Alta Visibilidad", MessageBoxButtons.OK);
@@ -53,7 +54,7 @@ namespace MercadoEnvio.ABM_Visibilidad
             txtPorcentaje.Text = visibilidadActual.porcentaje.ToString();
             txtCostoEnvio.Text = visibilidadActual.costo_envio.ToString();
             txtCostoEnvioDecimal.Text = visibilidadActual.costo_envioDecimal.ToString();
-
+            chkBajaLogica.Checked = Boolean.Parse(dataVisibilidad.Rows[0][4].ToString());
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -72,6 +73,7 @@ namespace MercadoEnvio.ABM_Visibilidad
                 txtCostoEnvio.Enabled = true;
                 txtCostoEnvioDecimal.Enabled = true;
                 txtPrecioDecimal.Enabled = true;
+                chkBajaLogica.Enabled = true;
                 estadoVentana = "habilitado";
                 button1.Text = "Guardar Cambios";
             }
@@ -84,6 +86,7 @@ namespace MercadoEnvio.ABM_Visibilidad
                     costo_envio = Int32.Parse(txtCostoEnvio.Text);
                     precioDecimal = Int32.Parse(txtPrecioDecimal.Text);
                     costo_envioDecimal = Int32.Parse(txtCostoEnvioDecimal.Text);
+                    
                 }
                 catch (System.FormatException)
                 {
@@ -114,11 +117,22 @@ namespace MercadoEnvio.ABM_Visibilidad
                 try
                 {
                     string porcentajeString = txtPorcentaje.Text.Insert(0, "0.");
+                    string habilitado;
+                    if (chkBajaLogica.Checked)
+                    {
+                        habilitado = "1";
+                    }
+                    else
+                    {
+                        habilitado = "0";
+                    }
+
                     DialogResult h = MessageBox.Show("¿Seguro que desea modificar la visibilidad?", "MODIFICAR VISIBILIDAD", MessageBoxButtons.YesNo);
                     string comando;
+                    
                     if (h == DialogResult.Yes)
                     {
-                        comando = "UPDATE DBME.visibilidad SET visibilidad_descripcion = '" + txtDescripcion.Text + "',visibilidad_precio = " + txtPrecio.Text + "." + txtPrecioDecimal.Text + ",visibilidad_porcentaje = " + porcentajeString + ",visibilidad_costo_envio = " + txtCostoEnvio.Text + "." + txtCostoEnvioDecimal.Text + " WHERE visibilidad_id = " + id;
+                        comando = "UPDATE DBME.visibilidad SET visibilidad_descripcion = '" + txtDescripcion.Text + "',visibilidad_precio = " + txtPrecio.Text + "." + txtPrecioDecimal.Text + ",visibilidad_porcentaje = " + porcentajeString + ",visibilidad_costo_envio = " + txtCostoEnvio.Text + "." + txtCostoEnvioDecimal.Text + ",posee_baja_logica =" + habilitado + " WHERE visibilidad_id = " + id;
                         (new ConexionSQL()).ejecutarComandoSQL(comando);
                         txtDescripcion.Enabled = false;
                         txtPrecio.Enabled = false;
@@ -126,7 +140,9 @@ namespace MercadoEnvio.ABM_Visibilidad
                         txtCostoEnvio.Enabled = false;
                         txtCostoEnvioDecimal.Enabled = false;
                         txtPrecioDecimal.Enabled = false;
+                        chkBajaLogica.Enabled = false;
                         estadoVentana = "deshabilitado";
+                        this.Close();
                     }
                     else
                     {

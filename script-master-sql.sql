@@ -104,7 +104,8 @@ CREATE TABLE DBME.visibilidad( --INT IDENTITY(1,1) PRIMARY KEY
 	visibilidad_descripcion NVARCHAR(255) UNIQUE,
 	visibilidad_precio NUMERIC(18,2), 
 	visibilidad_porcentaje NUMERIC(18,2) CHECK(visibilidad_porcentaje BETWEEN '0' AND '1'),
-	visibilidad_costo_envio NUMERIC(10,2)
+	visibilidad_costo_envio NUMERIC(10,2),
+	posee_baja_logica BIT
 );
 GO
 
@@ -351,8 +352,8 @@ AS
 BEGIN
 
 	--Se migran los fabricante de la tabla Maestra
-	INSERT INTO DBME.visibilidad( visibilidad_descripcion, visibilidad_porcentaje, visibilidad_precio, visibilidad_costo_envio)
-	SELECT DISTINCT Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio, 50
+	INSERT INTO DBME.visibilidad( visibilidad_descripcion, visibilidad_porcentaje, visibilidad_precio, visibilidad_costo_envio,posee_baja_logica)
+	SELECT DISTINCT Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio, 50, 0
 	FROM gd_esquema.Maestra
 
 	UPDATE DBME.visibilidad
@@ -468,21 +469,21 @@ BEGIN
 
 	--DECLARE cursor_para_publicaciones CURSOR FOR
 	INSERT INTO DBME.publicacion(publicacion_id,descripcion,cantidad,stock,fecha_creacion,fecha_vencimiento,precio,estado,publicacion_tipo,rubro_id,visibilidad_id,autor_id,permite_preguntas,realiza_envio)
-	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'ACTIVA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0  
+	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'FINALIZADA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0  
 	FROM gd_esquema.Maestra m JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion) JOIN DBME.rubro r ON (m.Publicacion_Rubro_Descripcion = r.descripcion_corta) JOIN DBME.usuario u ON (u.mail = m.Publ_Cli_Mail)
 	WHERE Publicacion_Tipo = 'Compra Inmediata' AND Publ_Cli_Mail IS NOT NULL
 	UNION
-	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'ACTIVA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0  
+	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'FINALIZADA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0  
 	FROM gd_esquema.Maestra m JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion) JOIN DBME.rubro r ON (m.Publicacion_Rubro_Descripcion = r.descripcion_corta) JOIN DBME.usuario u ON (u.mail = m.Publ_Empresa_Mail)
 	WHERE Publicacion_Tipo = 'Compra Inmediata' AND Publ_Empresa_Mail IS NOT NULL
 
 	INSERT INTO DBME.publicacion(publicacion_id,descripcion,cantidad,stock,fecha_creacion,fecha_vencimiento,precio,estado,publicacion_tipo,rubro_id,visibilidad_id,autor_id,permite_preguntas,realiza_envio,valor_inicial,valor_actual)
-	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'ACTIVA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0,MIN(Oferta_Monto),MAX(Oferta_Monto)  
+	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'FINALIZADA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0,MIN(Oferta_Monto),MAX(Oferta_Monto)  
 	FROM gd_esquema.Maestra m JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion) JOIN DBME.rubro r ON (m.Publicacion_Rubro_Descripcion = r.descripcion_corta) JOIN DBME.usuario u ON (u.mail = m.Publ_Cli_Mail)
 	WHERE Publicacion_Tipo = 'Subasta' AND Publ_Cli_Mail IS NOT NULL
 	GROUP BY Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,Publicacion_Estado,Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id
 	UNION
-	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'ACTIVA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0,MIN(Oferta_Monto),MAX(Oferta_Monto)  
+	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'FINALIZADA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0,MIN(Oferta_Monto),MAX(Oferta_Monto)  
 	FROM gd_esquema.Maestra m JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion) JOIN DBME.rubro r ON (m.Publicacion_Rubro_Descripcion = r.descripcion_corta) JOIN DBME.usuario u ON (u.mail = m.Publ_Empresa_Mail)
 	WHERE Publicacion_Tipo = 'Subasta' AND Publ_Empresa_Mail IS NOT NULL
 	GROUP BY Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,Publicacion_Estado,Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id
@@ -1499,11 +1500,11 @@ CREATE PROCEDURE DBME.historialComprasYSubastas (@usuario_id INT)
 AS
 BEGIN
 
-	(SELECT oferta_id as ofertas,monto,fecha,publicacion_id,'Oferta'
+	(SELECT oferta_id as ofertas,monto,fecha,publicacion_id,'Oferta' as 'Tipo de publicación'
 	FROM DBME.oferta o 
 	WHERE o.autor_id = @usuario_id
 	UNION
-	SELECT compra_id,cantidad,fecha,publicacion_id,'Compra'
+	SELECT compra_id,cantidad,fecha,publicacion_id,'Compra' as 'Tipo de publicación'
 	FROM DBME.compra c
 	WHERE c.autor_id = @usuario_id)
 	ORDER BY fecha DESC

@@ -53,12 +53,12 @@ namespace MercadoEnvio.ABM_Visibilidad
             string query;
             if (radioButton1.Checked)
             {
-                query = "SELECT visibilidad_id, visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje,visibilidad_costo_envio FROM DBME.visibilidad where visibilidad_descripcion LIKE '%" + textBox2.Text + "%'";
+                query = "SELECT visibilidad_id, visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje,visibilidad_costo_envio,posee_baja_logica FROM DBME.visibilidad where visibilidad_descripcion LIKE '%" + textBox2.Text + "%'";
 
             }
             else
             {
-                query = "SELECT visibilidad_id, visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje,visibilidad_costo_envio FROM DBME.visibilidad where visibilidad_descripcion =  '" + textBox1.Text + "'";
+                query = "SELECT visibilidad_id, visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje,visibilidad_costo_envio,posee_baja_logica FROM DBME.visibilidad where visibilidad_descripcion =  '" + textBox1.Text + "'";
             }
 
             DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
@@ -69,11 +69,12 @@ namespace MercadoEnvio.ABM_Visibilidad
                 return;
             }
             dataGridView1.DataSource = dt;
+            /*
             for(int i = 0;i<dataGridView1.Columns.Count;i++)
             {
                 dataGridView1.Columns[i].HeaderText = dataGridView1.Columns[i].HeaderText.Substring(12);
             }
-            
+            */
         }
 
         private void btnEditar_Click(object sender, EventArgs e)
@@ -109,7 +110,7 @@ namespace MercadoEnvio.ABM_Visibilidad
                 
                 if (h == DialogResult.Yes)
                 {
-                    string query = "DELETE FROM DBME.visibilidad WHERE visibilidad_id = " + id2;
+                    string query = "UPDATE DBME.visibilidad SET posee_baja_logica = 1 WHERE visibilidad_id = " + id2;
                     (new ConexionSQL()).ejecutarComandoSQL(query);
                 }
                 else

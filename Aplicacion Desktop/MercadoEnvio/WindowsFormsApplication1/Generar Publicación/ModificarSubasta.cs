@@ -29,8 +29,7 @@ namespace MercadoEnvio.Generar_Publicación
             sesion_actual = sesion;
 
             cargar_rubros();
-            cargar_visibilidad();
-            actualizar_costo_total();
+            
         }
 
         public void cargar_rubros()
@@ -60,7 +59,18 @@ namespace MercadoEnvio.Generar_Publicación
         public void cargar_visibilidad()
         {
 
-            string comando = "select visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje, visibilidad_costo_envio,visibilidad_id from dbme.visibilidad";
+            string comando;
+
+            if (estadoInicial == "ACTIVA" || estadoInicial == "PAUSADA")
+            {
+                comando = "select visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje, visibilidad_costo_envio,visibilidad_id from dbme.visibilidad ";
+            }
+            else
+            {
+                comando = "select visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje, visibilidad_costo_envio,visibilidad_id from dbme.visibilidad where posee_baja_logica = 0";
+            }
+
+            
             DataTable dataVisibilidades = (new ConexionSQL()).cargarTablaSQL(comando);
 
             //obtener los roles HABILITADOS de la data
@@ -104,6 +114,9 @@ namespace MercadoEnvio.Generar_Publicación
             string comando = "SELECT p.descripcion, p.stock , p.fecha_creacion, p.fecha_vencimiento, p.valor_inicial, p.rubro_id, p.visibilidad_id, p.estado, p.permite_preguntas, realiza_envio, p.costo FROM DBME.publicacion p WHERE p.publicacion_id = " + id_publicacion;
             DataTable dt = (new ConexionSQL()).cargarTablaSQL(comando);
 
+            estadoInicial = dt.Rows[0][7].ToString();
+            cargar_visibilidad();
+
             txtDescripción.Text = dt.Rows[0][0].ToString();
             txtStock.Text = dt.Rows[0][1].ToString();
             dateFechaInicio.Text = dt.Rows[0][2].ToString();
@@ -118,7 +131,7 @@ namespace MercadoEnvio.Generar_Publicación
             chkRealizaEnvio.Checked = Boolean.Parse(dt.Rows[0][9].ToString());
             txtCostoTotal.Text = dt.Rows[0][10].ToString();
 
-            estadoInicial = dt.Rows[0][7].ToString();
+            
 
             if (estadoInicial == "ACTIVA")
             {
@@ -166,6 +179,8 @@ namespace MercadoEnvio.Generar_Publicación
                 cmbEstado.Items.Add("FINALIZADA");
                 cmbEstado.SelectedIndex = cmbEstado.FindString(estadoInicial);
             }
+            
+            actualizar_costo_total();
         }
 
         private void cmdGenerarCompra_Click(object sender, EventArgs e)
@@ -178,7 +193,7 @@ namespace MercadoEnvio.Generar_Publicación
             int visibilidad_id;
             bool permitePreguntas = chkPermitePreguntas.Checked;
             string estado;
-
+            string visibilidad_descripcion;
 
             DateTime fechaInicio;
             DateTime fechaVencimiento;
@@ -189,6 +204,7 @@ namespace MercadoEnvio.Generar_Publicación
             {
                 rubro = rubros[cmbRubros.SelectedIndex].rubro_id;
                 visibilidad_id = cmbVisibilidad.SelectedIndex + 1;
+                visibilidad_descripcion = cmbVisibilidad.GetItemText(cmbVisibilidad.SelectedItem);
                 estado = cmbEstado.GetItemText(cmbEstado.SelectedItem);
                 fechaInicio = DateTime.Parse(dateFechaInicio.Text);
                 fechaVencimiento = DateTime.Parse(dateFechaVencimiento.Text);
@@ -196,6 +212,11 @@ namespace MercadoEnvio.Generar_Publicación
                 precio = UInt32.Parse(txtValorInicial.Text);
                 precio_decimal = UInt32.Parse(txtValorInicialDecimal.Text);
                 costo_total = Double.Parse(txtCostoTotal.Text);
+
+                string comando5 = "SELECT visibilidad_id FROM DBME.visibilidad WHERE visibilidad_descripcion = '" + visibilidad_descripcion+"'";
+                DataTable data_visibilidad = new ConexionSQL().cargarTablaSQL(comando5);
+                visibilidad_id = Int32.Parse(data_visibilidad.Rows[0][0].ToString());
+
             }
             catch (System.FormatException)
             {

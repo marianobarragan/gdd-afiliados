@@ -43,12 +43,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.lblComa = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.chkBajaLogica = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(14, 212);
+            this.button2.Location = new System.Drawing.Point(15, 242);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 11;
@@ -58,6 +59,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkBajaLogica);
             this.groupBox1.Controls.Add(this.txtCostoEnvioDecimal);
             this.groupBox1.Controls.Add(this.txtPrecioDecimal);
             this.groupBox1.Controls.Add(this.txtCostoEnvio);
@@ -71,9 +73,9 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.lblComa);
             this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Location = new System.Drawing.Point(14, 27);
+            this.groupBox1.Location = new System.Drawing.Point(15, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(257, 179);
+            this.groupBox1.Size = new System.Drawing.Size(257, 224);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Visibilidad";
@@ -122,7 +124,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(107, 139);
+            this.button1.Location = new System.Drawing.Point(107, 183);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(126, 24);
             this.button1.TabIndex = 8;
@@ -186,13 +188,25 @@
             this.label6.TabIndex = 13;
             this.label6.Text = ",";
             // 
+            // chkBajaLogica
+            // 
+            this.chkBajaLogica.AutoSize = true;
+            this.chkBajaLogica.Location = new System.Drawing.Point(107, 141);
+            this.chkBajaLogica.Name = "chkBajaLogica";
+            this.chkBajaLogica.Size = new System.Drawing.Size(129, 17);
+            this.chkBajaLogica.TabIndex = 20;
+            this.chkBajaLogica.Text = "Realizar Baja Lógica?";
+            this.chkBajaLogica.UseVisualStyleBackColor = true;
+            // 
             // ModificarVisibilidad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.ClientSize = new System.Drawing.Size(284, 274);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "ModificarVisibilidad";
             this.Text = "ModificarVisibilidad";
@@ -220,5 +234,6 @@
         private System.Windows.Forms.TextBox txtPorcentaje;
         private System.Windows.Forms.TextBox txtPrecio;
         private System.Windows.Forms.TextBox txtDescripcion;
+        private System.Windows.Forms.CheckBox chkBajaLogica;
     }
 }

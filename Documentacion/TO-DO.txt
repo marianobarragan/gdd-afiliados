@@ -2,8 +2,6 @@ terminar alta subasta, ver bien los campos
 
 nunca dejar de testear
 
-ver q onda con las unidades decimales en alta publicacion/subasta
-
-sapo tiene que arreglar el precio y precio decimal en modificar publicacion que los decimales se cargan al reves
-
 hacer la baja logica de visibilidad, rol y usuarios
+
+QUE ONDA VISIBLIDAD SIDA - FACTURACION - GATSU
