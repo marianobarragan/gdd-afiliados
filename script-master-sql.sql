@@ -1518,6 +1518,23 @@ GO*/
 
 /* START PROCEDURES DOMINIO */
 
+
+CREATE PROCEDURE DBME.validarUsuarioExistente (@username NVARCHAR(255),@mail NVARCHAR(255))
+AS
+BEGIN
+	
+	IF (EXISTS(SELECT username,mail FROM DBME.usuario WHERE username = @username OR mail = @mail))
+	BEGIN
+		SELECT true
+	END
+	ELSE
+	BEGIN
+		SELECT false
+	END
+END;
+GO 
+
+
 CREATE PROCEDURE DBME.cantidadDeCalificacionesDelUsuario (@usuario_id INT)
 AS
 BEGIN

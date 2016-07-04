@@ -59,7 +59,20 @@ namespace MercadoEnvio.ABM_Usuario.Alta_Usuario
                 MessageBox.Show("Las contraseñas son distintas","Alta Usuario",MessageBoxButtons.OK );
                 return;
             }
- 
+
+            string query2 = "EXECUTE DBME.validarUsuarioExistente '"+ txtUsername.Text +"','" +txtMail.Text+"'";
+            DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query2));
+            if (dt.Rows.Count == 0)
+            {
+                MessageBox.Show("No se han encontrado resultados", "Problema", MessageBoxButtons.OK);
+                return;
+            }
+            string respuesta = dt.Rows[0][0].ToString();
+            if (respuesta == "true") {
+                MessageBox.Show("Ya existe un usuario con ese nombre de usuario/mail ", "Alta Usuario", MessageBoxButtons.OK);
+                return;
+            }
+
             if (optCliente.Checked){
 
                 DatosClienteNuevo cl = new DatosClienteNuevo(username, password, email);

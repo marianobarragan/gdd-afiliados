@@ -2,5 +2,4 @@ terminar alta subasta, ver bien los campos
 
 nunca dejar de testear
 
-abm de usuario debe chequear si ya existe el usuario
 
