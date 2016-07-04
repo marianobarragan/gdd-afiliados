@@ -16,36 +16,21 @@ namespace MercadoEnvio.Listado_Estadistico
     {
         int indice;
         public List<Rubro> rubros;
-        public string descripcionVisibilidad;
-        public Boolean hayVisibilidad;
+        //public string descripcionVisibilidad;
+        //public Boolean hayVisibilidad;
+        public List<Visibilidad2> visibilidades;
 
         public ListadoPrincipal(int index)
         {
             InitializeComponent();
             indice = index;
-            textBox1.Text = indice.ToString();
-            descripcionVisibilidad = "Ninguno";
-            hayVisibilidad = false;
-          
-
-            if (indice == 1)
-            {
-                cmbRubros.Enabled = true;
-                /*
-                string comando = "SELECT descripcion_corta FROM DBME.rubro";
-                DataTable dataCalificacion = (new ConexionSQL()).cargarTablaSQL(comando);
-
-                foreach (DataRow row in dataCalificacion.Rows)
-                {
-                    cmbRubros.Items.Add(row[0].ToString());
-                }
-                cmbRubros.SelectedIndex = 0;*/
-            }
             
             cargar_rubros();
             cmbRubros.SelectedIndex = 0;
+
+            cargar_visibilidad();
+            lstTrimestre.SelectedIndex = 0;
           
-            
         }
 
 
@@ -70,8 +55,27 @@ namespace MercadoEnvio.Listado_Estadistico
                 string desc = rubros[j].descripcion_corta;
                 cmbRubros.Items.Add(desc);
             }
-
+            cmbRubros.SelectedIndex = 0;
         }
+
+        public void cargar_visibilidad()
+        {
+
+            string comando = "select visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje, visibilidad_costo_envio,visibilidad_id from dbme.visibilidad";
+            DataTable dataVisibilidades = (new ConexionSQL()).cargarTablaSQL(comando);
+
+            //obtener los roles HABILITADOS de la data
+            visibilidades = new List<Visibilidad2>();
+            for (int i = 0; i <= (dataVisibilidades.Rows.Count - 1); i++)
+            {
+                visibilidades.Add(new Visibilidad2(dataVisibilidades.Rows[i][0].ToString(), dataVisibilidades.Rows[i][1].ToString(), dataVisibilidades.Rows[i][2].ToString(), dataVisibilidades.Rows[i][3].ToString(), dataVisibilidades.Rows[i][4].ToString()));
+                cmbVisibilidad.Items.Add(dataVisibilidades.Rows[i][0].ToString());
+            }
+
+            cmbVisibilidad.SelectedIndex = 0;
+            
+        }
+
         private void lstTrimestre_SelectedIndexChanged(object sender, EventArgs e)
         {
             
@@ -82,33 +86,29 @@ namespace MercadoEnvio.Listado_Estadistico
             uint rubro;
             int trimestre;
             uint anio;
-                    
-            if(hayVisibilidad == true)
-            {
-                descripcionVisibilidad = lstVisibilidad.SelectedItem.ToString();
-            } 
+            string visibilidad_descripcion;
                        
             try
             {
                 anio = UInt32.Parse(txtAño.Text);
                 trimestre = lstTrimestre.SelectedIndex + 1;
                 rubro = rubros[cmbRubros.SelectedIndex].rubro_id;
+                visibilidad_descripcion = cmbVisibilidad.GetItemText(cmbVisibilidad.SelectedItem);
             }
             catch (System.FormatException)
             {
-                MessageBox.Show("Ingrese solamente numeros en los formularios verdes, sin puntos", "Nuevo Cliente", MessageBoxButtons.OK);
+                MessageBox.Show("Ingrese solamente numeros en los formularios verdes, sin puntos", "Listado Estadistico", MessageBoxButtons.OK);
                 return;
             }
             catch (System.OverflowException)
             {
-                MessageBox.Show("Ingrese numeros positivos en los formularios verdes", "Nuevo Cliente", MessageBoxButtons.OK);
+                MessageBox.Show("Ingrese numeros positivos en los formularios verdes", "Listado Estadistico", MessageBoxButtons.OK);
                 return;
             }      
               
             if (indice == 0) {
                 //topVendedoresConMayorCantidadDeProductosNoVendidos();
-                string comando2 = "SELECT * FROM DBME.topVendedoresConMayorCantidadDeProductosNoVendidos ('" + trimestre + "','" + anio + "','" + descripcionVisibilidad + "')";
-                //string comando2 = "SELECT * FROM DBME.topVendedoresConMayorCantidadDeProductosNoVendidos (1,2015, 'Ninguno')";
+                string comando2 = "SELECT * FROM DBME.topVendedoresConMayorCantidadDeProductosNoVendidos ('" + trimestre + "','" + anio + "','" + visibilidad_descripcion + "')";
                 this.ejecutarComando(comando2);
             }
             if (indice == 1) {
@@ -132,9 +132,9 @@ namespace MercadoEnvio.Listado_Estadistico
                 //string comando5 = "SELECT * FROM DBME.topVendedoresConMayorMontoFacturado (1,2015,'1')";
                 this.ejecutarComando(comando5);
             }
-            button1.Enabled = true; 
+
+            
                            
-             
         }
         public void ejecutarComando(string comandoAEjecutar)
         {
@@ -150,28 +150,47 @@ namespace MercadoEnvio.Listado_Estadistico
 
         private void txtAño_TextChanged(object sender, EventArgs e)
         {
-            //char caracterIngresado = e; Tratando de chequear que sea numerico
-
-
-            //if (caracterIngresado > '0' && caracterIngresado <'9')
-
-            //else
             
 
         }
 
         private void ListadoPrincipal_Load(object sender, EventArgs e)
         {
-            string comando = "SELECT visibilidad_descripcion FROM DBME.visibilidad";
-            DataTable dataVisibilidad = (new ConexionSQL()).cargarTablaSQL(comando);
-
-            foreach (DataRow row in dataVisibilidad.Rows)
+            
+            
+            if (indice == 0)
             {
-                lstVisibilidad.Items.Add(row[0].ToString());
+                //topVendedoresConMayorCantidadDeProductosNoVendidos();
+                this.Text = this.Text + " - Vendedores con mayor cantidad de productos no vendidos";
+                
             }
-            cmbRubros.SelectedIndex = 0;
+            if (indice == 1)
+            {
+                //topClientesConMayorCantidadDeProductosComprados();
+                this.Text = this.Text + " - Clientes con mayor cantidad de productos comprados";
+                cmbRubros.Enabled = true;
 
-            lstVisibilidad.Enabled = true;
+                label4.Visible = false;
+                cmbVisibilidad.Visible = false;
+            }
+            if (indice == 2)
+            {
+                //topVendedoresConMayorCantidadDeFacturas();
+                this.Text = this.Text + " - Vendedores con mayor cantidad de facturas";
+
+                label4.Visible = false;
+                cmbVisibilidad.Visible = false;
+            }
+            if (indice == 3)
+            {
+                //topVendedoresConMayorMontoFacturado();
+                this.Text = this.Text + " - Vendedores con mayor monto facturado";
+
+                label4.Visible = false;
+                cmbVisibilidad.Visible = false;
+            }
+
+            
             lstTrimestre.Enabled = true;
             btnBuscar.Enabled = true;
 
@@ -182,12 +201,16 @@ namespace MercadoEnvio.Listado_Estadistico
         private void button1_Click(object sender, EventArgs e)
         {
             dataGridView1.DataSource = null;
+            txtAño.Text = "";
+            lstTrimestre.SelectedIndex = 0;
+            cmbRubros.SelectedIndex = 0;
+            cmbVisibilidad.SelectedIndex = 0;
         }
 
         private void lstVisibilidad_SelectedIndexChanged(object sender, EventArgs e)
         {
-            hayVisibilidad = true;
+            
         }
        
-         }
+    }
 }

@@ -29,17 +29,17 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cmbVisibilidad = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.cmbRubros = new System.Windows.Forms.ComboBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lstTrimestre = new System.Windows.Forms.ListBox();
             this.txtAño = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.btnLimpiar = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.btnBuscar = new System.Windows.Forms.Button();
-            this.lstVisibilidad = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
@@ -50,29 +50,47 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.cmbVisibilidad);
+            this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.cmbRubros);
             this.groupBox1.Controls.Add(this.groupBox3);
-            this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.btnLimpiar);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.btnBuscar);
-            this.groupBox1.Controls.Add(this.lstVisibilidad);
-            this.groupBox1.Location = new System.Drawing.Point(12, 14);
+            this.groupBox1.Location = new System.Drawing.Point(13, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(754, 240);
+            this.groupBox1.Size = new System.Drawing.Size(514, 181);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtros";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // cmbVisibilidad
+            // 
+            this.cmbVisibilidad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbVisibilidad.FormattingEnabled = true;
+            this.cmbVisibilidad.Location = new System.Drawing.Point(353, 69);
+            this.cmbVisibilidad.Name = "cmbVisibilidad";
+            this.cmbVisibilidad.Size = new System.Drawing.Size(141, 21);
+            this.cmbVisibilidad.TabIndex = 23;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(252, 72);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(56, 13);
+            this.label4.TabIndex = 22;
+            this.label4.Text = "Visibilidad:";
             // 
             // cmbRubros
             // 
             this.cmbRubros.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbRubros.Enabled = false;
             this.cmbRubros.FormattingEnabled = true;
-            this.cmbRubros.Location = new System.Drawing.Point(341, 24);
+            this.cmbRubros.Location = new System.Drawing.Point(353, 42);
             this.cmbRubros.Name = "cmbRubros";
-            this.cmbRubros.Size = new System.Drawing.Size(195, 21);
+            this.cmbRubros.Size = new System.Drawing.Size(141, 21);
             this.cmbRubros.TabIndex = 21;
             // 
             // groupBox3
@@ -81,7 +99,7 @@
             this.groupBox3.Controls.Add(this.lstTrimestre);
             this.groupBox3.Controls.Add(this.txtAño);
             this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Location = new System.Drawing.Point(10, 24);
+            this.groupBox3.Location = new System.Drawing.Point(21, 19);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(213, 145);
             this.groupBox3.TabIndex = 20;
@@ -104,7 +122,8 @@
             this.lstTrimestre.Items.AddRange(new object[] {
             "Primer trimestre",
             "Segundo trimestre",
-            "Tercer trimestre"});
+            "Tercer trimestre",
+            "Cuarto trimestre"});
             this.lstTrimestre.Location = new System.Drawing.Point(85, 59);
             this.lstTrimestre.Name = "lstTrimestre";
             this.lstTrimestre.Size = new System.Drawing.Size(100, 69);
@@ -128,29 +147,20 @@
             this.label2.TabIndex = 12;
             this.label2.Text = "Mes";
             // 
-            // button1
+            // btnLimpiar
             // 
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(623, 145);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(86, 40);
-            this.button1.TabIndex = 19;
-            this.button1.Text = "Limpiar";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(589, 27);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(120, 20);
-            this.textBox1.TabIndex = 18;
+            this.btnLimpiar.Location = new System.Drawing.Point(304, 124);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(86, 40);
+            this.btnLimpiar.TabIndex = 19;
+            this.btnLimpiar.Text = "Limpiar";
+            this.btnLimpiar.UseVisualStyleBackColor = true;
+            this.btnLimpiar.Click += new System.EventHandler(this.button1_Click);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(240, 27);
+            this.label3.Location = new System.Drawing.Point(252, 45);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(85, 13);
             this.label3.TabIndex = 15;
@@ -160,7 +170,7 @@
             // 
             this.btnBuscar.Enabled = false;
             this.btnBuscar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBuscar.Location = new System.Drawing.Point(522, 144);
+            this.btnBuscar.Location = new System.Drawing.Point(408, 124);
             this.btnBuscar.Name = "btnBuscar";
             this.btnBuscar.Size = new System.Drawing.Size(86, 40);
             this.btnBuscar.TabIndex = 13;
@@ -168,22 +178,12 @@
             this.btnBuscar.UseVisualStyleBackColor = true;
             this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
             // 
-            // lstVisibilidad
-            // 
-            this.lstVisibilidad.Enabled = false;
-            this.lstVisibilidad.FormattingEnabled = true;
-            this.lstVisibilidad.Location = new System.Drawing.Point(341, 63);
-            this.lstVisibilidad.Name = "lstVisibilidad";
-            this.lstVisibilidad.Size = new System.Drawing.Size(120, 121);
-            this.lstVisibilidad.TabIndex = 10;
-            this.lstVisibilidad.SelectedIndexChanged += new System.EventHandler(this.lstVisibilidad_SelectedIndexChanged);
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.dataGridView1);
-            this.groupBox2.Location = new System.Drawing.Point(13, 259);
+            this.groupBox2.Location = new System.Drawing.Point(13, 201);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(753, 308);
+            this.groupBox2.Size = new System.Drawing.Size(513, 259);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Resultados";
@@ -194,7 +194,9 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(6, 19);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(736, 273);
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(501, 219);
             this.dataGridView1.TabIndex = 0;
             // 
             // ListadoPrincipal
@@ -202,9 +204,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SkyBlue;
-            this.ClientSize = new System.Drawing.Size(778, 584);
+            this.ClientSize = new System.Drawing.Size(541, 476);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "ListadoPrincipal";
             this.Text = "ListadoPrincipal";
@@ -225,16 +228,16 @@
         private System.Windows.Forms.Button btnBuscar;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ListBox lstVisibilidad;
         private System.Windows.Forms.TextBox txtAño;
         private System.Windows.Forms.ListBox lstTrimestre;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnLimpiar;
         private System.Windows.Forms.ComboBox cmbRubros;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox cmbVisibilidad;
 
     }
 }

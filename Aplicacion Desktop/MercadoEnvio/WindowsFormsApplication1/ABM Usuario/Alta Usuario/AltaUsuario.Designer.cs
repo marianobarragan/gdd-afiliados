@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.optEmpresa = new System.Windows.Forms.RadioButton();
+            this.optCliente = new System.Windows.Forms.RadioButton();
             this.txtMail = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -39,8 +41,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.optCliente = new System.Windows.Forms.RadioButton();
-            this.optEmpresa = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,6 +65,28 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Creacion Usuario";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // optEmpresa
+            // 
+            this.optEmpresa.AutoSize = true;
+            this.optEmpresa.Location = new System.Drawing.Point(116, 158);
+            this.optEmpresa.Name = "optEmpresa";
+            this.optEmpresa.Size = new System.Drawing.Size(66, 17);
+            this.optEmpresa.TabIndex = 14;
+            this.optEmpresa.TabStop = true;
+            this.optEmpresa.Text = "Empresa";
+            this.optEmpresa.UseVisualStyleBackColor = true;
+            // 
+            // optCliente
+            // 
+            this.optCliente.AutoSize = true;
+            this.optCliente.Location = new System.Drawing.Point(116, 135);
+            this.optCliente.Name = "optCliente";
+            this.optCliente.Size = new System.Drawing.Size(57, 17);
+            this.optCliente.TabIndex = 13;
+            this.optCliente.TabStop = true;
+            this.optCliente.Text = "Cliente";
+            this.optCliente.UseVisualStyleBackColor = true;
             // 
             // txtMail
             // 
@@ -149,28 +171,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Username";
             // 
-            // optCliente
-            // 
-            this.optCliente.AutoSize = true;
-            this.optCliente.Location = new System.Drawing.Point(116, 135);
-            this.optCliente.Name = "optCliente";
-            this.optCliente.Size = new System.Drawing.Size(57, 17);
-            this.optCliente.TabIndex = 13;
-            this.optCliente.TabStop = true;
-            this.optCliente.Text = "Cliente";
-            this.optCliente.UseVisualStyleBackColor = true;
-            // 
-            // optEmpresa
-            // 
-            this.optEmpresa.AutoSize = true;
-            this.optEmpresa.Location = new System.Drawing.Point(116, 158);
-            this.optEmpresa.Name = "optEmpresa";
-            this.optEmpresa.Size = new System.Drawing.Size(66, 17);
-            this.optEmpresa.TabIndex = 14;
-            this.optEmpresa.TabStop = true;
-            this.optEmpresa.Text = "Empresa";
-            this.optEmpresa.UseVisualStyleBackColor = true;
-            // 
             // AltaUsuario
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -178,6 +178,7 @@
             this.BackColor = System.Drawing.Color.LightSkyBlue;
             this.ClientSize = new System.Drawing.Size(295, 276);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "AltaUsuario";
             this.Text = "Alta Usuario";
