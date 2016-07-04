@@ -3,3 +3,6 @@ terminar alta subasta, ver bien los campos
 nunca dejar de testear
 
 
+modificar password
+
+arreglar domicilios en carga de modificarCliente y empresa

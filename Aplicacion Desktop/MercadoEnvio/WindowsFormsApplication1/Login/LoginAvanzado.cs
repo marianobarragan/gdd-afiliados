@@ -63,6 +63,7 @@ namespace MercadoEnvio.Login
         {
             comboBox1.SelectedIndex = 0;
             this.sesion = new Sesion(usuario.usuario_id, usuario.nombreUsuario, rolesDisponibles[comboBox1.SelectedIndex]);
+            this.sesion.usuarioActual.contraseña = usuario.contraseña;
             VistaPrincipal.VistaPrincipal vista = new VistaPrincipal.VistaPrincipal(sesion);
             this.Hide();
             vista.Show();

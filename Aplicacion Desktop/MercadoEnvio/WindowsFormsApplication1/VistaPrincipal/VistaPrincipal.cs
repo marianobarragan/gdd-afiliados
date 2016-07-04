@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 using MercadoEnvio.Domain;
 using MercadoEnvio.Controller;
+using MercadoEnvio.ABM_Usuario.Modificar_Usuario;
 
 namespace MercadoEnvio.VistaPrincipal
 {
@@ -162,6 +163,12 @@ namespace MercadoEnvio.VistaPrincipal
         private void groupBox1_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnCambiarContraseña_Click(object sender, EventArgs e)
+        {
+            ModificarContraseña modificar = new ModificarContraseña(sesion);
+            modificar.Show();
         }
     }
 }

@@ -91,7 +91,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
         private void button1_Click(object sender, EventArgs e)
         {
             string query;
-            query = "SELECT e.empresa_id,e.razon_social,e.cuit,e.fecha_creacion,e.nombre_contacto, u.mail, u.usuario_id FROM DBME.empresa e JOIN DBME.usuario u ON (e.usuario_id = u.usuario_id) where u.habilitado = 1 AND u.posee_baja_logica = 0";
+            query = "SELECT e.empresa_id,e.razon_social,e.cuit,e.fecha_creacion,e.nombre_contacto, u.mail, u.usuario_id FROM DBME.empresa e JOIN DBME.usuario u ON (e.usuario_id = u.usuario_id) where u.posee_baja_logica = 0";
 
             if (chkRazonSocial.Checked) {
                 query = query + " AND razon_social LIKE '%" + txtRazonSocial.Text + "%'";

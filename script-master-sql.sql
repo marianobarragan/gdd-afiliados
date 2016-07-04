@@ -773,15 +773,26 @@ SET @inicio =
 END
 SET @fin = @inicio + 2
 
+	
 	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,monto_facturado)
-	SELECT TOP 5 u.usuario_id, u.username, SUM(f.monto_total) as facturas_realizadas 
+	SELECT TOP 5 u.usuario_id, u.username, SUM(f.monto_total) as monto_facturado 
 	FROM DBME.usuario u JOIN DBME.factura f ON (u.usuario_id = f.usuario_id)
 	WHERE YEAR(f.fecha) = @anio AND 
 		  MONTH(f.fecha) Between @inicio AND @fin
 	GROUP BY u.usuario_id, u.username
-	ORDER BY facturas_realizadas DESC
-	
+	ORDER BY monto_facturado DESC
 	RETURN
+	/*
+	INSERT INTO @TABLA_RESULTADO(id_vendedor,nombre_vendedor,monto_facturado)
+	SELECT TOP 5 u.usuario_id, u.username, SUM(fd.monto_parcial) as monto_facturado
+	FROM DBME.usuario u JOIN DBME.factura f ON (u.usuario_id = f.usuario_id)
+						JOIN DBME.factura_detalle fd ON (f.factura_id = fd.factura_id) 
+	WHERE YEAR(f.fecha) = @anio AND 
+		  MONTH(f.fecha) Between @inicio AND @fin
+	GROUP BY u.usuario_id, u.username
+	ORDER BY monto_facturado DESC
+	RETURN
+	*/
 END;
 GO
 
@@ -830,8 +841,8 @@ BEGIN
 	DECLARE @domicilio_id AS INT 
 	EXECUTE DBME.crearDomicilio @ciudad,@localidad,@codigo_postal,@piso,@departamento,@domicilio_calle,@numero_calle,@domicilio_id OUT
 
-	INSERT INTO DBME.usuario(username,password,habilitado,cantidad_intentos_fallidos,mail,domicilio_id,fecha_creacion,telefono,es_nuevo)
-	VALUES (@username,HASHBYTES('SHA2_256',@password),1,0,@mail,@domicilio_id,GETDATE(),@telefono,1)
+	INSERT INTO DBME.usuario(username,password,habilitado,cantidad_intentos_fallidos,mail,domicilio_id,fecha_creacion,telefono,es_nuevo,posee_baja_logica)
+	VALUES (@username,HASHBYTES('SHA2_256',@password),1,0,@mail,@domicilio_id,dbme.getHoraDelSistema(),@telefono,1,0)
 
 	SET @usuario_id = SCOPE_IDENTITY()
 END;
@@ -1595,6 +1606,19 @@ BEGIN
 	EXECUTE DBME.crearDetalleFactura 1,'Comisión por publicación', @factura_id,@costo
 
 	select @factura_id
+END;
+GO
+
+CREATE PROCEDURE DBME.cambiarContrasenia (@usuario_id INT, @contrasenia NVARCHAR(255))
+AS
+BEGIN
+
+	DECLARE @contraseniaCifrada AS NVARCHAR(255)
+	SET @contraseniaCifrada = HASHBYTES('SHA2_256',@contrasenia)
+	
+	UPDATE DBME.usuario SET password = @contraseniaCifrada WHERE usuario_id = @usuario_id
+
+
 END;
 GO
 

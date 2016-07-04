@@ -17,6 +17,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
     {
         public uint empresa_id;
         public List<Rubro> rubros;
+        public bool habilitadoInicial;
 
         public ModificarDatosEmpresa(uint id2)
         {
@@ -68,6 +69,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
             txtNumeroPiso.Text = dt.Rows[0][10].ToString();
             txtDepartamento.Text = dt.Rows[0][11].ToString();
             chkHabilitado.Checked = Boolean.Parse(dt.Rows[0][12].ToString());
+            habilitadoInicial = Boolean.Parse(dt.Rows[0][12].ToString());
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -113,7 +115,12 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
 
             try // actualizar empresa
             {
+                if (habilitadoInicial != habilitado)
+                {
+                    string comando2 = "UPDATE DBME.usuario SET cantidad_intentos_fallidos = 0 WHERE usuario_id = (SELECT usuario_id FROM DBME.empresa WHERE empresa_id = " + empresa_id + ")";
+                    (new ConexionSQL()).ejecutarComandoSQL(comando2);
 
+                }
                 string comando = "EXECUTE DBME.updateEmpresa " + empresa_id + ",'" + nombre + "','" + razon_social + "','" + CUIT + "'," + rubro + ",'" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "','" + altura_calle + "','" + numero_piso + "','" + departamento + "','" + numero_telefono + "', " + habilitado;
                 //MessageBox.Show(comando, "Update", MessageBoxButtons.OK);
                 (new ConexionSQL()).ejecutarComandoSQL(comando);

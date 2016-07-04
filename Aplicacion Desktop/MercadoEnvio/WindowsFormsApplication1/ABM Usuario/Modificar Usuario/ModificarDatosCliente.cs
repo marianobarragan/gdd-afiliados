@@ -15,6 +15,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
     public partial class ModificarDatosCliente : Form
     {
         public uint cliente_id;
+        public bool habilitadoInicial;
 
         public ModificarDatosCliente(uint id2)
         {
@@ -41,6 +42,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
             txtNumeroPiso.Text = dt.Rows[0][11].ToString();
             txtDepartamento.Text = dt.Rows[0][12].ToString();
             chkHabilitado.Checked = Boolean.Parse(dt.Rows[0][13].ToString());
+            habilitadoInicial = Boolean.Parse(dt.Rows[0][13].ToString());
             //DataTable dataVisibilidad = (new ConexionSQL()).cargarTablaSQL(comando);
         }
 
@@ -95,6 +97,13 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
 
             try
             {
+                if (habilitadoInicial != habilitado)
+                {
+                    string comando2 = "UPDATE DBME.usuario SET cantidad_intentos_fallidos = 0 WHERE usuario_id = (SELECT usuario_id FROM DBME.cliente WHERE cliente_id = "+cliente_id+")";
+                    (new ConexionSQL()).ejecutarComandoSQL(comando2);
+                
+                }
+
 
                 string comando = "EXECUTE DBME.updateCliente "+cliente_id+",'" + nombre + "','" + apellido + "','" + fechaNacimiento + "','" + tipoDocumento + "'," + documento + ",'" + ciudad + "','" + localidad + "','" + codigo_postal + "','" + domicilio_calle + "'," + altura_calle + "," + numero_piso + ",'" + departamento + "'," + numero_telefono + "," + habilitado;
                 //MessageBox.Show(comando, "A", MessageBoxButtons.OK);
@@ -102,6 +111,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
                 //textBox1.Text = comando;
                 MessageBox.Show("Cliente actualizado exitosamente", "Update", MessageBoxButtons.OK);
                 this.Close();
+
             }
             catch (Exception er)
             {

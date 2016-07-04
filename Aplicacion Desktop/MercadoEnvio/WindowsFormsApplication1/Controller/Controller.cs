@@ -22,6 +22,7 @@ namespace MercadoEnvio.Controller
             // acafalta obtener el objeto usuario a partir de la data
 
             Usuario usuario2 = new Usuario(Int32.Parse(data.Rows[0][0].ToString()), usuario);
+            usuario2.contraseña = contraseña;
             return usuario2;
 
 

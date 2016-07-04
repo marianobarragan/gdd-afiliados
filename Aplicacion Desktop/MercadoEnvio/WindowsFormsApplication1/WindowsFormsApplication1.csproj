@@ -123,6 +123,12 @@
     <Compile Include="ABM Usuario\Modificar Usuario\MenuModificacion.Designer.cs">
       <DependentUpon>MenuModificacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM Usuario\Modificar Usuario\ModificarContraseña.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Usuario\Modificar Usuario\ModificarContraseña.Designer.cs">
+      <DependentUpon>ModificarContraseña.cs</DependentUpon>
+    </Compile>
     <Compile Include="ABM Usuario\Modificar Usuario\ModificarDatosCliente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -356,6 +362,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Usuario\Modificar Usuario\MenuModificacion.resx">
       <DependentUpon>MenuModificacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\Modificar Usuario\ModificarContraseña.resx">
+      <DependentUpon>ModificarContraseña.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Usuario\Modificar Usuario\ModificarDatosCliente.resx">
       <DependentUpon>ModificarDatosCliente.cs</DependentUpon>

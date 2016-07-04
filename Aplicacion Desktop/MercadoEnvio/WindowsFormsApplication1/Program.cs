@@ -26,7 +26,7 @@ namespace MercadoEnvio
             //Application.Run(new MercadoEnvio.Generar_Publicación.AltaSubasta(new Sesion(1, "fabian", new Rol("1", "nombre rol"))));
             //Application.Run(new MercadoEnvio.Generar_Publicación.ListadoPublicacionesUsuario(new Sesion(1, "fabian", new Rol("1", "nombre rol"))));
             Application.Run(new MercadoEnvio.Login.LoginInicial());
-            //Application.Run(new MercadoEnvio.Listado_Estadistico.ListadoPrincipal(2));
+            //Application.Run(new MercadoEnvio.Listado_Estadistico.ListadoPrincipal(3));
             
         }
 

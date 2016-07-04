@@ -39,6 +39,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnCambiarContraseña = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -162,12 +163,23 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Nombre usuario:";
             // 
+            // btnCambiarContraseña
+            // 
+            this.btnCambiarContraseña.Location = new System.Drawing.Point(684, 363);
+            this.btnCambiarContraseña.Name = "btnCambiarContraseña";
+            this.btnCambiarContraseña.Size = new System.Drawing.Size(145, 23);
+            this.btnCambiarContraseña.TabIndex = 2;
+            this.btnCambiarContraseña.Text = "Cambiar Contraseña ";
+            this.btnCambiarContraseña.UseVisualStyleBackColor = true;
+            this.btnCambiarContraseña.Click += new System.EventHandler(this.btnCambiarContraseña_Click);
+            // 
             // VistaPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SkyBlue;
             this.ClientSize = new System.Drawing.Size(841, 435);
+            this.Controls.Add(this.btnCambiarContraseña);
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -196,5 +208,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnCambiarContraseña;
     }
 }
