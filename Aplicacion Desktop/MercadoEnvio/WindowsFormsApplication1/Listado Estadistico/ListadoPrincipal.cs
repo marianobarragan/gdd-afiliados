@@ -14,17 +14,19 @@ namespace MercadoEnvio.Listado_Estadistico
 {
     public partial class ListadoPrincipal : Form
     {
-        public int indice;
+        int indice;
         public List<Rubro> rubros;
         public string descripcionVisibilidad;
+        public Boolean hayVisibilidad;
 
         public ListadoPrincipal(int index)
         {
             InitializeComponent();
-            int indice = index;
+            indice = index;
             textBox1.Text = indice.ToString();
-            //Sacar esto de aca arriba
             descripcionVisibilidad = "Ninguno";
+            hayVisibilidad = false;
+          
 
             if (indice == 1)
             {
@@ -42,8 +44,7 @@ namespace MercadoEnvio.Listado_Estadistico
             
             cargar_rubros();
             cmbRubros.SelectedIndex = 0;
-            //string comando3 = "SELECT * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2016,1)";
-           //this.ejecutarComando(comando3);
+          
             
         }
 
@@ -73,22 +74,24 @@ namespace MercadoEnvio.Listado_Estadistico
         }
         private void lstTrimestre_SelectedIndexChanged(object sender, EventArgs e)
         {
+            
         }
-
+        
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             uint rubro;
-            descripcionVisibilidad = lstVisibilidad.SelectedItem.ToString();
-            MessageBox.Show(descripcionVisibilidad, "hola", MessageBoxButtons.OK);
-        
-            string comandoMIL = "SELECT * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2016,1)";
-            this.ejecutarComando(comandoMIL);
-            
+            int trimestre;
+            uint anio;
+                    
+            if(hayVisibilidad == true)
+            {
+                descripcionVisibilidad = lstVisibilidad.SelectedItem.ToString();
+            } 
+                       
             try
             {
-                uint anio = UInt32.Parse(txtAño.Text);
-                //int trimestre = lstTrimestre.SelectedIndex + 1;
-                //string visibilidad = lstVisibilidad.SelectedItem.ToString();
+                anio = UInt32.Parse(txtAño.Text);
+                trimestre = lstTrimestre.SelectedIndex + 1;
                 rubro = rubros[cmbRubros.SelectedIndex].rubro_id;
             }
             catch (System.FormatException)
@@ -102,41 +105,35 @@ namespace MercadoEnvio.Listado_Estadistico
                 return;
             }      
               
-              switch (indice)
-                {
-                case 0:
-                    //topVendedoresConMayorCantidadDeProductosNoVendidos();
-                    //string comando2 = "EXECUTE DBME.topVendedoresConMayorCantidadDeProductosNoVendidos '" + trimestre + "','" + anio + "'" + visibilidad + "";
-                   string comando2 = "SELECT DBME.topVendedoresConMayorCantidadDeProductosNoVendidos (1,2015,'1')";
-                   this.ejecutarComando(comando2);
-                   
-                break;
-                case 1:
-                    //topClientesConMayorCantidadDeProductosComprados();
-                //string comando3 = "SELECT * from DBME.topClientesConMayorCantidadDeProductosComprados '" + trimestre + "','" + anio + "'" + rubro + "";
-               
-                string comando3 = "SELECT * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2016,1)";
-                   this.ejecutarComando(comando3);
-                   
-                   break;
-                case 2:
-                    //topVendedoresConMayorCantidadDeFacturas();
-                   //string comando4 = "SELECT * FROM DBME.topVendedoresConMayorCantidadDeFacturas '" + trimestre + "','" + anio + "'";
-                   string comando4 = "SELECT * FROM DBME.topVendedoresConMayorCantidadDeFacturas (1,2015,'1')";
-                   this.ejecutarComando(comando4);
-                   break;
-                case 3:
-                    //topVendedoresConMayorMontoFacturado();
-                   //string comando5 = "SELECT * FROM DBME.topVendedoresConMayorMontoFacturado '" + trimestre + "','" + anio + "'";
-                   string comando5 = "SELECT * FROM DBME.topVendedoresConMayorMontoFacturado (1,2015,'1')";
-                   this.ejecutarComando(comando5);
-                break;
-
-                default:
-             //      imprimir un error o no hacer nada
-                break;
+            if (indice == 0) {
+                //topVendedoresConMayorCantidadDeProductosNoVendidos();
+                string comando2 = "SELECT * FROM DBME.topVendedoresConMayorCantidadDeProductosNoVendidos ('" + trimestre + "','" + anio + "','" + descripcionVisibilidad + "')";
+                //string comando2 = "SELECT * FROM DBME.topVendedoresConMayorCantidadDeProductosNoVendidos (1,2015, 'Ninguno')";
+                this.ejecutarComando(comando2);
             }
-              button1.Enabled = true;   
+            if (indice == 1) {
+                //topClientesConMayorCantidadDeProductosComprados();
+                string comando3 = "SELECT * from DBME.topClientesConMayorCantidadDeProductosComprados ('" + trimestre + "','" + anio + "','" + rubro + "')";
+                this.ejecutarComando(comando3);
+                //string comando3 = "SELECT * from DBME.topClientesConMayorCantidadDeProductosComprados (1,2016,1)";
+            }
+            if (indice == 2)
+            {
+                //topVendedoresConMayorCantidadDeFacturas();
+                string comando4 = "SELECT * FROM DBME.topVendedoresConMayorCantidadDeFacturas ('" + trimestre + "','" + anio + "')";
+                this.ejecutarComando(comando4);
+                //string comando4 = "SELECT * FROM DBME.topVendedoresConMayorCantidadDeFacturas (1,2015,'1')";
+
+            }
+            if (indice == 3) 
+            {
+                //topVendedoresConMayorMontoFacturado();
+                string comando5 = "SELECT * FROM DBME.topVendedoresConMayorMontoFacturado ('" + trimestre + "','" + anio + "')";
+                //string comando5 = "SELECT * FROM DBME.topVendedoresConMayorMontoFacturado (1,2015,'1')";
+                this.ejecutarComando(comando5);
+            }
+            button1.Enabled = true; 
+                           
              
         }
         public void ejecutarComando(string comandoAEjecutar)
@@ -185,6 +182,11 @@ namespace MercadoEnvio.Listado_Estadistico
         private void button1_Click(object sender, EventArgs e)
         {
             dataGridView1.DataSource = null;
+        }
+
+        private void lstVisibilidad_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            hayVisibilidad = true;
         }
        
          }
