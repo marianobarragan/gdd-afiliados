@@ -57,13 +57,13 @@ namespace MercadoEnvio.Generar_Publicación
             cmbRubros.SelectedIndex = 0;
         }
 
-        public void cargar_visibilidad()
+        public void cargar_visibilidad(int visibilidad)
         {
             string comando;
 
             if (estadoInicial == "ACTIVA" || estadoInicial == "PAUSADA")
             {
-                comando = "select visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje, visibilidad_costo_envio,visibilidad_id from dbme.visibilidad ";
+                comando = "select visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje, visibilidad_costo_envio,visibilidad_id from dbme.visibilidad where visibilidad_id =" + visibilidad;
             }
             else {
                 comando = "select visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje, visibilidad_costo_envio,visibilidad_id from dbme.visibilidad where posee_baja_logica = 0";
@@ -115,7 +115,7 @@ namespace MercadoEnvio.Generar_Publicación
 
 
             estadoInicial = dt.Rows[0][7].ToString();
-            cargar_visibilidad();
+            cargar_visibilidad(Int32.Parse(dt.Rows[0][6].ToString()));
 
             txtDescripción.Text = dt.Rows[0][0].ToString();
             txtStock.Text = dt.Rows[0][1].ToString();
@@ -125,7 +125,8 @@ namespace MercadoEnvio.Generar_Publicación
             txtPrecio.Text = datos[0];
             txtPrecioDecimal.Text = datos[1];
             cmbRubros.SelectedIndex = Int32.Parse(dt.Rows[0][5].ToString());
-            cmbVisibilidad.SelectedIndex = Int32.Parse(dt.Rows[0][6].ToString()) -1;
+            
+            cmbVisibilidad.SelectedIndex = 0;
             cmbEstado.SelectedIndex = cmbEstado.FindString(dt.Rows[0][7].ToString());
             chkPermitePreguntas.Checked = Boolean.Parse(dt.Rows[0][8].ToString());
             chkRealizaEnvio.Checked = Boolean.Parse(dt.Rows[0][9].ToString());
@@ -173,6 +174,7 @@ namespace MercadoEnvio.Generar_Publicación
                 chkRealizaEnvio.Enabled = false;
                 chkPermitePreguntas.Enabled = false;
 
+                cmbEstado.Items.Clear();
                 cmbEstado.Items.Add("ACTIVA");
                 cmbEstado.Items.Add("PAUSADA");
                 cmbEstado.Items.Add("FINALIZADA");

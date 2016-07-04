@@ -50,6 +50,7 @@ namespace MercadoEnvio.Facturas
             lbl6.Text = dataUsuario.Rows[0][1].ToString();
 
             string comando3 = "execute dbme.devolverInformacionFactura " + idUsuario;
+
             DataTable dataUsuario2 = (new ConexionSQL().cargarTablaSQL(comando3));
 
             if (dataUsuario2.Rows[0][0].ToString() == "empresa")
@@ -60,13 +61,21 @@ namespace MercadoEnvio.Facturas
                 lbl4.Text = "Nombre Contacto: ";
                 lbl7.Text = dataUsuario3.Rows[0][0].ToString();
                 lbl8.Text = dataUsuario3.Rows[0][1].ToString();
-            }else{
+            }else if (dataUsuario2.Rows[0][0].ToString() == "cliente"){
                 string comando5 = "SELECT nombre +' ' +apellido,numero_documento FROM dbme.cliente WHERE usuario_id =  " + idUsuario;
                 DataTable dataUsuario3 = (new ConexionSQL().cargarTablaSQL(comando5));
                 lbl3.Text = "Nombre y Apellido: ";
                 lbl4.Text = "Numero Documento: ";
                 lbl7.Text = dataUsuario3.Rows[0][0].ToString();
                 lbl8.Text = dataUsuario3.Rows[0][1].ToString();
+            }else if (dataUsuario2.Rows[0][0].ToString() == "admin")
+            {
+                lbl2.Text = " ";
+                lbl3.Text = " ";
+                lbl4.Text = " ";
+                lbl6.Text = " ";
+                lbl7.Text = " ";
+                lbl8.Text = " ";
             }
 
             string comando6 = "SELECT * FROM DBME.factura_detalle WHERE factura_id = " + factura_id;

@@ -91,14 +91,6 @@ CREATE TABLE DBME.empresa(
 );
 GO
 
-CREATE TABLE DBME.administrador(
-	administrador_id INT IDENTITY(1,1) PRIMARY KEY,
-	nombre VARCHAR(16),
-	apellido VARCHAR(25),
-	usuario_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id)
-);
-GO
-
 CREATE TABLE DBME.visibilidad( --INT IDENTITY(1,1) PRIMARY KEY
 	visibilidad_id NUMERIC(18,0) IDENTITY(1,1) PRIMARY KEY,
 	visibilidad_descripcion NVARCHAR(255) UNIQUE,
@@ -109,9 +101,22 @@ CREATE TABLE DBME.visibilidad( --INT IDENTITY(1,1) PRIMARY KEY
 );
 GO
 
+CREATE TABLE DBME.estado ( 
+	estado_id NVARCHAR(255) PRIMARY KEY,
+	estado_descripcion NVARCHAR(255) UNIQUE,
+	CONSTRAINT estado_id CHECK (estado_id IN ('BORRADOR','ACTIVA','PAUSADA','FINALIZADA')) 
+);
+GO
+
+CREATE TABLE DBME.tipo(
+	tipo_id NVARCHAR(255) PRIMARY KEY
+	CONSTRAINT tipo_id CHECK (tipo_id IN ('Compra Inmediata','Subasta'))
+);
+GO
+
 CREATE TABLE DBME.publicacion(
 	publicacion_id NUMERIC(18,0) IDENTITY(1,1) PRIMARY KEY,
-	publicacion_tipo NVARCHAR(255), 
+	publicacion_tipo NVARCHAR(255) FOREIGN KEY REFERENCES DBME.tipo(tipo_id),
 	descripcion NVARCHAR(255), 
 	stock NUMERIC(18,0),
 	fecha_creacion DATETIME,
@@ -121,7 +126,7 @@ CREATE TABLE DBME.publicacion(
 	rubro_id INT FOREIGN KEY REFERENCES DBME.rubro(rubro_id),
 	visibilidad_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.visibilidad(visibilidad_id),
 	autor_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id),
-	estado NVARCHAR(255) CHECK (estado IN ('BORRADOR','ACTIVA','PAUSADA','FINALIZADA')) DEFAULT 'BORRADOR',
+	estado NVARCHAR(255)  FOREIGN KEY REFERENCES DBME.estado(estado_id),
 	permite_preguntas bit,
 	realiza_envio bit,
 	cantidad INT,
@@ -174,7 +179,7 @@ GO
 CREATE TABLE DBME.factura_detalle(
 	factura_detalle_id INT IDENTITY(1,1) PRIMARY KEY,
 	factura_cantidad NUMERIC(18,0),
-	tipo_de_item VARCHAR(64), 
+	tipo_de_item VARCHAR(64) CHECK (tipo_de_item IN ('Comisión por publicación','Costo envio','Comision por producto','INDEFINIDO')),
 	factura_id NUMERIC(18,0) FOREIGN KEY REFERENCES DBME.factura(factura_id),
 	monto_parcial NUMERIC(18,2)
 );
@@ -459,7 +464,33 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE DBME.migrarEstados
+AS
+BEGIN
 
+	INSERT INTO DBME.estado (estado_id,estado_descripcion)
+	VALUES('BORRADOR','Publicación Borrador, visible solo para el autor')
+	INSERT INTO DBME.estado (estado_id,estado_descripcion)
+	VALUES ('ACTIVA','Publicación Activa, visible para los usuarios')
+	INSERT INTO DBME.estado (estado_id,estado_descripcion)
+	VALUES ('PAUSADA','Publicación Pausada, no genera compras')
+	INSERT INTO DBME.estado (estado_id,estado_descripcion)
+	VALUES ('FINALIZADA','Publicación Finalizada')
+	
+END;
+GO
+
+CREATE PROCEDURE DBME.migrarTipos
+AS
+BEGIN
+
+	INSERT INTO DBME.tipo(tipo_id)
+	VALUES('Subasta')
+	INSERT INTO DBME.tipo (tipo_id)
+	VALUES ('Compra Inmediata')
+	
+END;
+GO
 
 CREATE PROCEDURE DBME.migrarPublicaciones
 AS
@@ -581,6 +612,8 @@ GO
 	EXECUTE DBME.migrarEmpresas
 	EXECUTE DBME.enlazarRol_X_Usuario
 	EXECUTE DBME.migrarVisibilidad
+	EXECUTE DBME.migrarEstados
+	EXECUTE DBME.migrarTipos
 	EXECUTE DBME.migrarPublicaciones
 	EXECUTE DBME.migrarFacturas
 	EXECUTE DBME.migrarCalificaciones
@@ -885,11 +918,11 @@ BEGIN
 
 	DECLARE @usuario_id AS INT
 										--w23e encriptado
-	EXECUTE DBME.crearUsuario 'admin','w23e',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, @usuario_id OUT
-	INSERT INTO DBME.administrador(nombre,apellido,usuario_id)
-	VALUES ('Administrador','General',@usuario_id)
+	EXECUTE DBME.crearUsuario 'admin','w23e','mail@admin.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, @usuario_id OUT
+
 	INSERT INTO DBME.rol_x_usuario (usuario_id,rol_id)
 	VALUES (@usuario_id,1)
+
 END;
 GO
 
@@ -1099,7 +1132,7 @@ BEGIN
 		IF (@estado = 'ACTIVA')
 		BEGIN
 			EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
-			EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
+			EXECUTE DBME.crearDetalleFactura 1,'Comisión por publicación', @factura_id,@costo
 			select @factura_id
 		END
 
@@ -1145,7 +1178,7 @@ BEGIN
 		IF (@estado = 'ACTIVA')
 		BEGIN
 			EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
-			EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
+			EXECUTE DBME.crearDetalleFactura 1,'Comisión por publicación', @factura_id,@costo
 			select @factura_id
 		END
 		
@@ -1203,8 +1236,8 @@ BEGIN
 		DECLARE @CostoTotal AS NUMERIC(18,2) = @costo_envio + @comision
 
 		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@CostoTotal,@factura_id OUT
-		EXECUTE DBME.crearDetalleFactura 1,'Costo envio ',@factura_id,@costo_envio
-		EXECUTE DBME.crearDetalleFactura @cantidad,'Comision',@factura_id,@comision
+		EXECUTE DBME.crearDetalleFactura 1,'Costo envio',@factura_id,@costo_envio
+		EXECUTE DBME.crearDetalleFactura @cantidad,'Comision por producto',@factura_id,@comision
 	END;
 					
 	IF ((SELECT publicacion_tipo FROM DBME.publicacion WHERE publicacion_id = @publicacion_id AND estado = 'ACTIVA') = 'Compra Inmediata')
@@ -1242,8 +1275,8 @@ BEGIN
 		WHERE publicacion_id = @publicacion_id
 
 		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@CostoTotal,@factura_id OUT
-		EXECUTE DBME.crearDetalleFactura 1,'Costo envio ',@factura_id,@costo_envio
-		EXECUTE DBME.crearDetalleFactura @cantidad,'Comision',@factura_id,@comision
+		EXECUTE DBME.crearDetalleFactura 1,'Costo envio',@factura_id,@costo_envio
+		EXECUTE DBME.crearDetalleFactura @cantidad,'Comision por producto',@factura_id,@comision
 
 	END
 
@@ -1519,9 +1552,13 @@ BEGIN
 	BEGIN
 		SELECT 'empresa'
 	END
-	ELSE
+	IF (EXISTS(SELECT usuario_id FROM DBME.cliente WHERE usuario_id = @usuario_id))
 	BEGIN
 		SELECT 'cliente'
+	END
+	IF ((SELECT username FROM DBME.usuario WHERE usuario_id = @usuario_id) = 'admin')
+	BEGIN
+		SELECT 'admin'
 	END
 
 END;
@@ -1541,7 +1578,7 @@ BEGIN
 	WHERE p.publicacion_id = @publicacion_id
 
 	EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
-	EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
+	EXECUTE DBME.crearDetalleFactura 1,'Comisión por publicación', @factura_id,@costo
 
 	select @factura_id
 END;

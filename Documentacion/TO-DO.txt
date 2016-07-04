@@ -2,6 +2,5 @@ terminar alta subasta, ver bien los campos
 
 nunca dejar de testear
 
-hacer la baja logica de visibilidad, rol y usuarios
+abm de usuario debe chequear si ya existe el usuario
 
-QUE ONDA VISIBLIDAD SIDA - FACTURACION - GATSU

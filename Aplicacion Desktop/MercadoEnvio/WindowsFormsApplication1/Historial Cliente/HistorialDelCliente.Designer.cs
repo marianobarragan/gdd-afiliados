@@ -67,12 +67,12 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 16;
             this.listBox1.Items.AddRange(new object[] {
-            "Historial Del Cliente",
+            "Historial De Compras y Subastas",
             "Resumen De Estrellas",
             "Operaciones Que Faltan Por Calificar"});
             this.listBox1.Location = new System.Drawing.Point(6, 19);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(294, 84);
+            this.listBox1.Size = new System.Drawing.Size(318, 84);
             this.listBox1.TabIndex = 4;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 

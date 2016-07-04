@@ -265,6 +265,7 @@
             this.cmbVisibilidad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbVisibilidad.FormattingEnabled = true;
             this.cmbVisibilidad.Location = new System.Drawing.Point(102, 35);
+            this.cmbVisibilidad.MaxDropDownItems = 50;
             this.cmbVisibilidad.Name = "cmbVisibilidad";
             this.cmbVisibilidad.Size = new System.Drawing.Size(121, 21);
             this.cmbVisibilidad.TabIndex = 24;
@@ -405,6 +406,7 @@
             this.BackColor = System.Drawing.Color.LightSkyBlue;
             this.ClientSize = new System.Drawing.Size(705, 394);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "ModificarCompraInmediata";
             this.Text = "ModificarCompraInmediata";
