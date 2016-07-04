@@ -176,6 +176,7 @@
             this.lstVisibilidad.Name = "lstVisibilidad";
             this.lstVisibilidad.Size = new System.Drawing.Size(120, 121);
             this.lstVisibilidad.TabIndex = 10;
+            this.lstVisibilidad.SelectedIndexChanged += new System.EventHandler(this.lstVisibilidad_SelectedIndexChanged);
             // 
             // groupBox2
             // 

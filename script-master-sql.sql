@@ -689,7 +689,7 @@ BEGIN
 	END
 	ELSE
 		INSERT INTO @TABLA_RESULTADO(id_vendedor,mail_vendedor ,cantidad_productos_sin_vender)
-		SELECT u.usuario_id, u.mail, SUM(p.stock) as Cantidad_Productos_No_Vendidos 
+		SELECT TOP 5 u.usuario_id, u.mail, SUM(p.stock) as Cantidad_Productos_No_Vendidos 
 		FROM DBME.usuario u JOIN DBME.publicacion p ON(u.usuario_id = p.autor_id) JOIN dbme.visibilidad v ON(p.visibilidad_id = v.visibilidad_id)
 		WHERE YEAR(p.fecha_creacion) = @anio AND MONTH(p.fecha_creacion) Between @inicio AND @fin AND v.visibilidad_descripcion = @visibilidad 
 		GROUP BY u.usuario_id, u.mail
