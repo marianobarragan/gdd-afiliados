@@ -1525,11 +1525,11 @@ BEGIN
 	
 	IF (EXISTS(SELECT username,mail FROM DBME.usuario WHERE username = @username OR mail = @mail))
 	BEGIN
-		SELECT true
+		SELECT 'true'
 	END
 	ELSE
 	BEGIN
-		SELECT false
+		SELECT 'false'
 	END
 END;
 GO 
