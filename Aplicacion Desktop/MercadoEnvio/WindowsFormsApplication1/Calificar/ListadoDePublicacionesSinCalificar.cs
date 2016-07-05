@@ -22,17 +22,6 @@ namespace MercadoEnvio.Calificar
 
         private void ListadoDePublicacionesSinCalificar_Load(object sender, EventArgs e)
         {
-            /*
-            string query = "SELECT * FROM DBME.compra WHERE (autor_id = " + idCliente+" AND esta_calificada = 0)" ;
-            DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query));
-            if (dt.Rows.Count == 0)
-            {
-                //MessageBox.Show("No posee calificaciones pendientes", "Calificar al vendedor", MessageBoxButtons.OK);
-                dataGridView1.DataSource = null;
-                return;
-            }
-            dataGridView1.DataSource = dt;
-            */
 
             btnUltimasCalificaciones_Click(null, null);
             btnBuscar_Click(null, null);
@@ -44,6 +33,7 @@ namespace MercadoEnvio.Calificar
 
             if (dataGridView1.Rows.Count == 0 || dataGridView1.CurrentRow == null) //si la tabla esta vacia, no apuntas a nadie
             {
+                MessageBox.Show("Debe seleccionar un elemento antes", "Problema", MessageBoxButtons.OK);
                 return;
             }
             if (dataGridView1.SelectedCells.Count == 0)
@@ -59,13 +49,13 @@ namespace MercadoEnvio.Calificar
 
         private void btnUltimasCalificaciones_Click(object sender, EventArgs e)
         {
-            string query2 = "SELECT TOP 5 * FROM DBME.compra WHERE (autor_id = " + idCliente + " AND esta_calificada = 1)";
+            string query2 = "SELECT TOP 5 fecha, calificacion_id,descripcion, compra_id FROM DBME.calificacion WHERE (autor_id = " + idCliente + ") ORDER BY fecha DESC";
             DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query2));
             if (dt.Rows.Count == 0)
             {
-                MessageBox.Show("No posee calificaciones pendientes", "Calificar al vendedor", MessageBoxButtons.OK);
+                MessageBox.Show("No posee calificaciones", "Calificar al vendedor", MessageBoxButtons.OK);
                 dataGridView1.DataSource = null;
-                this.Close();
+                //this.Close();
                 return;
             }
 
