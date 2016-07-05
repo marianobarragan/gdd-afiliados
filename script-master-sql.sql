@@ -158,7 +158,7 @@ GO
 CREATE TABLE DBME.calificacion(
 	calificacion_id NUMERIC(18,0) IDENTITY(1,1) PRIMARY KEY,
 	cantidad_estrellas NUMERIC(18,0) CHECK(cantidad_estrellas BETWEEN '0' AND '5') DEFAULT '0',
-	descripcion NVARCHAR(255) NOT NULL,
+	descripcion NVARCHAR(255),
 	fecha DATETIME,
 	autor_id INT FOREIGN KEY REFERENCES DBME.usuario(usuario_id),
 	compra_id INT FOREIGN KEY REFERENCES DBME.compra(compra_id),
