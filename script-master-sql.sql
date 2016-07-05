@@ -1004,7 +1004,7 @@ BEGIN
 	DECLARE @empresa_id INT
 	DECLARE @date DATETIME
 
-	SET @date = GETDATE()
+	SET @date = = DBME.getHoraDelSistema()
 
 	BEGIN TRY
 		BEGIN TRANSACTION			
@@ -1382,7 +1382,7 @@ CREATE PROCEDURE DBME.calificarAlVendedor (@compra_id INT,@cliente_id INT, @come
 AS
 BEGIN
 
-		INSERT INTO DBME.calificacion(cantidad_estrellas,descripcion,fecha,autor_id,compra_id) VALUES(@calificacion,@comentario, GETDATE(),@cliente_id,@compra_id)
+		INSERT INTO DBME.calificacion(cantidad_estrellas,descripcion,fecha,autor_id,compra_id) VALUES(@calificacion,@comentario, DBME.getHoraDelSistema(),@cliente_id,@compra_id)
 		UPDATE DBME.compra
 		SET esta_calificada = 1
 		WHERE compra_id = @compra_id	
