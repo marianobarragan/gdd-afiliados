@@ -77,6 +77,7 @@
             this.txtCostoEnvioDecimal.Name = "txtCostoEnvioDecimal";
             this.txtCostoEnvioDecimal.Size = new System.Drawing.Size(31, 20);
             this.txtCostoEnvioDecimal.TabIndex = 11;
+            this.txtCostoEnvioDecimal.Text = "00";
             // 
             // txtPrecioDecimal
             // 
@@ -86,6 +87,7 @@
             this.txtPrecioDecimal.Name = "txtPrecioDecimal";
             this.txtPrecioDecimal.Size = new System.Drawing.Size(31, 20);
             this.txtPrecioDecimal.TabIndex = 9;
+            this.txtPrecioDecimal.Text = "00";
             // 
             // button1
             // 

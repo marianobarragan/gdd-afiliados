@@ -97,9 +97,11 @@
             // 
             this.txtValorInicialDecimal.BackColor = System.Drawing.Color.PaleGreen;
             this.txtValorInicialDecimal.Location = new System.Drawing.Point(199, 181);
+            this.txtValorInicialDecimal.MaxLength = 2;
             this.txtValorInicialDecimal.Name = "txtValorInicialDecimal";
             this.txtValorInicialDecimal.Size = new System.Drawing.Size(57, 20);
             this.txtValorInicialDecimal.TabIndex = 41;
+            this.txtValorInicialDecimal.Text = "00";
             // 
             // dateFechaInicio
             // 

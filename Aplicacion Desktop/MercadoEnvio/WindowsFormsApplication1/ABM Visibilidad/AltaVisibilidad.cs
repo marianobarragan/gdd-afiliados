@@ -26,26 +26,31 @@ namespace MercadoEnvio.ABM_Visibilidad
 
         private void button1_Click(object sender, EventArgs e)
         {
-            float precio;
-            float porcentaje;
-            float costo;
-            float precioDecimal;
-
-            float costoDecimal;
+            uint precio;
+            uint porcentaje;
+            uint costo;
+            uint precioDecimal;
+            uint costoDecimal;
+            
             try
             {
-                precio = float.Parse(txtPrecio.Text);
-                porcentaje = float.Parse(txtPorcentaje.Text);
-                costo = float.Parse(txtCostoEnvio.Text);
-                precioDecimal = float.Parse(txtPrecioDecimal.Text);
-                costoDecimal = float.Parse(txtCostoEnvioDecimal.Text);
+                precio = UInt32.Parse(txtPrecio.Text);
+                porcentaje = UInt32.Parse(txtPorcentaje.Text);
+                costo = UInt32.Parse(txtCostoEnvio.Text);
+                precioDecimal = UInt32.Parse(txtPrecioDecimal.Text);
+                costoDecimal = UInt32.Parse(txtCostoEnvioDecimal.Text);
             }
             catch (System.FormatException)
             {
                 MessageBox.Show("Valores invalidos en precio/porcentaje/costo de envio. Ingrese solamente numeros enteros ", "Alta Visibilidad", MessageBoxButtons.OK);
                 return;
             }
-            
+            catch (System.OverflowException)
+            {
+                MessageBox.Show("Ingrese numeros positivos en los formularios verdes", "Alta Visibilidad", MessageBoxButtons.OK);
+                return;
+            }
+
             if (precio < 0 || porcentaje < 0 || costo < 0){
                 MessageBox.Show("No se pueden ingresar valores negativos ", "Alta Visibilidad", MessageBoxButtons.OK);
                 return;

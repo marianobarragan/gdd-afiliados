@@ -59,7 +59,8 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
             txtRazonSocial.Text = dt.Rows[0][0].ToString();
             txtNombre.Text = dt.Rows[0][1].ToString();
             txtCUIT.Text = dt.Rows[0][2].ToString();
-            cmbRubros.SelectedIndex = Int32.Parse(dt.Rows[0][3].ToString());
+            
+            cmbRubros.SelectedIndex = Int32.Parse(dt.Rows[0][3].ToString()) - 1;
             txtNumeroTelefono.Text = dt.Rows[0][4].ToString();
             txtCiudad.Text = dt.Rows[0][5].ToString();
             txtLocalidad.Text = dt.Rows[0][6].ToString();

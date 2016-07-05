@@ -108,6 +108,7 @@ namespace MercadoEnvio.Listado_Estadistico
               
             if (indice == 0) {
                 //topVendedoresConMayorCantidadDeProductosNoVendidos();
+                
                 string comando2 = "SELECT * FROM DBME.topVendedoresConMayorCantidadDeProductosNoVendidos ('" + trimestre + "','" + anio + "','" + visibilidad_descripcion + "')";
                 this.ejecutarComando(comando2);
             }

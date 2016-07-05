@@ -1,3 +1,14 @@
+/*
+El script está dividido en diferentes secciones:
+	-Creación de tablas
+	-Migración de la tabla maestra
+	-Funciones (tops del listado estadístico y funciones del reloj)
+	-Procedures creacionales
+	-Triggers
+	-Procedures de comunicación
+	-Procedures de dominio
+*/
+
 USE[GD1C2016];
 GO
 
@@ -272,7 +283,7 @@ GO
 CREATE PROCEDURE DBME.migrarDomicilio2
 AS
 BEGIN
-
+	--Se realizan querys para obtener los datos correspondientes al domicilio de cada empresa y cliente por separado
 	INSERT INTO DBME.domicilio(codigo_postal,domicilio_calle,numero_calle,piso,departamento)
 	SELECT Publ_Cli_Cod_Postal,Publ_Cli_Dom_Calle,Publ_Cli_Nro_Calle,Publ_Cli_Piso,Publ_Cli_Depto
 	FROM gd_esquema.Maestra
@@ -285,13 +296,12 @@ BEGIN
 END;
 GO
 
---SELECT SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', 'w23e')), 3, 250) 
-
---SELECT HASHBYTES('SHA2_256','w23e'),'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7' FROM 
 CREATE PROCEDURE DBME.migrarClientes  -- de PUBL CLI
 AS
 BEGIN
-
+	--Se seleccionan los datos de cada cliente de la tabla maestra.
+	--Para los atributos mail, username y password (encriptado) se utiliza el mail del cliente.
+	--Todos los clientes migrados se encuentran habilitados.
 
 	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id,fecha_creacion,telefono,es_nuevo,posee_baja_logica)
 	SELECT DISTINCT Publ_Cli_Mail,Publ_Cli_Mail,HASHBYTES('SHA2_256',Publ_Cli_Mail),1,0, d.domicilio_id ,NULL,NULL,0,0
@@ -302,17 +312,16 @@ BEGIN
 	SELECT DISTINCT u.usuario_id, m.Publ_Cli_Apeliido, m.Publ_Cli_Nombre,m.Publ_Cli_Dni,'DNI',m.Publ_Cli_Fecha_Nac
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Cli_Mail = u.mail)
 	
-	
-	--UPDATE DBME.usuario SET password = SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', password)), 3, 250)
-
-		
 END;
 GO
 
 CREATE PROCEDURE DBME.migrarEmpresas
 AS
 BEGIN
-	
+	--Se seleccionan los datos de cada empresa de la tabla maestra.
+	--Para los atributos mail, username y password se utiliza el mail de la empresa.
+	--Todos los empresa migrados se encuentran habilitados.
+	--El nombre de contacto para todas las empresas será la razón social
 	INSERT INTO DBME.usuario(mail,username,password,habilitado,cantidad_intentos_fallidos,domicilio_id ,fecha_creacion,telefono,es_nuevo,posee_baja_logica)
 	SELECT DISTINCT Publ_Empresa_Mail, Publ_Empresa_Mail,HASHBYTES('SHA2_256',Publ_Empresa_Mail),1,0, d.domicilio_id ,NULL,NULL,0,0
 	FROM gd_esquema.Maestra m JOIN DBME.domicilio d ON (m.Publ_Empresa_Cod_Postal = d.codigo_postal)
@@ -344,7 +353,7 @@ GO
 CREATE PROCEDURE DBME.migrarRubro
 AS 
 BEGIN
-
+	--El nombre lo dice todo :)
 	INSERT INTO DBME.rubro(descripcion_larga,descripcion_corta)
 	SELECT DISTINCT NULL,Publicacion_Rubro_Descripcion
 	FROM gd_esquema.Maestra
@@ -356,11 +365,11 @@ CREATE PROCEDURE DBME.migrarVisibilidad
 AS
 BEGIN
 
-	--Se migran los fabricante de la tabla Maestra
+	--Se migran los tipos de visibilidad de la tabla Maestra
 	INSERT INTO DBME.visibilidad( visibilidad_descripcion, visibilidad_porcentaje, visibilidad_precio, visibilidad_costo_envio,posee_baja_logica)
 	SELECT DISTINCT Publicacion_Visibilidad_Desc, Publicacion_Visibilidad_Porcentaje, Publicacion_Visibilidad_Precio, 50, 0
 	FROM gd_esquema.Maestra
-
+	--El costo de envio de los tipos de visibilidad migrados tiene un valor fijo de 50 pesos.
 	UPDATE DBME.visibilidad
 	SET visibilidad_costo_envio = 50
 	
@@ -374,8 +383,9 @@ GO
 CREATE PROCEDURE DBME.migrarFacturas
 AS
 BEGIN
-	
-	SET IDENTITY_INSERT DBME.factura ON;
+	--En este procedure se migran las facturas y los detalle-factura.
+	--Para el atributo ID de cada factura se utiliza Factura_Nro de la tabla maestra
+	SET IDENTITY_INSERT DBME.factura ON;--Permite insertar en el atributo ID de la tabla DBME.factura
 	SET IDENTITY_INSERT DBME.factura_detalle OFF;
 	
 	INSERT INTO DBME.factura(factura_id,fecha,monto_total,forma_pago_desc,usuario_id,publicacion_id)
@@ -386,7 +396,7 @@ BEGIN
 	SELECT DISTINCT Factura_Nro,Factura_Fecha,Factura_Total,Forma_Pago_Desc,u.usuario_id,Publicacion_Cod
 	FROM gd_esquema.Maestra m LEFT JOIN DBME.usuario u ON (m.Publ_Empresa_Mail= u.mail)
 	WHERE Factura_Nro IS NOT NULL AND Publ_Empresa_Mail IS NOT NULL)
-
+	--Para todas las descripciones de los detalles de factura migrados se utiliza "INDEFINIDO"
 	INSERT INTO DBME.factura_detalle(factura_id,factura_cantidad,monto_parcial,tipo_de_item)
 	SELECT Factura_Nro,Item_Factura_Cantidad,Item_Factura_Monto,'INDEFINIDO'
 	FROM gd_esquema.Maestra 
@@ -399,7 +409,8 @@ CREATE PROCEDURE DBME.migrarCalificaciones
 AS
 BEGIN
 	SET IDENTITY_INSERT DBME.calificacion ON;
-
+	--Se migran calificaciones
+	--Se utliza el ID de la tabla maestra
 	INSERT INTO DBME.calificacion(calificacion_id,cantidad_estrellas,autor_id,descripcion,fecha)
 	SELECT m.Calificacion_Codigo,m.Calificacion_Cant_Estrellas/2,u.usuario_id,'Sin descripción',Compra_Fecha
 	FROM gd_esquema.Maestra m LEFT JOIN DBME.usuario u ON (m.Cli_Mail=u.mail)
@@ -421,53 +432,19 @@ GO
 CREATE PROCEDURE DBME.migrarOfertas
 AS
 BEGIN
-
-	--DECLARE cursor_para_ofertas CURSOR FOR
+	
 	INSERT INTO DBME.oferta (monto,fecha,autor_id,publicacion_id)
 	SELECT Oferta_Monto,Oferta_Fecha,u.usuario_id,Publicacion_Cod
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Cli_Mail = u.mail)
 	WHERE Oferta_Fecha IS NOT NULL 
 	
-	/*
-	order by Publicacion_Cod
-	DECLARE @Publ_Empresa_Mail AS NVARCHAR(255)
-	DECLARE @Publ_Cli_Mail AS NVARCHAR(255)
-	DECLARE @Publicacion_Cod AS NUMERIC(18,0)
-	DECLARE @Oferta_Monto AS NUMERIC(18,2)
-	DECLARE @Oferta_Fecha AS DATETIME
-	DECLARE @usuario_id AS INT
-	DECLARE @oferta_id AS INT
-	
-	OPEN cursor_para_ofertas 
-	FETCH cursor_para_ofertas INTO @Publ_Empresa_Mail,@Publ_Cli_Mail,@Publicacion_Cod,@Oferta_Monto,@Oferta_Fecha
-
-	WHILE (@@FETCH_STATUS = 0)
-		BEGIN
-			IF (@Publ_Empresa_Mail IS NOT NULL)
-				BEGIN
-					EXECUTE DBME.devolverIdDeMail @Publ_Empresa_Mail,@usuario_id OUT
-
-					INSERT INTO DBME.oferta (monto,fecha,autor_id,publicacion_id)
-					VALUES (@Oferta_Monto,@Oferta_Fecha,@usuario_id,@Publicacion_Cod)
-				END
-			ELSE
-				BEGIN
-					EXECUTE DBME.devolverIdDeMail @Publ_Cli_Mail,@usuario_id OUT
-
-					INSERT INTO DBME.oferta (monto,fecha,autor_id,publicacion_id)
-					VALUES (@Oferta_Monto,@Oferta_Fecha,@usuario_id,@Publicacion_Cod)
-				END
-			FETCH cursor_para_ofertas INTO @Publ_Empresa_Mail,@Publ_Cli_Mail,@Publicacion_Cod,@Oferta_Monto,@Oferta_Fecha
-		END
-	CLOSE cursor_para_ofertas
-	DEALLOCATE cursor_para_ofertas*/
 END;
 GO
 
 CREATE PROCEDURE DBME.migrarEstados
 AS
 BEGIN
-
+	--Se migran los estados de publicación a una nueva tabla según lo indicado por la correción
 	INSERT INTO DBME.estado (estado_id,estado_descripcion)
 	VALUES('BORRADOR','Publicación Borrador, visible solo para el autor')
 	INSERT INTO DBME.estado (estado_id,estado_descripcion)
@@ -483,7 +460,7 @@ GO
 CREATE PROCEDURE DBME.migrarTipos
 AS
 BEGIN
-
+	--Se migran los tipos de publicación a una nueva tabla según lo indicado por la correción
 	INSERT INTO DBME.tipo(tipo_id)
 	VALUES('Subasta')
 	INSERT INTO DBME.tipo (tipo_id)
@@ -495,10 +472,11 @@ GO
 CREATE PROCEDURE DBME.migrarPublicaciones
 AS
 BEGIN
-
+	--Se migran las publicaciones
+	--Se seleccionan las publicaciones por compra inmediata y por subasta, los cuales se dividen entre las hechas por clientes y por empresas.
+	--Luego se insertan en la tabla DBME.publicacion con diferentes criterios dependiendo su tipo según corresponda
 	SET IDENTITY_INSERT DBME.publicacion ON;
 
-	--DECLARE cursor_para_publicaciones CURSOR FOR
 	INSERT INTO DBME.publicacion(publicacion_id,descripcion,cantidad,stock,fecha_creacion,fecha_vencimiento,precio,estado,publicacion_tipo,rubro_id,visibilidad_id,autor_id,permite_preguntas,realiza_envio)
 	SELECT DISTINCT Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,0,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,'FINALIZADA',Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id,0,0  
 	FROM gd_esquema.Maestra m JOIN DBME.visibilidad v ON (m.Publicacion_Visibilidad_Desc = v.visibilidad_descripcion) JOIN DBME.rubro r ON (m.Publicacion_Rubro_Descripcion = r.descripcion_corta) JOIN DBME.usuario u ON (u.mail = m.Publ_Cli_Mail)
@@ -519,74 +497,14 @@ BEGIN
 	WHERE Publicacion_Tipo = 'Subasta' AND Publ_Empresa_Mail IS NOT NULL
 	GROUP BY Publicacion_Cod,Publicacion_Descripcion,Publicacion_Stock,Publicacion_Fecha,Publicacion_Fecha_Venc,Publicacion_Precio,Publicacion_Estado,Publicacion_Tipo,r.rubro_id,v.visibilidad_id,u.usuario_id
 	
-	/*	
-	UPDATE DBME.publicacion 
-	SET fecha_finalizacion_subasta = g.Compra_Fecha
-	FROM gd_esquema.Maestra g 
-	WHERE g.Publicacion_Cod = publicacion_id AND g.publicacion_tipo = 'Subasta'
-		
-	
-	DECLARE @Publicacion_Cod AS NUMERIC(18,0)
-	DECLARE @Publicacion_Descripcion AS NVARCHAR(255) 
-	DECLARE @Publicacion_Tipo AS NVARCHAR(255)
-	DECLARE @Publicacion_Stock AS NUMERIC(18,0)
-	DECLARE @Publicacion_Fecha AS DATETIME
-	DECLARE @Publicacion_Fecha_Venc AS DATETIME
-	DECLARE @Publicacion_Precio AS NUMERIC(18,2)
-	DECLARE @Publicacion_Estado AS NVARCHAR(255)
-	DECLARE @Publicacion_Rubro_Descripcion AS NVARCHAR(255)
-	DECLARE @rubro_id AS INT
-	DECLARE @Publicacion_Visibilidad_Cod AS INT
-	DECLARE @Publ_Cli_Mail AS NVARCHAR(255)
-	DECLARE @Publ_Empresa_Mail AS NVARCHAR(255)
-	DECLARE @usuario_id AS INT
-
-	OPEN cursor_para_publicaciones
-	FETCH cursor_para_publicaciones INTO @Publicacion_Cod,@Publicacion_Descripcion,@Publicacion_Stock,@Publicacion_Fecha,
-	@Publicacion_Fecha_Venc,@Publicacion_Precio,@Publicacion_Estado,@Publicacion_Tipo,@Publicacion_Rubro_Descripcion,@Publicacion_Visibilidad_Cod,@Publ_Cli_Mail,@Publ_Empresa_Mail
-	WHILE (@@FETCH_STATUS = 0)
-		BEGIN
-			EXECUTE DBME.devolverIdRubroDeDescripcion @Publicacion_Rubro_Descripcion,@rubro_id OUT
-			
-			IF (@publicacion_tipo = 'Compra Inmediata')
-			BEGIN
-				IF (@Publ_Cli_Mail IS NOT NULL)
-				BEGIN
-					EXECUTE DBME.devolverIdDeMail @Publ_Cli_Mail,@usuario_id OUT
-				END
-				ELSE
-				BEGIN
-					EXECUTE DBME.devolverIdDeMail @Publ_Empresa_Mail,@usuario_id OUT
-				END
-				INSERT INTO DBME.publicacion(publicacion_id,descripcion,stock,fecha_creacion,fecha_vencimiento,precio,publicacion_tipo,estado,permite_preguntas,realiza_envio,rubro_id,visibilidad_id,autor_id,cantidad)
-				VALUES (@Publicacion_Cod,@Publicacion_Descripcion,@Publicacion_Stock,@Publicacion_Fecha,@Publicacion_Fecha_Venc,@Publicacion_Precio,@Publicacion_Tipo,'FINALIZADA',1,0,@rubro_id,@Publicacion_Visibilidad_Cod,@usuario_id,0)
-			END
-			ELSE
-			BEGIN
-				IF(@Publ_Cli_Mail IS NOT NULL)
-				BEGIN
-					EXECUTE DBME.devolverIdDeMail @Publ_Cli_Mail,@usuario_id OUT
-					END
-				ELSE
-				BEGIN
-					EXECUTE DBME.devolverIdDeMail @Publ_Empresa_Mail,@usuario_id OUT
-				END
-				INSERT INTO DBME.publicacion(publicacion_id,descripcion,stock,fecha_creacion,fecha_vencimiento,publicacion_tipo,estado,permite_preguntas,realiza_envio,rubro_id,visibilidad_id,autor_id,cantidad)
-				VALUES (@Publicacion_Cod,@Publicacion_Descripcion,@Publicacion_Stock,@Publicacion_Fecha,@Publicacion_Fecha_Venc,@Publicacion_Tipo,'FINALIZADA',1,0,@rubro_id,@Publicacion_Visibilidad_Cod,@usuario_id,0)
-				
-			END
-			FETCH cursor_para_publicaciones INTO @Publicacion_Cod,@Publicacion_Descripcion,@Publicacion_Stock,@Publicacion_Fecha,@Publicacion_Fecha_Venc,@Publicacion_Precio,
-			@Publicacion_Estado,@Publicacion_Tipo,@Publicacion_Rubro_Descripcion,@Publicacion_Visibilidad_Cod,@Publ_Cli_Mail,@Publ_Empresa_Mail
-		END
-	CLOSE cursor_para_publicaciones
-	DEALLOCATE cursor_para_publicaciones*/
 END;
 GO
 
 CREATE PROCEDURE DBME.migrarCompras
 AS
 BEGIN
-
+	--Se migran las compras, y sus respectivas referencias a calificacion y publicacion.
+	--Se actualiza la referencia compra_id en la tabla calificacion
 	INSERT INTO DBME.compra (cantidad,fecha,autor_id,publicacion_id,esta_calificada)
 	SELECT Compra_Cantidad,Compra_Fecha,u.usuario_id,Publicacion_Cod,1
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Cli_Mail=u.mail)
@@ -632,7 +550,7 @@ GO
 CREATE PROCEDURE DBME.setHoraDelSistema (@nueva_hora DATETIME)
 AS
 BEGIN
-	
+	--Se setea el reloj según lo indicado en el archivo de configuración
 	BEGIN TRY
 		DELETE FROM DBME.reloj
 	
@@ -650,7 +568,7 @@ CREATE FUNCTION DBME.getHoraDelSistema()
 RETURNS DATETIME
 AS
 BEGIN
-
+	--Funcion para obtener la hora del sistema, para su uso dentro de la base de datos.
 	DECLARE @hora_actual AS DATETIME
 	SELECT @hora_actual = hora_actual FROM DBME.reloj
 	
@@ -814,7 +732,7 @@ CREATE PROCEDURE DBME.crearDomicilio (
 	@domicilio_id INT OUT)
 AS
 BEGIN
-	
+		--Procedure que genera un nuevo domicilio, y devuelve su id para su posterior uso
 	INSERT INTO DBME.domicilio(ciudad,localidad,codigo_postal,piso,departamento,domicilio_calle,numero_calle)
 	VALUES (@ciudad,@localidad,@codigo_postal,@piso,@departamento,@domicilio_calle,@numero_calle)
 
@@ -838,7 +756,8 @@ CREATE PROCEDURE DBME.crearUsuario(
 	@usuario_id INT OUT)
 AS
 BEGIN
-
+	--Procedure que genera un nueva entrada en la tabla usuario, guarda la contraseña con la encriptación SHA2_256 y devuelve su id para su posterior uso
+	--Recibe también todos los datos necesarios para crear el domicilio
 	DECLARE @domicilio_id AS INT 
 	EXECUTE DBME.crearDomicilio @ciudad,@localidad,@codigo_postal,@piso,@departamento,@domicilio_calle,@numero_calle,@domicilio_id OUT
 
@@ -869,7 +788,8 @@ CREATE PROCEDURE DBME.crearCliente(
 	@cliente_id INT OUT)
 AS
 BEGIN
-	
+	--Genera un nuevo cliente, recibiendo todos los datos para crear un nuevo usuario y domicilio.
+	--Devuelve el id del cliente creado.
 	DECLARE @usuario_id AS INT
 
 	EXECUTE DBME.crearUsuario @username,@password,@mail,@telefono,@ciudad,@localidad,@codigo_postal,@piso,@departamento,@domicilio_calle,@numero_calle, @usuario_id OUT
@@ -905,7 +825,8 @@ CREATE PROCEDURE DBME.crearEmpresa(
 	@cliente_id INT OUT)
 AS
 BEGIN
-	
+	--Genera un nueva empresa, recibiendo todos los datos para crear un nuevo usuario y domicilio.
+	--Devuelve el id de la empresa creado.
 	DECLARE @usuario_id AS INT
 
 	EXECUTE DBME.crearUsuario @username,@password,@mail,@telefono,@ciudad,@localidad,@codigo_postal,@piso,@departamento,@domicilio_calle,@numero_calle, @usuario_id OUT
@@ -924,7 +845,7 @@ GO
 CREATE PROCEDURE DBME.crearAdministradores
 AS
 BEGIN
-
+	--Crea al administrador
 	DECLARE @usuario_id AS INT
 										--w23e encriptado
 	EXECUTE DBME.crearUsuario 'admin','w23e','mail@admin.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, @usuario_id OUT
@@ -942,7 +863,7 @@ GO
 CREATE PROCEDURE DBME.nuevoCliente (@username NVARCHAR(255), @password NVARCHAR(255), @mail NVARCHAR(255), @nombre NVARCHAR(255), @apellido NVARCHAR(255),@fechaNacimiento DATETIME, @tipoDocumento NVARCHAR(3),@numero_documento NUMERIC(18,0),@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT)
 AS
 BEGIN
-
+	--Crea un nuevo cliente de manera atómica y con el respectivo manejo de errores
 	DECLARE @mensaje_error varchar(100)
 	DECLARE @cliente_id INT
 
@@ -965,7 +886,9 @@ GO
 CREATE PROCEDURE DBME.updateCliente (@cliente_id INT, @nombre NVARCHAR(255), @apellido NVARCHAR(255),@fechaNacimiento DATETIME, @tipoDocumento NVARCHAR(3),@numero_documento NUMERIC(18,0),@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT, @habilitado BIT)
 AS
 BEGIN
-
+	--Procedure que está para mantener la consistencia con el TP, refleja cambios en tablas domicilio, cliente y usuario
+	--Tiene manejo de errores
+	--Se realiza de manera atómica
 	DECLARE @mensaje_error varchar(100)
 	DECLARE @usuario_id INT
 	DECLARE @domicilio_id INT
@@ -1000,7 +923,7 @@ GO
 CREATE PROCEDURE DBME.nuevaEmpresa (@username NVARCHAR(255), @password NVARCHAR(255), @mail NVARCHAR(255), @nombre NVARCHAR(255),@razon_social NVARCHAR(255), @cuit NVARCHAR(50), @rubro_id INT, @ciudad NVARCHAR(255), @localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@numero_calle NUMERIC(18,0),@piso NUMERIC(18,0),@departamento NVARCHAR(50), @telefono BIGINT)
 AS
 BEGIN
-
+	--Crea una nueva empresa de manera atómica y con el respectivo manejo de errores
 	DECLARE @mensaje_error varchar(100)
 	DECLARE @empresa_id INT
 	DECLARE @date DATETIME
@@ -1026,7 +949,9 @@ GO
 CREATE PROCEDURE DBME.updateEmpresa (@empresa_id INT, @nombre NVARCHAR(255), @razon_social NVARCHAR(255),@cuit NVARCHAR(50),@rubro_id INT ,@ciudad NVARCHAR(255),@localidad NVARCHAR(255),@codigo_postal NVARCHAR(50), @domicilio_calle NVARCHAR(255),@altura_calle NUMERIC (18,0),@numero_piso NUMERIC(18,0), @departamento NVARCHAR(50), @numero_telefono BIGINT, @habilitado BIT)
 AS
 BEGIN
-
+	--Procedure que está para mantener la consistencia con el TP, refleja cambios en tablas domicilio, empresa y usuario
+	--Tiene manejo de errores
+	--Se realiza de manera atómica
 	DECLARE @mensaje_error varchar(100)
 	DECLARE @usuario_id INT
 	DECLARE @domicilio_id INT
@@ -1064,6 +989,9 @@ GO
 CREATE PROCEDURE DBME.crearFactura (@publicacion_id NUMERIC(18,2) , @usuario_id INT, @precio NUMERIC(18,2),@factura_id INT OUT)
 AS
 BEGIN
+	--Crea una factura de manera atómica
+	--Tiene manejo de errores
+	--Devuelve el id de la factura creada
 	DECLARE @mensaje_error AS NVARCHAR(99)
 		
 	BEGIN TRY
@@ -1088,6 +1016,8 @@ GO
 CREATE PROCEDURE DBME.crearDetalleFactura (@cantidad NUMERIC(18,0), @tipo_de_item VARCHAR(64), @factura_id INT,@monto_parcial NUMERIC(18,2))
 AS
 BEGIN
+	--Crea el detalle factura de manera atómica
+	--Tiene manejo de errores
 	DECLARE @mensaje_error AS NVARCHAR(99)
 		
 	BEGIN TRY
@@ -1113,7 +1043,7 @@ GO
 CREATE PROCEDURE DBME.crearCompraInmediata (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME,@precio NUMERIC(18,2), @rubro_id INT, @visibilidad_id NUMERIC(18,0), @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit, @costo NUMERIC(18,2))
 AS
 BEGIN
-
+	--Crea una nueva compra inmediata de manera atómica, y con manejo de errores.
 	DECLARE @mensaje_error AS NVARCHAR(99)
 	DECLARE @publicacion_id AS NUMERIC(18,0)
 	
@@ -1124,7 +1054,7 @@ BEGIN
 
 	BEGIN TRY
 		BEGIN TRANSACTION	
-
+		--Si es la primera publicación del usuario
 		IF ((SELECT es_nuevo FROM DBME.usuario WHERE usuario_id = @autor_id) = 1 )
 		BEGIN
 			SET @costo = 0
@@ -1137,7 +1067,8 @@ BEGIN
 		SET @publicacion_id = SCOPE_IDENTITY()
 		DECLARE @descripcion_facha AS VARCHAR(64)
 		SET @descripcion_facha =  'Costo visibilidad ' + CONVERT(VARCHAR(64),@visibilidad_descripcion) 
-
+		
+		--Se genera la factura correspondiente si tiene el estado "ACTIVA"
 		IF (@estado = 'ACTIVA')
 		BEGIN
 			EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
@@ -1159,7 +1090,7 @@ GO
 CREATE PROCEDURE DBME.crearSubasta (@descripcion NVARCHAR(255),@stock NUMERIC(18,0),@fecha_creacion DATETIME,@fecha_vencimiento DATETIME, @costo NUMERIC(18,2), @rubro_id INT, @visibilidad_id NUMERIC(18,0), @autor_id INT, @estado NVARCHAR(255),@permite_preguntas bit,@realiza_envio bit, @valor_inicial DECIMAL(10,2))
 AS
 BEGIN
-
+	--Crea una nueva subasta de manera atómica, y con manejo de errores.
 	DECLARE @mensaje_error AS NVARCHAR(99)
 	DECLARE @publicacion_id AS NUMERIC(18,0)
 	
@@ -1169,8 +1100,9 @@ BEGIN
 	DECLARE @factura_id AS INT
 
 	BEGIN TRY
-		BEGIN TRANSACTION	
-
+		BEGIN TRANSACTION
+			
+				--Si es la primera publicación del usuario
 		IF ((SELECT es_nuevo FROM DBME.usuario WHERE usuario_id = @autor_id) = 1 )
 		BEGIN
 			SET @costo = 0
@@ -1183,7 +1115,8 @@ BEGIN
 		SET @publicacion_id = SCOPE_IDENTITY()
 		DECLARE @descripcion_facha AS VARCHAR(64)
 		SET @descripcion_facha = 'Costo visibilidad: ' + CONVERT(VARCHAR(64),@visibilidad_descripcion) 
-
+				
+				--Se genera la factura correspondiente si tiene el estado "ACTIVA"')
 		IF (@estado = 'ACTIVA')
 		BEGIN
 			EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
@@ -1212,7 +1145,8 @@ ON DBME.compra
 FOR INSERT
 AS
 BEGIN
-
+--Este trigger se ejecuta cuando se realiza una compra con éxito
+	--Crea una nueva factura cuando hay una compra inmediata en cualquier momento y el sistema "barre" las subastas finalizadas
 	DECLARE @hora DATETIME
 	DECLARE @autor_id INT
 	DECLARE @factura_id INT
@@ -1223,7 +1157,7 @@ BEGIN
 	DECLARE @publicacion_id AS NUMERIC(18,0) = (SELECT publicacion_id FROM inserted)
 	DECLARE @costo NUMERIC(18,2) = (SELECT costo FROM DBME.publicacion WHERE publicacion_id = @publicacion_id)
 	DECLARE @cantidad NUMERIC(18,0) = (SELECT cantidad FROM inserted)
-
+		--Si la compra corresponde a una compra inmediata
 	IF ((SELECT publicacion_tipo FROM DBME.publicacion WHERE publicacion_id = @publicacion_id) = 'Subasta')
 	BEGIN 
 
@@ -1232,7 +1166,7 @@ BEGIN
 		FROM dbme.oferta o
 		WHERE o.publicacion_id = @publicacion_id
 		ORDER BY o.monto DESC)
-
+				--Agarro los datos necesarios para la factura
 		SELECT @cantidad = cantidad,@hora = DBME.getHoraDelSistema(),@autor_id = p.autor_id,@visibilidad = v.visibilidad_descripcion,@costo_envio = v.visibilidad_costo_envio,@comision = visibilidad_porcentaje * o.monto
 		FROM DBME.publicacion p JOIN DBME.oferta o ON (p.publicacion_id = o.publicacion_id) JOIN DBME.visibilidad v ON (v.visibilidad_id = p.visibilidad_id)
 		WHERE o.oferta_id=@oferta_id_ganador
@@ -1248,10 +1182,10 @@ BEGIN
 		EXECUTE DBME.crearDetalleFactura 1,'Costo envio',@factura_id,@costo_envio
 		EXECUTE DBME.crearDetalleFactura @cantidad,'Comision por producto',@factura_id,@comision
 	END;
-					
+	--Si la compra corresponde a una subasta								
 	IF ((SELECT publicacion_tipo FROM DBME.publicacion WHERE publicacion_id = @publicacion_id AND estado = 'ACTIVA') = 'Compra Inmediata')
 	BEGIN 
-		
+				--Agarro los datos necesarios para la factura
 		SELECT @costo_envio = v.visibilidad_costo_envio,@comision = p.precio*i.cantidad*v.visibilidad_porcentaje
 		FROM DBME.visibilidad v JOIN DBME.publicacion p ON (v.visibilidad_id = p.visibilidad_id) JOIN inserted i ON (p.publicacion_id = i.publicacion_id) 
 		WHERE p.publicacion_id = @publicacion_id
@@ -1264,24 +1198,16 @@ BEGIN
 		SET @autor_id = (SELECT autor_id FROM dbme.publicacion WHERE publicacion_id = @publicacion_id)
 		SET @CostoTotal = @costo_envio + @comision
 
-		
+		UPDATE DBME.publicacion
+		SET stock = stock - @cantidad
+		WHERE publicacion_id = @publicacion_id
+				--Si la compra inmediata se queda sin stock le actualizo el estado a finalizada
 		IF((SELECT stock FROM DBME.publicacion WHERE publicacion_id = @publicacion_id) = 0)
 		BEGIN
 			UPDATE DBME.publicacion
 			SET estado = 'FINALIZADA'
 			WHERE publicacion_id = @publicacion_id
 		END
-
-		/*
-		UPDATE DBME.publicacion
-		SET stock = stock-i.cantidad 
-		FROM inserted i
-		WHERE i.publicacion_id = @publicacion_id
-		*/
-
-		UPDATE DBME.publicacion
-		SET stock = stock - @cantidad
-		WHERE publicacion_id = @publicacion_id
 
 		EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@CostoTotal,@factura_id OUT
 		EXECUTE DBME.crearDetalleFactura 1,'Costo envio',@factura_id,@costo_envio
@@ -1314,6 +1240,8 @@ GO
 CREATE PROCEDURE DBME.loginUsuario (@username nvarchar(255),@contrasenia nvarchar(255))
 AS
 BEGIN
+
+	--Procedure que maneja el login del usuario al sistema
 	DECLARE @u_id INT
 	DECLARE @u_password NVARCHAR(255)
 	DECLARE @u_habilitado bit
@@ -1327,12 +1255,6 @@ BEGIN
 	SELECT @u_id = usuario_id, @u_password = password, @u_habilitado = habilitado, @cantidad_intentos_fallidos = cantidad_intentos_fallidos,@u_baja = posee_baja_logica
 	FROM DBME.usuario
 	WHERE DBME.usuario.username = @username 
-	
-	/*
-	SELECT @u_id = DBME.usuario.usuario_id, @u_password = usuario.password, @u_habilitado = habilitado, @cantidad_intentos_fallidos = DBME.usuario.cantidad_intentos_fallidos
-	FROM DBME.usuario
-	WHERE DBME.usuario.username = @username
-	*/
 
 
 	IF (@U_id IS NULL)
@@ -1363,7 +1285,7 @@ BEGIN
 	BEGIN
 		SET @cantidad_intentos_fallidos = @cantidad_intentos_fallidos + 1
 		UPDATE DBME.usuario SET cantidad_intentos_fallidos = @cantidad_intentos_fallidos WHERE usuario_id = @u_id
-		
+				--Si el usuario supera la cantidad de intentos permitidos
 		IF (@cantidad_intentos_fallidos > 2)
 		BEGIN
 			UPDATE DBME.usuario SET usuario.habilitado = 0 WHERE usuario_id = @u_id
@@ -1378,7 +1300,7 @@ BEGIN
 		
 		END
 	END 
-
+		--login correcto
 	IF (@contrasenia = @u_password)
 	BEGIN 
 		UPDATE DBME.usuario SET cantidad_intentos_fallidos = 0 WHERE DBME.usuario.usuario_id = @u_id
@@ -1394,7 +1316,7 @@ GO
 CREATE PROCEDURE DBME.calificarAlVendedor (@compra_id INT,@cliente_id INT, @comentario NVARCHAR(255), @calificacion numeric(18,0))
 AS
 BEGIN
-
+		--Crea una nueva calificacion y actualiza el campo en la tabla compra
 		INSERT INTO DBME.calificacion(cantidad_estrellas,descripcion,fecha,autor_id,compra_id) VALUES(@calificacion,@comentario, DBME.getHoraDelSistema(),@cliente_id,@compra_id)
 		UPDATE DBME.compra
 		SET esta_calificada = 1
@@ -1410,13 +1332,13 @@ BEGIN
 	DECLARE @hora_actual DATETIME
 	SELECT @hora_actual = DBME.getHoraDelSistema()
 
-	--BEGIN TRY
-
+			-- Procedure que se ejecuta cuando un usuario se loguea en el sistema
+		
+		--Se encarga de lo siguiente:
 		-- verificar las publicaciones activas
 		-- marcarlas como finalizadas
 		-- ver si alguien gano las subastas 
-		-- generar las facturas correspondientes
-		
+		--Generar la compra para la subasta con ganador	
 		DECLARE @publicacion_id NUMERIC(18,0)
 		DECLARE @publicacion_tipo NVARCHAR(255)
 		DECLARE @oferta_id_ganador INT
@@ -1443,40 +1365,7 @@ BEGIN
 			
 			IF (@publicacion_tipo = 'Subasta')
 			BEGIN
-				
-				/*SET @oferta_id_ganador = (SELECT TOP 1 o.oferta_id 
-				FROM dbme.oferta o
-				WHERE o.publicacion_id = @publicacion_id
-				ORDER BY o.monto DESC)
-				
-				
-				IF (@oferta_id_ganador IS NOT NULL)
-				BEGIN
-					
-					
-					DECLARE @factura_id INT
-					DECLARE @costo NUMERIC(18,2) = (SELECT costo FROM DBME.publicacion WHERE publicacion_id = @publicacion_id)
-					DECLARE @visibilidad NVARCHAR(255)
-					DECLARE @costo_envio NUMERIC(10,2)
-					DECLARE @comision NUMERIC(18,2) 
 
-					SELECT @cantidad = cantidad,@hora = DBME.getHoraDelSistema(),@autor_id = o.autor_id,@visibilidad = v.visibilidad_descripcion,@costo_envio = v.visibilidad_costo_envio,@comision = visibilidad_porcentaje * o.monto
-					FROM DBME.publicacion p JOIN DBME.oferta o ON (p.publicacion_id = o.publicacion_id) JOIN DBME.visibilidad v ON (v.visibilidad_id = p.visibilidad_id)
-					WHERE o.oferta_id=@oferta_id_ganador
-
-					
-
-					DECLARE @descripcion_facha AS VARCHAR(64)
-					SET @descripcion_facha =  'Costo visibilidad ' + CONVERT(VARCHAR(64),@visibilidad) 
-
-					EXECUTE DBME.crearFactura @publicacion_id, @autor_id,@costo,@factura_id OUT
-					EXECUTE DBME.crearDetalleFactura 1,@descripcion_facha, @factura_id,@costo
-					EXECUTE DBME.crearDetalleFactura 1,'Costo envio ',@factura_id,@costo_envio
-					EXECUTE DBME.crearDetalleFactura 1,'Comision',@factura_id,@comision
-
-				END
-				
-				*/
 				DECLARE @cantidad NUMERIC(18,0)
 				DECLARE @hora DATETIME
 				DECLARE @autor_id INT
@@ -1515,24 +1404,6 @@ BEGIN
 END; 
 GO
 
-/*
-create procedure DBME.sida
-AS
-BEGIN
-	
-	DECLARE @mensaje_error varchar(100)
-	DECLAre @sida VARCHAR (5)
-	SET @sida = 'ho'
-	BEGIN TRY
-		INSERT INTO DBME.domicilio (numero_calle) VALUES (@sida)
-	END TRY
-	BEGIN CATCH
-		SET @mensaje_error = 'El usuario ingresado no existe'
-		RAISERROR(@mensaje_error, 12, 1)
-	END CATCH 
-END;
-GO*/
-
 
 
 /* END PROCEDURES COMUNICACION */
@@ -1543,7 +1414,7 @@ GO*/
 CREATE PROCEDURE DBME.validarUsuarioExistente (@username NVARCHAR(255),@mail NVARCHAR(255))
 AS
 BEGIN
-	
+		--Devuelve si existe un usuario con el mail o username
 	IF (EXISTS(SELECT username,mail FROM DBME.usuario WHERE username = @username OR mail = @mail))
 	BEGIN
 		SELECT 'true'
@@ -1559,6 +1430,7 @@ GO
 CREATE PROCEDURE DBME.cantidadDeCalificacionesDelUsuario (@usuario_id INT)
 AS
 BEGIN
+	--Procedure para el punto "calificaciones del usuario"
 	SELECT cantidad_estrellas as 'Numero de estrellas', COUNT(cantidad_estrellas) as 'Cantidad de calificaciones'
 	FROM DBME.calificacion
 	WHERE autor_id = @usuario_id
@@ -1570,7 +1442,7 @@ GO
 CREATE PROCEDURE DBME.historialComprasYSubastas (@usuario_id INT)
 AS
 BEGIN
-
+	--Procedure que devuelve el historia de compras y subastas del usuario
 	(SELECT oferta_id as ofertas,monto,fecha,publicacion_id,'Oferta' as 'Tipo de publicación'
 	FROM DBME.oferta o 
 	WHERE o.autor_id = @usuario_id
@@ -1586,6 +1458,7 @@ GO
 CREATE PROCEDURE DBME.devolverInformacionFactura (@usuario_id INT)
 AS
 BEGIN
+	--Devuelve para quién está dirigida la factura, ya que se genera de manera diferente dependiendo el tipo de usuario
 	IF (EXISTS(SELECT usuario_id FROM DBME.empresa WHERE usuario_id = @usuario_id))
 	BEGIN
 		SELECT 'empresa'
@@ -1605,7 +1478,7 @@ GO
 CREATE PROCEDURE DBME.crearFacturasDelBorrador (@publicacion_id NUMERIC(18,0)) 
 AS
 BEGIN
-	
+		--Crea la factura si el usuario guardó la publicación correspondiente como borrador
 	DECLARE @autor_id INT
 	DECLARE @costo DECIMAL(10,2)
 	DECLARE @factura_id NUMERIC (18,0)
@@ -1625,7 +1498,7 @@ GO
 CREATE PROCEDURE DBME.cambiarContrasenia (@usuario_id INT, @contrasenia NVARCHAR(255))
 AS
 BEGIN
-
+	--Procedure para el cambio de contraseña del usuario
 	DECLARE @contraseniaCifrada AS NVARCHAR(255)
 	SET @contraseniaCifrada = HASHBYTES('SHA2_256',@contrasenia)
 	

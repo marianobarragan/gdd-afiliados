@@ -25,11 +25,18 @@ namespace MercadoEnvio.Calificar
 
         private void CalificarAlVendedor_Load(object sender, EventArgs e)
         {
-            string comando = "SELECT p.descripcion, p.precio, u.username FROM DBME.compra c JOIN DBME.publicacion p ON (c.publicacion_id = p.publicacion_id) JOIN DBME.usuario u ON(p.autor_id = u.usuario_id) WHERE (c.compra_id = "+compra_id+")";
-
+            string comando = "SELECT p.descripcion, p.precio, u.username,p.valor_actual,p.publicacion_tipo FROM DBME.compra c JOIN DBME.publicacion p ON (c.publicacion_id = p.publicacion_id) JOIN DBME.usuario u ON(p.autor_id = u.usuario_id) WHERE (c.compra_id = "+compra_id+")";
             DataTable dataCalificacion = (new ConexionSQL()).cargarTablaSQL(comando);
+            if (dataCalificacion.Rows[0][4].ToString() == "Subasta")
+            {
+                textPrecio.Text = dataCalificacion.Rows[0][3].ToString();
+            }
+            else 
+            {
+                textPrecio.Text = dataCalificacion.Rows[0][1].ToString();
+            }
             textEmpresa.Text = dataCalificacion.Rows[0][2].ToString();
-            textPrecio.Text = dataCalificacion.Rows[0][1].ToString();
+            
             textProducto.Text = dataCalificacion.Rows[0][0].ToString();
             lstCalificacion.SelectedIndex = 0;
                

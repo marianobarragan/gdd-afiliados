@@ -122,9 +122,11 @@
             // 
             this.txtOfertaDecimal.BackColor = System.Drawing.Color.PaleGreen;
             this.txtOfertaDecimal.Location = new System.Drawing.Point(232, 84);
+            this.txtOfertaDecimal.MaxLength = 2;
             this.txtOfertaDecimal.Name = "txtOfertaDecimal";
             this.txtOfertaDecimal.Size = new System.Drawing.Size(37, 20);
             this.txtOfertaDecimal.TabIndex = 18;
+            this.txtOfertaDecimal.Text = "00";
             // 
             // OfertarProducto
             // 

@@ -30,6 +30,7 @@
         {
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkBajaLogica = new System.Windows.Forms.CheckBox();
             this.txtCostoEnvioDecimal = new System.Windows.Forms.TextBox();
             this.txtPrecioDecimal = new System.Windows.Forms.TextBox();
             this.txtCostoEnvio = new System.Windows.Forms.TextBox();
@@ -43,7 +44,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.lblComa = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.chkBajaLogica = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,22 +80,39 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Visibilidad";
             // 
+            // chkBajaLogica
+            // 
+            this.chkBajaLogica.AutoSize = true;
+            this.chkBajaLogica.Location = new System.Drawing.Point(107, 141);
+            this.chkBajaLogica.Name = "chkBajaLogica";
+            this.chkBajaLogica.Size = new System.Drawing.Size(129, 17);
+            this.chkBajaLogica.TabIndex = 20;
+            this.chkBajaLogica.Text = "Realizar Baja Lógica?";
+            this.chkBajaLogica.UseVisualStyleBackColor = true;
+            // 
             // txtCostoEnvioDecimal
             // 
+            this.txtCostoEnvioDecimal.BackColor = System.Drawing.Color.PaleGreen;
             this.txtCostoEnvioDecimal.Location = new System.Drawing.Point(203, 101);
+            this.txtCostoEnvioDecimal.MaxLength = 2;
             this.txtCostoEnvioDecimal.Name = "txtCostoEnvioDecimal";
             this.txtCostoEnvioDecimal.Size = new System.Drawing.Size(30, 20);
             this.txtCostoEnvioDecimal.TabIndex = 19;
+            this.txtCostoEnvioDecimal.Text = "00";
             // 
             // txtPrecioDecimal
             // 
+            this.txtPrecioDecimal.BackColor = System.Drawing.Color.PaleGreen;
             this.txtPrecioDecimal.Location = new System.Drawing.Point(203, 46);
+            this.txtPrecioDecimal.MaxLength = 2;
             this.txtPrecioDecimal.Name = "txtPrecioDecimal";
             this.txtPrecioDecimal.Size = new System.Drawing.Size(30, 20);
             this.txtPrecioDecimal.TabIndex = 18;
+            this.txtPrecioDecimal.Text = "00";
             // 
             // txtCostoEnvio
             // 
+            this.txtCostoEnvio.BackColor = System.Drawing.Color.PaleGreen;
             this.txtCostoEnvio.Location = new System.Drawing.Point(107, 101);
             this.txtCostoEnvio.Name = "txtCostoEnvio";
             this.txtCostoEnvio.Size = new System.Drawing.Size(85, 20);
@@ -103,6 +120,7 @@
             // 
             // txtPorcentaje
             // 
+            this.txtPorcentaje.BackColor = System.Drawing.Color.PaleGreen;
             this.txtPorcentaje.Location = new System.Drawing.Point(107, 74);
             this.txtPorcentaje.Name = "txtPorcentaje";
             this.txtPorcentaje.Size = new System.Drawing.Size(85, 20);
@@ -110,6 +128,7 @@
             // 
             // txtPrecio
             // 
+            this.txtPrecio.BackColor = System.Drawing.Color.PaleGreen;
             this.txtPrecio.Location = new System.Drawing.Point(107, 46);
             this.txtPrecio.Name = "txtPrecio";
             this.txtPrecio.Size = new System.Drawing.Size(85, 20);
@@ -187,16 +206,6 @@
             this.label6.Size = new System.Drawing.Size(18, 25);
             this.label6.TabIndex = 13;
             this.label6.Text = ",";
-            // 
-            // chkBajaLogica
-            // 
-            this.chkBajaLogica.AutoSize = true;
-            this.chkBajaLogica.Location = new System.Drawing.Point(107, 141);
-            this.chkBajaLogica.Name = "chkBajaLogica";
-            this.chkBajaLogica.Size = new System.Drawing.Size(129, 17);
-            this.chkBajaLogica.TabIndex = 20;
-            this.chkBajaLogica.Text = "Realizar Baja Lógica?";
-            this.chkBajaLogica.UseVisualStyleBackColor = true;
             // 
             // ModificarVisibilidad
             // 

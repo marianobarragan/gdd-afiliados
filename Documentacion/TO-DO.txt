@@ -1,13 +1,7 @@
 nunca dejar de testear
 
 hacer un script q dropea todo
-
-revisar visibilidad gratis
-
-*******************
-------- UPGRADE ---------
-
-LOGIN: .Que solo pueda iniciarse una sesion a la vez(se bloquea el boton del login).        
+       
 
 
 

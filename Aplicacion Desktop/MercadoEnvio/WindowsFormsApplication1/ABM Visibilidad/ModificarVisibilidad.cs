@@ -19,12 +19,12 @@ namespace MercadoEnvio.ABM_Visibilidad
     {
         public int id;
         public string descripcion;
-        public int precio;
-        public int porcentaje;
-        public int costo_envio;
+        public uint precio;
+        public uint porcentaje;
+        public uint costo_envio;
         public string estadoVentana;
-        public int precioDecimal;
-        public int costo_envioDecimal;
+        public uint precioDecimal;
+        public uint costo_envioDecimal;
         public Visibilidad visibilidadActual;
 
         public ModificarVisibilidad(int id)
@@ -81,34 +81,39 @@ namespace MercadoEnvio.ABM_Visibilidad
             {
                 try
                 {
-                    precio = Int32.Parse(txtPrecio.Text);
-                    porcentaje = Int32.Parse(txtPorcentaje.Text);
-                    costo_envio = Int32.Parse(txtCostoEnvio.Text);
-                    precioDecimal = Int32.Parse(txtPrecioDecimal.Text);
-                    costo_envioDecimal = Int32.Parse(txtCostoEnvioDecimal.Text);
+                    precio = UInt32.Parse(txtPrecio.Text);
+                    porcentaje = UInt32.Parse(txtPorcentaje.Text);
+                    costo_envio = UInt32.Parse(txtCostoEnvio.Text);
+                    precioDecimal = UInt32.Parse(txtPrecioDecimal.Text);
+                    costo_envioDecimal = UInt32.Parse(txtCostoEnvioDecimal.Text);
                     
                 }
                 catch (System.FormatException)
                 {
-                    MessageBox.Show("Valores invalidos en precio/porcentaje/costo de envio. Ingrese solamente numeros enteros ", "Alta Visibilidad", MessageBoxButtons.OK);
+                    MessageBox.Show("Valores invalidos en precio/porcentaje/costo de envio. Ingrese solamente numeros enteros ", "Modificar Visibilidad", MessageBoxButtons.OK);
+                    return;
+                }
+                catch (System.OverflowException)
+                {
+                    MessageBox.Show("Ingrese numeros positivos en los formularios verdes", "Modificar Visibilidad", MessageBoxButtons.OK);
                     return;
                 }
 
                 if (precio < 0 || porcentaje < 0 || costo_envio < 0)
                 {
-                    MessageBox.Show("No se pueden ingresar valores negativos ", "Alta Visibilidad", MessageBoxButtons.OK);
+                    MessageBox.Show("No se pueden ingresar valores negativos ", "Modificar Visibilidad", MessageBoxButtons.OK);
                     return;
                 }
 
                 if (txtDescripcion.Text == "")
                 {
-                    MessageBox.Show("Debe ingresar un nombre", "Alta Visibilidad", MessageBoxButtons.OK);
+                    MessageBox.Show("Debe ingresar un nombre", "Modificar Visibilidad", MessageBoxButtons.OK);
                     return;
                 }
 
                 if (porcentaje > 100)
                 {
-                    MessageBox.Show("El porcentaje es mayor a lo permitido", "Alta Visibilidad", MessageBoxButtons.OK);
+                    MessageBox.Show("El porcentaje es mayor a lo permitido", "Modificar Visibilidad", MessageBoxButtons.OK);
                     return;
                 }
 
