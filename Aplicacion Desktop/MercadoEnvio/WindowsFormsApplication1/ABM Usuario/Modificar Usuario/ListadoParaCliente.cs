@@ -126,10 +126,10 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
 
                 if (h == DialogResult.Yes)
                 {
-                    string query = "UPDATE FROM DBME.usuario SET posee_baja_logica = 0 WHERE cliente_id = " + id1;
+                    string query = "UPDATE DBME.usuario SET posee_baja_logica = 1 WHERE usuario_id = " + id1;
                     (new ConexionSQL()).ejecutarComandoSQL(query);
                 }
-
+                btnLimpiar_Click(null, null);
                 return;
             }
 

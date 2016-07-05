@@ -60,6 +60,12 @@ namespace MercadoEnvio.ABM_Usuario.Alta_Usuario
                 return;
             }
 
+            if (password.Length <= 4)
+            {
+                MessageBox.Show("La contraseña debe tener más de 4 caracteres", "Alta Usuario", MessageBoxButtons.OK);
+                return;
+            }
+
             string query2 = "EXECUTE DBME.validarUsuarioExistente '"+ txtUsername.Text +"','" +txtMail.Text+"'";
             DataTable dt = (new Controller.ConexionSQL().cargarTablaSQL(query2));
             if (dt.Rows.Count == 0)

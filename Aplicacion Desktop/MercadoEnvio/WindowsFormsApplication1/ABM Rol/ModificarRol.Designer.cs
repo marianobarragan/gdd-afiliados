@@ -45,9 +45,9 @@
             // 
             // btnModificarRol
             // 
-            this.btnModificarRol.Location = new System.Drawing.Point(257, 359);
+            this.btnModificarRol.Location = new System.Drawing.Point(542, 347);
             this.btnModificarRol.Name = "btnModificarRol";
-            this.btnModificarRol.Size = new System.Drawing.Size(175, 51);
+            this.btnModificarRol.Size = new System.Drawing.Size(110, 29);
             this.btnModificarRol.TabIndex = 20;
             this.btnModificarRol.Text = "Modificar Rol";
             this.btnModificarRol.UseVisualStyleBackColor = true;
@@ -67,7 +67,7 @@
             // 
             // btnVolver
             // 
-            this.btnVolver.Location = new System.Drawing.Point(24, 381);
+            this.btnVolver.Location = new System.Drawing.Point(24, 347);
             this.btnVolver.Name = "btnVolver";
             this.btnVolver.Size = new System.Drawing.Size(111, 29);
             this.btnVolver.TabIndex = 18;
@@ -165,7 +165,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.ClientSize = new System.Drawing.Size(672, 428);
+            this.ClientSize = new System.Drawing.Size(667, 387);
             this.Controls.Add(this.btnModificarRol);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.btnVolver);
@@ -175,6 +175,7 @@
             this.Controls.Add(this.txtNombreRol);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "ModificarRol";
             this.Text = "ModificarRol";

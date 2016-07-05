@@ -97,11 +97,11 @@ namespace MercadoEnvio.Generar_Publicación
 
             costo_total = visibilidades[cmbVisibilidad.SelectedIndex].precio;
             //costo_total = visibilidades[cmbVisibilidad.SelectedIndex].porcentaje;
-
+            /*
             if (chkRealizaEnvio.Checked)
             {
                 costo_total = costo_total + visibilidades[cmbVisibilidad.SelectedIndex].costo_envio;
-            }
+            }*/
 
             //costo_total = costo_total + porcentaje * (double.Parse(txtPrecio.Text));
             //costo_total = costo_total + porcentaje * 

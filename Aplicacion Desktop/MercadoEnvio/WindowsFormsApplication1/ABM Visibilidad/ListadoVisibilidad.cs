@@ -112,6 +112,7 @@ namespace MercadoEnvio.ABM_Visibilidad
                 {
                     string query = "UPDATE DBME.visibilidad SET posee_baja_logica = 1 WHERE visibilidad_id = " + id2;
                     (new ConexionSQL()).ejecutarComandoSQL(query);
+                    btnBorrarDatos_Click(null, null);
                 }
                 else
                 {

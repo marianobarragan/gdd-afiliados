@@ -76,6 +76,7 @@ namespace MercadoEnvio.Login
             catch(Exception er)
             {
                 MessageBox.Show(er.Message, "Login", MessageBoxButtons.OK);
+                textBox2.Text = null;
                 return;
             }
 

@@ -65,9 +65,9 @@ namespace MercadoEnvio.ABM_Visibilidad
             try 
             {
                 string porcentajeString = porcentaje.ToString().Insert(0, "0.");
-                string comando = "INSERT INTO DBME.visibilidad (visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje,visibilidad_costo_envio,posee_baja_logica) VALUES ('" + txtDescripcion.Text + "'," + precio+ "." + precioDecimal + "," + porcentajeString + "," + costo +"."+costoDecimal+ ",0)";
-                MessageBox.Show("¿Está seguro de que desea crear la visibilidad?", "Alta Visibilidad", MessageBoxButtons.OK);
+                string comando = "INSERT INTO DBME.visibilidad (visibilidad_descripcion,visibilidad_precio,visibilidad_porcentaje,visibilidad_costo_envio,posee_baja_logica) VALUES ('" + txtDescripcion.Text + "'," + precio+ "." + precioDecimal + "," + porcentajeString + "," + costo +"."+costoDecimal+ ",0)";                
                 (new ConexionSQL()).ejecutarComandoSQL(comando);
+                MessageBox.Show("Visibilidad creada exitosamente", "Alta Visibilidad", MessageBoxButtons.OK);
             }
             catch (Exception er) {
                 MessageBox.Show(er.Message, "Alta Visibilidad", MessageBoxButtons.OK);

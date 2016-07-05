@@ -1,8 +1,19 @@
-terminar alta subasta, ver bien los campos
-
 nunca dejar de testear
 
+hacer un script q dropea todo
 
-modificar password
+revisar visibilidad gratis
 
-arreglar domicilios en carga de modificarCliente y empresa
+*******************
+------- UPGRADE ---------
+
+LOGIN: .Que solo pueda iniciarse una sesion a la vez(se bloquea el boton del login).        
+
+
+
+
+
+
+
+
+

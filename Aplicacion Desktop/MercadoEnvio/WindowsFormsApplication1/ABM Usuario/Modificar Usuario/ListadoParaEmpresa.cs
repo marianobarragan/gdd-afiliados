@@ -58,10 +58,11 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
 
                 if (h == DialogResult.Yes)
                 {
-                    string q = "UPDATE FROM DBME.usuario SET posee_baja_logica = 1 WHERE usuario_id = " + id1; //baja logica del sistema
+                    string q = "UPDATE DBME.usuario SET posee_baja_logica = 1 WHERE usuario_id = " + id1; //baja logica del sistema
                     (new ConexionSQL()).ejecutarComandoSQL(q);
                 }
 
+                button2_Click(null, null);
                 return;
             }
 

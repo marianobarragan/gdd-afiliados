@@ -319,7 +319,7 @@ BEGIN
 	WHERE Publ_Empresa_Mail IS NOT NULL
 	
 	INSERT INTO DBME.empresa(usuario_id,razon_social,cuit,fecha_creacion,nombre_contacto)
-	SELECT DISTINCT u.usuario_id,Publ_Empresa_Razon_Social,Publ_Empresa_Cuit,Publ_Empresa_Fecha_Creacion,'Usuario Migrado'
+	SELECT DISTINCT u.usuario_id,Publ_Empresa_Razon_Social,Publ_Empresa_Cuit,Publ_Empresa_Fecha_Creacion,Publ_Empresa_Razon_Social
 	FROM gd_esquema.Maestra m JOIN DBME.usuario u ON (m.Publ_Empresa_Mail = u.mail) 
 
 	--UPDATE DBME.usuario SET password = SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA2_256', password)), 3, 250) 
@@ -717,6 +717,7 @@ BEGIN
 							JOIN DBME.publicacion p ON(c2.publicacion_id = p.publicacion_id) 
 		WHERE YEAR(c2.fecha) = @anio AND 
 			  MONTH(c2.fecha) Between @inicio AND @fin
+			  AND p.rubro_id = @rubro
 		Group By c.cliente_id, c.nombre, c.apellido
 		Order By Cantidad_Productos_Comprados DESC
 		RETURN
@@ -1288,9 +1289,21 @@ BEGIN
 
 	END
 
-	
 END;
 GO
+
+CREATE TRIGGER DBME.triggerActualizarEstadoPublicaciones
+ON DBME.publicacion
+AFTER UPDATE
+AS
+BEGIN
+	UPDATE DBME.publicacion
+	SET estado = 'FINALIZADA'
+	WHERE stock = 0 AND estado = 'ACTIVA'
+
+END;
+GO
+
 
 /* END TRIGGERS */
 

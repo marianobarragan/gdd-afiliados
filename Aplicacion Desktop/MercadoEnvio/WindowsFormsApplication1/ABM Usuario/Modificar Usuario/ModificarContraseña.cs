@@ -31,7 +31,7 @@ namespace MercadoEnvio.ABM_Usuario.Modificar_Usuario
         {
             if (sesion.usuarioActual.contraseña != txtContraseñaVieja.Text)
             {
-                MessageBox.Show("La contraseña vieja es incorrecta vieja: " + sesion.usuarioActual.contraseña +"  nueva"+ txtContraseñaVieja.Text, "Error", MessageBoxButtons.OK);
+                MessageBox.Show("La contraseña vieja es incorrecta", "Error", MessageBoxButtons.OK);
                 return;
             }
             if (txtContraseñaNueva1.Text != txtContraseñaNueva2.Text)

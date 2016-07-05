@@ -31,7 +31,9 @@ namespace MercadoEnvio.Historial_Cliente
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (listBox1.GetItemText(listBox1.SelectedItem) == "Historial Del Cliente")
+
+
+            if (listBox1.GetItemText(listBox1.SelectedItem) == "Historial De Compras y Subastas")
             {
               
             //string dsd = textBox1.Text;
@@ -47,6 +49,7 @@ namespace MercadoEnvio.Historial_Cliente
                 //dataGridView1.DataSource = dt;
 
             }
+             
             if (listBox1.GetItemText(listBox1.SelectedItem) == "Resumen De Estrellas")
             {
 
@@ -76,9 +79,21 @@ namespace MercadoEnvio.Historial_Cliente
 
                 
             }
+
+            //MessageBox.Show("rows: " + dt.Rows.Count + " index: " + listBox1.SelectedIndex, "a", MessageBoxButtons.OK);
+
+            if (dt.Rows.Count == 0)
+            {
+                MessageBox.Show("La consulta no ha devuelto resultados", "Problema", MessageBoxButtons.OK);
+                dataGridView1.DataSource = null;
+                return;
+            }
+            else {
+                paginas_totales = dt.Rows.Count / 50;
+                mostrar_pagina(1);
+            }
+
             
-            paginas_totales = dt.Rows.Count / 50;
-            mostrar_pagina(1);
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)

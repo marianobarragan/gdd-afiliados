@@ -104,6 +104,9 @@ namespace MercadoEnvio.Facturas
         private void ListadoFacturas_Load(object sender, EventArgs e)
         {
 
+            dateTimePicker1.Value = DateTime.Parse(Program.fechaSistema() + 1);
+            dateTimePicker2.Value = DateTime.Parse(Program.fechaSistema() + 1);
+
             query = "SELECT * FROM DBME.factura";
 
             /*
@@ -186,7 +189,7 @@ namespace MercadoEnvio.Facturas
 
             if (chkDetalles.Checked)
             {
-                query += " AND d.tipo_de_item LIKE '%" + txtDirigida.Text + "%'";
+                query += " AND d.tipo_de_item LIKE '%" + txtContenido.Text + "%'";
             }
 
             if (chkDirigida.Checked)

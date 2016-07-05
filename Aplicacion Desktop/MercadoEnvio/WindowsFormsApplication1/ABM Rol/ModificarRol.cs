@@ -103,7 +103,7 @@ namespace MercadoEnvio.ABM_Rol
                     //comando = "UPDATE DBME.visibilidad SET visibilidad_descripcion = '" + txtDescripcion.Text + "',visibilidad_precio = " + txtPrecio.Text + "." + txtPrecioDecimal.Text + ",visibilidad_porcentaje = " + porcentajeString + ",visibilidad_costo_envio = " + txtCostoEnvio.Text + "." + txtCostoEnvioDecimal.Text + " WHERE visibilidad_id = " + id;
                     
                     comando1 = "UPDATE DBME.rol SET nombre_rol = '" + txtNombreRol.Text + "', es_rol_habilitado = "  + check + " WHERE nombre_rol = '" + nombreRol + "'";
-                    MessageBox.Show(comando1, "a", MessageBoxButtons.OK);
+                    //MessageBox.Show(comando1, "a", MessageBoxButtons.OK);
                     (new ConexionSQL()).ejecutarComandoSQL(comando1);
                     comando2 = "DELETE FROM DBME.rol_x_funcionalidad WHERE rol_id = (SELECT rol_id FROM DBME.rol WHERE nombre_rol = '"+nombreRol+"')";
                     (new ConexionSQL()).ejecutarComandoSQL(comando2);

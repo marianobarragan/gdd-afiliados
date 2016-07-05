@@ -36,10 +36,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkEstaHabilitado = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.chkEstaHabilitado = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -119,9 +119,20 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Rol Actual";
             // 
+            // chkEstaHabilitado
+            // 
+            this.chkEstaHabilitado.AutoSize = true;
+            this.chkEstaHabilitado.Location = new System.Drawing.Point(12, 68);
+            this.chkEstaHabilitado.Name = "chkEstaHabilitado";
+            this.chkEstaHabilitado.Size = new System.Drawing.Size(101, 17);
+            this.chkEstaHabilitado.TabIndex = 7;
+            this.chkEstaHabilitado.Text = "Esta habilitado?";
+            this.chkEstaHabilitado.UseVisualStyleBackColor = true;
+            this.chkEstaHabilitado.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(24, 381);
+            this.button2.Location = new System.Drawing.Point(24, 358);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(111, 29);
             this.button2.TabIndex = 9;
@@ -143,31 +154,20 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(221, 359);
+            this.button4.Location = new System.Drawing.Point(539, 358);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(175, 51);
+            this.button4.Size = new System.Drawing.Size(110, 29);
             this.button4.TabIndex = 11;
             this.button4.Text = "Crear Rol";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // chkEstaHabilitado
-            // 
-            this.chkEstaHabilitado.AutoSize = true;
-            this.chkEstaHabilitado.Location = new System.Drawing.Point(12, 68);
-            this.chkEstaHabilitado.Name = "chkEstaHabilitado";
-            this.chkEstaHabilitado.Size = new System.Drawing.Size(101, 17);
-            this.chkEstaHabilitado.TabIndex = 7;
-            this.chkEstaHabilitado.Text = "Esta habilitado?";
-            this.chkEstaHabilitado.UseVisualStyleBackColor = true;
-            this.chkEstaHabilitado.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // AltaRol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SkyBlue;
-            this.ClientSize = new System.Drawing.Size(661, 422);
+            this.ClientSize = new System.Drawing.Size(661, 400);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);

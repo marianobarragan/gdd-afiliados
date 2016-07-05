@@ -57,12 +57,6 @@
     <Compile Include="ABM Rol\AltaRol.Designer.cs">
       <DependentUpon>AltaRol.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Rol\BajaRol.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ABM Rol\BajaRol.Designer.cs">
-      <DependentUpon>BajaRol.cs</DependentUpon>
-    </Compile>
     <Compile Include="ABM Rol\ListadoRol.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -329,9 +323,6 @@
     </Compile>
     <EmbeddedResource Include="ABM Rol\AltaRol.resx">
       <DependentUpon>AltaRol.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ABM Rol\BajaRol.resx">
-      <DependentUpon>BajaRol.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Rol\ListadoRol.resx">
       <DependentUpon>ListadoRol.cs</DependentUpon>
