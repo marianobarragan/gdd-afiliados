@@ -5,6 +5,7 @@ El script está dividido en diferentes secciones:
 	-Funciones (tops del listado estadístico y funciones del reloj)
 	-Procedures creacionales
 	-Triggers
+	-Indice
 	-Procedures de comunicación
 	-Procedures de dominio
 */
@@ -928,7 +929,7 @@ BEGIN
 	DECLARE @empresa_id INT
 	DECLARE @date DATETIME
 
-	SET @date = = DBME.getHoraDelSistema()
+	SET @date = DBME.getHoraDelSistema()
 
 	BEGIN TRY
 		BEGIN TRANSACTION			
@@ -1233,6 +1234,19 @@ GO
 
 /* END TRIGGERS */
 
+/* START INDICES */
+
+CREATE INDEX INDICE_FACTURA_FECHA
+ON DBME.factura (fecha)
+
+CREATE INDEX INDICE_FACTURA_USUARIO_ID
+ON DBME.factura (usuario_id)
+
+CREATE INDEX INDICE_FACTURA_DETALLE_TIPO_DE_ITEM
+ON DBME.factura_detalle (tipo_de_item)
+
+GO
+/* END INDICES */
 
 /* START PROCEDURES COMUNICACION */
 

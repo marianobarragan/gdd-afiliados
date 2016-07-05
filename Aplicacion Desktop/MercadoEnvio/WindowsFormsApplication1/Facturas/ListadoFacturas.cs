@@ -151,7 +151,7 @@ namespace MercadoEnvio.Facturas
             DateTime fecha_inicio;
             DateTime fecha_fin;
 
-            query = "SELECT * FROM DBME.factura f JOIN DBME.factura_detalle d ON (f.factura_id = d.factura_id) where f.factura_id IS NOT NULL";
+            query = "SELECT f.factura_id,f.publicacion_id,f.fecha,f.monto_total,f.usuario_id, d.tipo_de_item FROM DBME.factura f JOIN DBME.factura_detalle d ON (f.factura_id = d.factura_id) where f.factura_id IS NOT NULL";
 
             if (chkFechas.Checked)
             {
